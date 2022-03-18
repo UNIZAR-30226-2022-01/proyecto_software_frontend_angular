@@ -1,0 +1,58 @@
+<div style="text-align: center;">
+    <h1>Crear cuenta en World Domination</h1>
+
+<form [formGroup]="profileForm">
+    <div class="from-group">
+
+    </div>
+    <p style="font-size: small;"><a [routerLink]="['/inicioSesion']" style="text-decoration: none;">¿Tienes cuenta ya? Inicia sesión</a></p>
+    
+    <input id="nombre" type="text" formControlName="nombre" size="30" placeholder="Nombre de usuario">
+    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
+      style="color:red;">
+
+      <div *ngIf="nombre.errors?.['required']">
+        El nombre de usuario es obligatorio.
+      </div>
+      <div *ngIf="nombre.errors?.['minlength']">
+        El nombre de usuario debe tener mínimo 4 caracteres.
+      </div>
+    </div>
+    
+    <br><br>
+    <input id="email" type="text" formControlName="email" size="30" placeholder="Correo electrónico">
+    
+      <div *ngIf="email.invalid && (email.dirty || email.touched)"
+          style="color:red;">
+
+        <div *ngIf="email.errors?.['required']">
+          El correo electrónico de usuario es obligatorio.
+        </div>
+      </div>
+
+    <br><br>
+    <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
+        <div *ngIf="password.invalid && (password.dirty || password.touched)"
+          style="color:red;">
+
+            <div *ngIf="password.errors?.['required']">
+                La contraseña es un campo obligatorio.
+            </div>
+      </div>
+
+    <br><br>
+    <input id="password2" type="password" formControlName="password2" size="30" placeholder="Confirmar contraseña">
+    <div *ngIf="password2.invalid && (password2.dirty || password2.touched)"
+          style="color:red;">
+
+            <div *ngIf="password2.errors?.['required']">
+            La confirmación de contraseña es un campo obligatorio.
+            </div>
+      </div>
+</form>
+
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <p>Pulse el botón para crear su cuenta</p>
+    <button type="submit" >Submit</button>
+</form>
+</div><

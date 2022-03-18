@@ -1,0 +1,39 @@
+<div style="text-align: center;">
+    <h1>Inicio de sesión en tú cuenta de World Domination</h1>
+
+<form [formGroup]="profileForm">
+    
+    <p style="font-size: small; "><a [routerLink]="['/registroUsuario']" style="text-decoration: none;">¿Nuevo aquí? Regístrate</a></p>
+    
+    <input id="nombre" type="text" formControlName="nombre" size="30" placeholder="Nombre de usuario">
+    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
+      style="color:red;">
+
+      <div *ngIf="nombre.errors?.['required']">
+        El nombre de usuario es obligatorio.
+      </div>
+      <div *ngIf="nombre.errors?.['minlength']">
+        El nombre de usuario debe tener mínimo 4 caracteres.
+      </div>
+    </div>
+    
+
+    <br><br>
+    <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
+        <div *ngIf="password.invalid && (password.dirty || password.touched)"
+          style="color:red;">
+
+            <div *ngIf="password.errors?.['required']">
+            El correo electrónico de usuario es obligatorio.
+            </div>
+      </div>
+
+    <br><br>
+    
+</form>
+
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <p>Pulse el botón para iniciar sesión</p>
+    <button type="submit" >Submit</button>
+</form>
+</div><
