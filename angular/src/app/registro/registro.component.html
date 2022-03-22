@@ -1,5 +1,5 @@
 <div style="text-align: center;">
-    <h1>Crear cuenta en World Domination</h1>
+  <h1>Crear cuenta en World Domination</h1>
 
 <form [formGroup]="profileForm">
     <div class="from-group">
@@ -17,6 +17,9 @@
       <div *ngIf="nombre.errors?.['minlength']">
         El nombre de usuario debe tener mínimo 4 caracteres.
       </div>
+      <div *ngIf="nombre.errors?.['pattern']">
+        El nombre de usuario solo puede contener los carácteres alfanuméricos y los carácteres '-' '_'
+      </div>
     </div>
     
     <br><br>
@@ -28,6 +31,11 @@
         <div *ngIf="email.errors?.['required']">
           El correo electrónico de usuario es obligatorio.
         </div>
+
+        <div *ngIf="email.errors?.['email']">
+          El correo electrónico no es valido.
+        </div>
+
       </div>
 
     <br><br>
@@ -48,11 +56,17 @@
             <div *ngIf="password2.errors?.['required']">
             La confirmación de contraseña es un campo obligatorio.
             </div>
-      </div>
+    </div>
+    <div *ngIf="profileForm.value.password!=profileForm.value.password2" style="color:red;">
+      Las contraseñas tienen que coincidir.
+    </div>
+
 </form>
+
+
 
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
     <p>Pulse el botón para crear su cuenta</p>
     <button type="submit" >Submit</button>
 </form>
-</div><
+</div>

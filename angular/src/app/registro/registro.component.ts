@@ -15,9 +15,12 @@ export class RegistroComponent  {
     nombre: new FormControl('',[
       Validators.required,
       Validators.minLength(4),
+      Validators.pattern('[A-Za-z0-9-_]+'),
     ]),
     email: new FormControl('',[
-      Validators.required,]),
+      Validators.required,
+      Validators.email,
+    ]),
     password: new FormControl('',[
       Validators.required,]),
     password2: new FormControl('',[
