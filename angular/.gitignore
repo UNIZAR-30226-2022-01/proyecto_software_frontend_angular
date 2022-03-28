@@ -29,6 +29,9 @@ modules/.vscode
 .vimrc
 .nvimrc
 
+# Cache
+.angular/cache/
+
 # Don't check in secret files
 *secret.js
 
