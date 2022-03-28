@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl  } from '@angular/forms';
-//import { CustomValidators } from '../custom-validators';
+import { EnviarFormularioService } from '../enviar-formulario.service';
 
 
 @Component({
@@ -30,21 +30,23 @@ export class RegistroComponent  {
   
 
   
-  constructor(private fb: FormBuilder) { }
-  
-
-
+  constructor(private fb: FormBuilder, private enviar: EnviarFormularioService) {}
   
   onSubmit() {
-    console.warn(this.profileForm.value);
     console.log(this.profileForm.value);
+    this.enviar.enviarFormularioRegistro(this.profileForm)
+      .subscribe(
+        data => console.log('No hay errores!', data),
+        error => console.error('Error', error)
+      )
   }
 
 
-get nombre() { return this.profileForm.get('nombre')!; }
-get email() { return this.profileForm.get('email')!; }
-get password() { return this.profileForm.get('password')!; }
-get password2() { return this.profileForm.get('password2')!; }
+  get nombre() { return this.profileForm.get('nombre')!; }
+  get email() { return this.profileForm.get('email')!; }
+  get password() { return this.profileForm.get('password')!; }
+  get password2() { return this.profileForm.get('password2')!; }
 
 }
+
 

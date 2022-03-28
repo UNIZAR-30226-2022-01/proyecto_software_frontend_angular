@@ -65,8 +65,8 @@
 
 
 
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" >
     <p>Pulse el botón para crear su cuenta</p>
-    <button type="submit" >Submit</button>
+    <button type="submit" [disabled]="!profileForm.valid || (profileForm.value.password!=profileForm.value.password2)" >Submit</button>
 </form>
 </div>
