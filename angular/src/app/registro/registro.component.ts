@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl  } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { EnviarFormularioService } from '../enviar-formulario.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ɵparseCookieValue } from '@angular/common';
 
 
 @Component({
@@ -48,12 +49,14 @@ export class RegistroComponent  {
         data => console.log('No hay errores!', data),
         error => console.error('Error', error)
       )*/
-    var respuesta1 = this.http.post('http://localhost:8090/registro', formData, {observe:'response', responseType:'text'})
-        .subscribe(
-          respuesta  => {console.log(respuesta);}
-          
-        );
-    console.log(respuesta1); 
+     
+    
+    var cookie = this.http.post<any>('http://localhost:8090/registro', formData, {observe:'response'})
+        .subscribe({
+          next :(response) => console.log(response.headers),
+          error: (error) => console.log(error.error), 
+        });
+    console.log('hola caracola' ,cookie);
     
     
  }
