@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl  } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { EnviarFormularioService } from '../enviar-formulario.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -30,16 +32,31 @@ export class RegistroComponent  {
   
 
   
-  constructor(private fb: FormBuilder, private enviar: EnviarFormularioService) {}
+  constructor(private fb: FormBuilder, private enviar: EnviarFormularioService, private http: HttpClient) {}
   
+  
+
   onSubmit() {
+    var formData: any = new FormData();
+    formData.append('nombre', this.profileForm.get('nombre')!.value);
+    formData.append('email', this.profileForm.get('email')!.value);
+    formData.append('password', this.profileForm.get('password')!.value);
+
     console.log(this.profileForm.value);
-    this.enviar.enviarFormularioRegistro(this.profileForm)
+    /*this.enviar.enviarFormularioRegistro(this.profileForm)
       .subscribe(
         data => console.log('No hay errores!', data),
         error => console.error('Error', error)
-      )
-  }
+      )*/
+    var respuesta1 = this.http.post('http://localhost:8090/registro', formData, {observe:'response', responseType:'text'})
+        .subscribe(
+          respuesta  => {console.log(respuesta);}
+          
+        );
+    console.log(respuesta1); 
+    
+    
+ }
 
 
   get nombre() { return this.profileForm.get('nombre')!; }
@@ -49,4 +66,6 @@ export class RegistroComponent  {
 
 }
 
-
+export interface Config {
+  respuesta: string;
+}
