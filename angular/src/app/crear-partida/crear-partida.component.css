@@ -1,0 +1,16 @@
+* {
+  background-color: #20BCE7;
+}
+
+.country:hover {
+  fill:#FFFFFF;
+  opacity: 0.8;
+  transition: 0.3s;
+  transform: scale(1.003);
+}
+
+#Lines{
+  stroke-dasharray: 5,5;
+}
+
+
