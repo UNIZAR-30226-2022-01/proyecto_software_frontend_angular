@@ -38,7 +38,7 @@ const appRoutes: Routes = [
   {path: 'mapa', component: MapaComponent},
   {path: 'crearPartida', component: CrearPartidaComponent},
   {path: 'ranking', component: RankingComponent},
-  {path: 'amigos', component: AmigosComponent} 
+  {path: 'amigos', component: AmigosComponent}
 ]
 
 
