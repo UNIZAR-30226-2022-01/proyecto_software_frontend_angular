@@ -19,6 +19,9 @@ import { MapaComponent } from './mapa/mapa.component';
 import { RouterModule, Routes } from '@angular/router';
 import { CrearPartidaComponent } from './crear-partida/crear-partida.component';
 import { RankingComponent } from './ranking/ranking.component';
+import { AmigosComponent } from './amigos/amigos.component';
+import { DownBarComponent } from './down-bar/down-bar.component';
+import { TopBarJuegoComponent } from './top-bar-juego/top-bar-juego.component';
 import { CirculosTropasComponent } from './circulos-tropas/circulos-tropas.component';
 
 const appRoutes: Routes = [
@@ -34,7 +37,8 @@ const appRoutes: Routes = [
   {path: 'notificaciones', component: NotificacionesComponent},
   {path: 'mapa', component: MapaComponent},
   {path: 'crearPartida', component: CrearPartidaComponent},
-  {path: 'ranking', component: RankingComponent}
+  {path: 'ranking', component: RankingComponent},
+  {path: 'amigos', component: AmigosComponent} 
 ]
 
 
@@ -54,6 +58,9 @@ const appRoutes: Routes = [
     MapaComponent,
     CrearPartidaComponent,
     RankingComponent,
+    AmigosComponent,
+    DownBarComponent,
+    TopBarJuegoComponent,
     CirculosTropasComponent
   ],
   imports: [
