@@ -15,7 +15,7 @@
         El nombre de usuario es obligatorio.
       </div>
       <div *ngIf="nombre.errors?.['minlength']">
-        El nombre de usuario debe tener mínimo 4 caracteres.
+        El nombre de usuario debe tener mínimo 5 caracteres.
       </div>
       <div *ngIf="nombre.errors?.['pattern']">
         El nombre de usuario solo puede contener los carácteres alfanuméricos y los carácteres '-' '_'
@@ -46,6 +46,10 @@
             <div *ngIf="password.errors?.['required']">
                 La contraseña es un campo obligatorio.
             </div>
+
+            <div *ngIf="password.errors?.['minlength']">
+              La contraseña debe tener mínimo 8 caracteres.
+            </div>
       </div>
 
     <br><br>
@@ -70,3 +74,8 @@
     <button type="submit" [disabled]="!profileForm.valid || (profileForm.value.password!=profileForm.value.password2)" >Submit</button>
 </form>
 </div>
+
+
+<button onclick="console.log(localStorage.getItem('cookie'));">Clica aqui</button>
+
+
