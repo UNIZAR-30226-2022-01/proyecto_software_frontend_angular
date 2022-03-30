@@ -22,6 +22,7 @@ import { RankingComponent } from './ranking/ranking.component';
 import { AmigosComponent } from './amigos/amigos.component';
 import { DownBarComponent } from './down-bar/down-bar.component';
 import { TopBarJuegoComponent } from './top-bar-juego/top-bar-juego.component';
+import { CirculosTropasComponent } from './circulos-tropas/circulos-tropas.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -59,7 +60,8 @@ const appRoutes: Routes = [
     RankingComponent,
     AmigosComponent,
     DownBarComponent,
-    TopBarJuegoComponent
+    TopBarJuegoComponent,
+    CirculosTropasComponent
   ],
   imports: [
     BrowserModule,

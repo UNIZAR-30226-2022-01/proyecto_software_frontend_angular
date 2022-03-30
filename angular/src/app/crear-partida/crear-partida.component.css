@@ -1,0 +1,36 @@
+* {
+  background-color: #20BCE7;
+}
+
+.country:hover {
+  fill:#FFFFFF;
+  opacity: 0.8;
+  transition: 0.3s;
+  transform: scale(1.003);
+}
+
+#Lines{
+  stroke-dasharray: 5,5;
+}
+
+.circulo{
+  stroke: black;
+  stroke-width: 3;
+  -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+  filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+}
+
+.ejemplo:hover > #Africa_Oriental {
+  fill:#FFFFFF;
+  opacity: 0.8;
+  transition: 0.3s;
+  transform: scale(1.003);
+}
+
+.cAfrica .circulo {
+  fill:#e2bc75;
+}
+
+.cOceania .circulo {
+  fill: #f7aab1;
+}
