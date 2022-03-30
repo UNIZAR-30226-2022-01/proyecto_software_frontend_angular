@@ -19,6 +19,9 @@ import { MapaComponent } from './mapa/mapa.component';
 import { RouterModule, Routes } from '@angular/router';
 import { CrearPartidaComponent } from './crear-partida/crear-partida.component';
 import { RankingComponent } from './ranking/ranking.component';
+import { AmigosComponent } from './amigos/amigos.component';
+import { DownBarComponent } from './down-bar/down-bar.component';
+import { TopBarJuegoComponent } from './top-bar-juego/top-bar-juego.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -33,7 +36,8 @@ const appRoutes: Routes = [
   {path: 'notificaciones', component: NotificacionesComponent},
   {path: 'mapa', component: MapaComponent},
   {path: 'crearPartida', component: CrearPartidaComponent},
-  {path: 'ranking', component: RankingComponent} 
+  {path: 'ranking', component: RankingComponent},
+  {path: 'amigos', component: AmigosComponent} 
 ]
 
 
@@ -52,7 +56,10 @@ const appRoutes: Routes = [
     NotificacionesComponent,
     MapaComponent,
     CrearPartidaComponent,
-    RankingComponent
+    RankingComponent,
+    AmigosComponent,
+    DownBarComponent,
+    TopBarJuegoComponent
   ],
   imports: [
     BrowserModule,

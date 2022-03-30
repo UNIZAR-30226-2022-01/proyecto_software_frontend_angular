@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl  } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { EnviarFormularioService } from '../enviar-formulario.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ɵparseCookieValue } from '@angular/common';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 
 @Component({
@@ -34,31 +33,26 @@ export class RegistroComponent  {
 
   
   constructor(private fb: FormBuilder, private enviar: EnviarFormularioService, private http: HttpClient) {}
-  
-  
-
+  mycookie:any;
   onSubmit() {
     var formData: any = new FormData();
     formData.append('nombre', this.profileForm.get('nombre')!.value);
     formData.append('email', this.profileForm.get('email')!.value);
     formData.append('password', this.profileForm.get('password')!.value);
+    
 
-    console.log(this.profileForm.value);
-    /*this.enviar.enviarFormularioRegistro(this.profileForm)
-      .subscribe(
-        data => console.log('No hay errores!', data),
-        error => console.error('Error', error)
-      )*/
-     
-    
-    var cookie = this.http.post<any>('http://localhost:8090/registro', formData, {observe:'response'})
+    var cookie;
+    this.http.post('http://localhost:8090/registro', formData, {observe:'response', responseType:'text'})
         .subscribe({
-          next :(response) => console.log(response.headers),
-          error: (error) => console.log(error.error), 
+          next :(response) => {console.log('Respuesta:',response.body),
+                              cookie = response.body,
+                              console.log('Cookie',cookie)
+                              this.mycookie = response.body,
+                              console.log('Cookie',this.mycookie)},
+                              
+          error: (error) => console.log('El error:',error.error),//console.log(error.error), 
         });
-    console.log('hola caracola' ,cookie);
-    
-    
+
  }
 
 

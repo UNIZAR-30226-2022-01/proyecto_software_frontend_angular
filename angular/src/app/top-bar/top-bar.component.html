@@ -1,9 +1,28 @@
 <div class="topnav">
-    <a class="active" [routerLink]="['/']">Inicio</a>
+    <a class="active" [routerLink]="['/']">World Domination</a>
   
     <a [routerLink]="['/tienda']">Tienda</a>
   
-    <a [routerLink]="['/registroUsuario']">Registro</a>
-  
+    <a [routerLink]="['/ranking']">Ranking</a>
+
+    <a [routerLink]="['/personalizacion']">Personalización</a>
+
+    <a [routerLink]="['/registroUsuario']">Reg</a>
+
+
+    <div class="topnav-right">
+      <a [routerLink]="['/amigos']"><img class="imagenes" src="https://img.icons8.com/material-rounded/48/000000/add-user-group-man-man.png"/></a>
+      <a [routerLink]="['/notificaciones']"><img class="imagenes" src="https://img.icons8.com/material-sharp/50/000000/mail.png" /></a>
+      
+     
+      <div class="dropdown"> 
+        <button class="dropbtn">&nbsp;&nbsp;&nbsp;Foto &#x25BE;</button>
+        <div class="dropdown-content">
+          <a [routerLink]="['/perfilUsuario']">Perfil</a>
+          <a >Log out</a>
+        </div>
+      </div>
+    </div>
+
   </div>
   
