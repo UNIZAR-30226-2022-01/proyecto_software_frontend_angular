@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CirulosTropasComponent } from './cirulos-tropas.component';
+import { CirculosTropasComponent } from './circulos-tropas.component';
 
-describe('CirulosTropasComponent', () => {
-  let component: CirulosTropasComponent;
-  let fixture: ComponentFixture<CirulosTropasComponent>;
+describe('CirculosTropasComponent', () => {
+  let component: CirculosTropasComponent;
+  let fixture: ComponentFixture<CirculosTropasComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CirulosTropasComponent ]
+      declarations: [ CirculosTropasComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CirulosTropasComponent);
+    fixture = TestBed.createComponent(CirculosTropasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

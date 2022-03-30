@@ -19,7 +19,7 @@ import { MapaComponent } from './mapa/mapa.component';
 import { RouterModule, Routes } from '@angular/router';
 import { CrearPartidaComponent } from './crear-partida/crear-partida.component';
 import { RankingComponent } from './ranking/ranking.component';
-import { CirulosTropasComponent } from './cirulos-tropas/cirulos-tropas.component';
+import { CirculosTropasComponent } from './circulos-tropas/circulos-tropas.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -34,7 +34,7 @@ const appRoutes: Routes = [
   {path: 'notificaciones', component: NotificacionesComponent},
   {path: 'mapa', component: MapaComponent},
   {path: 'crearPartida', component: CrearPartidaComponent},
-  {path: 'ranking', component: RankingComponent} 
+  {path: 'ranking', component: RankingComponent}
 ]
 
 
@@ -54,7 +54,7 @@ const appRoutes: Routes = [
     MapaComponent,
     CrearPartidaComponent,
     RankingComponent,
-    CirulosTropasComponent
+    CirculosTropasComponent
   ],
   imports: [
     BrowserModule,
