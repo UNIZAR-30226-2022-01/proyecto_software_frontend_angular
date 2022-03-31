@@ -11,8 +11,8 @@ import {  FormBuilder, FormControl, Validators } from '@angular/forms';
 
 
 export class CrearPartidaComponent implements OnInit {
-  cookie:any;       
-  nombre_usuario:any; 
+  cookie:any;
+  nombre_usuario:any;
 
   ngOnInit() {
     this.nombre_usuario = localStorage.getItem('nombre_usuario'),
@@ -50,14 +50,16 @@ export class CrearPartidaComponent implements OnInit {
 
 
   onSubmit() {
-  let hcookie = new HttpHeaders();
-  hcookie.append('cookie_user',this.cookie);
-  hcookie.append('Set-Cookie',this.cookie);
-  console.log(this.cookie);
+  //let hcookie = new HttpHeaders();
+  //hcookie = hcookie.append('Cookie', this.cookie);
+  //console.log('meto en header Cookie:' , hcookie.get('Cookie'));
 
   var formData: any = new FormData();
   formData.append('maxJugadores', this.profileForm.get('maxJugadores')!.value);
   formData.append('password', this.profileForm.get('password')!.value);
+
+  console.log('Meto cookie en document.cookie:', this.cookie);
+  document.cookie = this.cookie;
 
   if (this.publica = true){
     formData.append('tipo', 'Publica');
@@ -66,12 +68,12 @@ export class CrearPartidaComponent implements OnInit {
   }
 
 
-  this.http.post('http://localhost:8090/api/crearPartida', formData, { headers:hcookie, observe:'response', responseType:'text'})
-      .subscribe({  
+  this.http.post('http://localhost:8090/api/crearPartida', formData, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
         next :(response) => {console.log('Todo ok')},
-                            
+
         error: (error) => {alert(error.error)}
-      });  
+      });
   }
 
   get maxJugadores() { return this.profileForm.get('maxJugadores')!; }
