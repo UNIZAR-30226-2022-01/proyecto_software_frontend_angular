@@ -7,19 +7,16 @@
 
     <a [routerLink]="['/personalizacion']">Personalización</a>
 
-    <a [routerLink]="['/registroUsuario']">Reg</a>
-    <a [routerLink]="['/inicioSesion']">Ini</a>
-
     <div class="topnav-right">
       <a [routerLink]="['/amigos']"><img class="imagenes" src="https://img.icons8.com/material-rounded/48/000000/add-user-group-man-man.png"/></a>
       <a [routerLink]="['/notificaciones']"><img class="imagenes" src="https://img.icons8.com/material-sharp/50/000000/mail.png" /></a>
       
      
       <div class="dropdown"> 
-        <button class="dropbtn">&nbsp;&nbsp;&nbsp;Foto &#x25BE;</button>
+        <button class="dropbtn">&nbsp;{{nombre_usuario}} &#x25BE;</button>
         <div class="dropdown-content">
-          <a [routerLink]="['/perfilUsuario']">Perfil</a>
-          <a >Log out</a>
+          <a width ="ancho"  [routerLink]="['/perfilUsuario']">Perfil</a>
+          <a width ="ancho" (click)="cerrarSesion()">Log out</a>
         </div>
       </div>
     </div>

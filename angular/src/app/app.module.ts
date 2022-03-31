@@ -23,6 +23,7 @@ import { AmigosComponent } from './amigos/amigos.component';
 import { DownBarComponent } from './down-bar/down-bar.component';
 import { TopBarJuegoComponent } from './top-bar-juego/top-bar-juego.component';
 import { CirculosTropasComponent } from './circulos-tropas/circulos-tropas.component';
+import { IdentificacionComponent } from './identificacion/identificacion.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -38,7 +39,8 @@ const appRoutes: Routes = [
   {path: 'mapa', component: MapaComponent},
   {path: 'crearPartida', component: CrearPartidaComponent},
   {path: 'ranking', component: RankingComponent},
-  {path: 'amigos', component: AmigosComponent}
+  {path: 'amigos', component: AmigosComponent},
+  {path: 'identificacion', component: IdentificacionComponent}
 ]
 
 
@@ -61,7 +63,8 @@ const appRoutes: Routes = [
     AmigosComponent,
     DownBarComponent,
     TopBarJuegoComponent,
-    CirculosTropasComponent
+    CirculosTropasComponent,
+    IdentificacionComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl  } from '@angular/forms';
-import { EnviarFormularioService } from '../enviar-formulario.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -60,7 +59,8 @@ export class RegistroComponent  {
         .subscribe({
           next :(response) => {this.cookie = response.body,
                               localStorage.setItem('cookie', this.cookie),
-                              this.router.navigate(['/'])
+                              console.log('algo'),
+                              this.router.navigate(['/identificacion'])
                             },
                               
           error: (error) => {alert(error.error)}
@@ -72,8 +72,6 @@ export class RegistroComponent  {
   get email() { return this.profileForm.get('email')!; }
   get password() { return this.profileForm.get('password')!; }
   get password2() { return this.profileForm.get('password2')!; }
-
-
 
 }
 

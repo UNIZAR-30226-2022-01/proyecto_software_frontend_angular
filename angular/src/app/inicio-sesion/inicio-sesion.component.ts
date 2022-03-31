@@ -46,7 +46,8 @@ export class InicioSesionComponent  {
         .subscribe({
           next :(response) => {this.cookie = response.body,
                               localStorage.setItem('cookie', this.cookie),
-                              this.router.navigate(['/'])
+                              console.log('algo'),
+                              this.router.navigate(['/identificacion'])
                             },
                               
           error: (error) => {alert(error.error)}
