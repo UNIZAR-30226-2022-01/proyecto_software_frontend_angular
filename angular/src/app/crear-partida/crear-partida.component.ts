@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {  FormBuilder, FormControl, Validators } from '@angular/forms';
 
@@ -50,7 +50,10 @@ export class CrearPartidaComponent implements OnInit {
 
 
   onSubmit() {
-  console.log(this.profileForm.value);
+  let hcookie = new HttpHeaders();
+  hcookie.append('cookie_user',this.cookie);
+  hcookie.append('Set-Cookie',this.cookie);
+  console.log(this.cookie);
 
   var formData: any = new FormData();
   formData.append('maxJugadores', this.profileForm.get('maxJugadores')!.value);
@@ -62,8 +65,9 @@ export class CrearPartidaComponent implements OnInit {
     formData.append('tipo', 'Privada');
   }
 
-  this.http.post('http://localhost:8090/api/crearPartida', formData, {observe:'response', responseType:'text'})
-      .subscribe({
+
+  this.http.post('http://localhost:8090/api/crearPartida', formData, { headers:hcookie, observe:'response', responseType:'text'})
+      .subscribe({  
         next :(response) => {console.log('Todo ok')},
                             
         error: (error) => {alert(error.error)}
