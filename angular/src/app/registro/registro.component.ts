@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl  } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl  } from '@angular/forms';
 import { EnviarFormularioService } from '../enviar-formulario.service';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { waitForAsync } from '@angular/core/testing';
-import { AppModule } from '../app.module';
+import { HttpClient } from '@angular/common/http';
+
 
 
 @Component({
@@ -59,8 +57,7 @@ export class RegistroComponent  {
     
     this.http.post('http://localhost:8090/registro', formData, {observe:'response', responseType:'text'})
         .subscribe({
-          next :(response) => {console.log('Respuesta:',response.body),
-                              this.cookie = this.getCookie(response.body!),
+          next :(response) => {this.cookie = this.getCookie(response.body!),
                               this.nombre_usuario = this.getNombre_Usuario(response.body!),
                               localStorage.setItem('cookie', this.cookie),
                               localStorage.setItem('nombre_usuario', this.nombre_usuario)

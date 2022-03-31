@@ -1,0 +1,42 @@
+<div style="text-align: center;">
+    <br><br><br>
+    <h1>Configurar Partida</h1>
+  
+    <br>
+    <form [formGroup]="profileForm">
+        <label for="maxJugadores" >Número máximo de jugadores</label>
+        <select id="maxJugadores" name="maxJugadores" formControlName="maxJugadores">
+            <option [value]="2" ngValue="2">2</option>
+            <option [value]="3" ngValue="3">3</option>
+            <option [value]="4" ngValue="4">4</option>
+            <option [value]="5" ngValue="5">5</option>
+            <option [value]="6" ngValue="6">6</option>
+        </select>
+        <br><br>
+    </form>    
+        <p>Tipo de partida</p><br>
+
+        <label for="publica">Partida pública</label>
+        <input type="checkbox" id="publica" [(ngModel)]="publica" name="publica" (change)="actualizar('publica')"><br><br> 
+
+        <label for="privada">Partida privada</label>
+        <input type="checkbox" id="privada" [(ngModel)]="privada" name="privada" (change)="actualizar('privada')"><br><br>
+
+    <form [formGroup]="profileForm">
+        <label for="password" >Contraseña</label>
+        <input type="text" id="password" name="password" formControlName="password" ><br><br>
+        <div *ngIf="esPrivada&&password.errors?.['required']" style="color:red;">
+            Si la sala es privada tienes que crear una contraseña.
+        </div>
+    
+    </form>    
+    
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <button type="submit" [disabled]="(!esPublica&&!esPrivada)||(esPrivada&&password.errors?.['required'])||(maxJugadores.errors?.['required'])">Crear partida</button>
+    </form>
+    
+</div>
+
+ 
+  
+  

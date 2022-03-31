@@ -68,6 +68,7 @@ const appRoutes: Routes = [
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    FormsModule,
     RouterModule.forRoot(appRoutes),
   ],
   exports:[RouterModule],

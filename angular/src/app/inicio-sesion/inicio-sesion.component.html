@@ -12,9 +12,6 @@
       <div *ngIf="nombre.errors?.['required']">
         El nombre de usuario es obligatorio.
       </div>
-      <div *ngIf="nombre.errors?.['minlength']">
-        El nombre de usuario debe tener mínimo 4 caracteres.
-      </div>
     </div>
     
 
@@ -24,7 +21,7 @@
           style="color:red;">
 
             <div *ngIf="password.errors?.['required']">
-            El correo electrónico de usuario es obligatorio.
+            La contraseña es un campo es obligatorio.
             </div>
       </div>
 
@@ -34,6 +31,6 @@
 
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
     <p>Pulse el botón para iniciar sesión</p>
-    <button type="submit" >Submit</button>
+    <button type="submit"[disabled]="!profileForm.valid" >Submit</button>
 </form>
-</div><
+</div>
