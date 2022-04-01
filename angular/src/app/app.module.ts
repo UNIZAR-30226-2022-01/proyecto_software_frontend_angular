@@ -24,9 +24,10 @@ import { DownBarComponent } from './down-bar/down-bar.component';
 import { TopBarJuegoComponent } from './top-bar-juego/top-bar-juego.component';
 import { CirculosTropasComponent } from './circulos-tropas/circulos-tropas.component';
 import { IdentificacionComponent } from './identificacion/identificacion.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
-  {path: '', component: InicioComponent},
+  {path: 'inicio', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
   {path: 'inicioSesion', component: InicioSesionComponent},
   {path: 'tienda', component: TiendaComponent},
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
   {path: 'perfilUsuario', component: PerfilComponent},
   {path: 'personalizacion', component: PersonalizacionComponent},
   {path: 'notificaciones', component: NotificacionesComponent},
-  {path: 'mapa', component: MapaComponent},
+  {path: '', component: MapaComponent},
   {path: 'crearPartida', component: CrearPartidaComponent},
   {path: 'ranking', component: RankingComponent},
   {path: 'amigos', component: AmigosComponent},
@@ -68,6 +69,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
