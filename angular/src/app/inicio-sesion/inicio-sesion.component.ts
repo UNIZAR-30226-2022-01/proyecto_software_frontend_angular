@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'inicio-sesion',
@@ -44,14 +45,23 @@ export class InicioSesionComponent  {
 
     this.http.post('http://localhost:8090/login', formData, {observe:'response', responseType:'text'})
         .subscribe({
-          next :(response) => {this.cookie = response.body,
-                              localStorage.setItem('cookie', this.cookie),
-                              console.log('algo'),
-                              this.router.navigate(['/identificacion'])
-                            },
-                              
-          error: (error) => {alert(error.error)}
-        });  
+          next :(response) => {Swal.fire({
+                                          title: 'Inicio de sesión completado con éxito',
+                                          icon: 'success',
+                                          timer: 2000,
+                                          timerProgressBar: true,}),
+                              //this.cookie = response.body,
+                              //localStorage.setItem('cookie', this.cookie),
+                              document.cookie = response.body!,this.router.navigate(['/identificacion'])
+                              },
+            
+          error: (error) => {Swal.fire({
+                                        title: 'Se ha producido un error al iniciar sesión',
+                                        text: error.error,
+                                        icon: 'error',
+                                      });
+                            }
+          });
  }
 
   get nombre() { return this.profileForm.get('nombre')!; }

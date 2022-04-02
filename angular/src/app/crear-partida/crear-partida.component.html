@@ -21,15 +21,18 @@
 
         <label for="privada">Partida privada</label>
         <input type="checkbox" id="privada" [(ngModel)]="privada" name="privada" (change)="actualizar('privada')"><br><br>
+    <div id="contrasenia">
+        <form [formGroup]="profileForm">
+            <label for="password" >Contraseña</label>
+            <input type="text" id="password" name="password" formControlName="password" ><br><br>
+            <div *ngIf="esPrivada&&password.errors?.['required']" style="color:red;">
+                Si la sala es privada tienes que crear una contraseña.
+            </div>
+        
+        </form> 
 
-    <form [formGroup]="profileForm">
-        <label for="password" >Contraseña</label>
-        <input type="text" id="password" name="password" formControlName="password" ><br><br>
-        <div *ngIf="esPrivada&&password.errors?.['required']" style="color:red;">
-            Si la sala es privada tienes que crear una contraseña.
-        </div>
-    
-    </form>    
+    </div>
+       
     
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
         <button type="submit" [disabled]="(!esPublica&&!esPrivada)||(esPrivada&&password.errors?.['required'])||(maxJugadores.errors?.['required'])">Crear partida</button>

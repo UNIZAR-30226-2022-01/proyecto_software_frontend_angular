@@ -24,6 +24,7 @@ import { DownBarComponent } from './down-bar/down-bar.component';
 import { TopBarJuegoComponent } from './top-bar-juego/top-bar-juego.component';
 import { CirculosTropasComponent } from './circulos-tropas/circulos-tropas.component';
 import { IdentificacionComponent } from './identificacion/identificacion.component';
+import { LobbyComponent } from './lobby/lobby.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -40,7 +41,8 @@ const appRoutes: Routes = [
   {path: 'crearPartida', component: CrearPartidaComponent},
   {path: 'ranking', component: RankingComponent},
   {path: 'amigos', component: AmigosComponent},
-  {path: 'identificacion', component: IdentificacionComponent}
+  {path: 'identificacion', component: IdentificacionComponent},
+  {path: 'lobby', component: LobbyComponent}
 ]
 
 
@@ -64,7 +66,8 @@ const appRoutes: Routes = [
     DownBarComponent,
     TopBarJuegoComponent,
     CirculosTropasComponent,
-    IdentificacionComponent
+    IdentificacionComponent,
+    LobbyComponent
   ],
   imports: [
     BrowserModule,

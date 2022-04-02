@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {  FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'crear-partida',
@@ -12,11 +12,11 @@ import { Router } from '@angular/router';
 
 
 export class CrearPartidaComponent implements OnInit {
-  cookie:any;
+  //cookie:any;
 
   ngOnInit() {
     //this.nombre_usuario = localStorage.getItem('nombre_usuario'),
-    this.cookie = localStorage.getItem('cookie')
+    //this.cookie = localStorage.getItem('cookie')
   }
 
   profileForm = this.fb.group({
@@ -55,7 +55,7 @@ export class CrearPartidaComponent implements OnInit {
   formData.append('maxJugadores', this.profileForm.get('maxJugadores')!.value);
   formData.append('password', this.profileForm.get('password')!.value);
 
-  document.cookie = this.cookie;
+  //document.cookie = this.cookie;
 
   if (this.publica = true){
     formData.append('tipo', 'Publica');
@@ -66,8 +66,19 @@ export class CrearPartidaComponent implements OnInit {
 
   this.http.post('http://localhost:8090/api/crearPartida', formData, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
-        next :(response) => {this.router.navigate(['/'])},
-        error: (error) => {alert(error.error)}
+        next :(response) => {Swal.fire({
+                                        title: 'Partida creada con éxito',
+                                        text: "Espera a que el resto de jugadores se unan a la partida",
+                                        icon: 'success',
+                                      });
+                              this.router.navigate(['/lobby'])
+                            },
+        error: (error) => {Swal.fire({
+                                    title: 'Se ha producido un error al crear la partida',
+                                    text: error.error,
+                                    icon: 'error',
+                                    })
+                          }
       });
   }
 

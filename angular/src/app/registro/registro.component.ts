@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl  } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -31,24 +31,10 @@ export class RegistroComponent  {
       Validators.required,]),
   });
   
-  
+  cookie:any;
+
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {}
   
-  cookie:any;       
-  //nombre_usuario:any; 
-
-  /*getNombre_Usuario(nombre:string) {
-    nombre = nombre.split('=')[1];
-    nombre = nombre.split('|')[0];
-    return nombre;
-  }
-
-  getCookie(nombre:string) {
-    nombre = nombre.split('|')[1];
-    nombre = nombre.split(';')[0];
-    return nombre;
-  }*/
-
   onSubmit() {
     var formData: any = new FormData();
     formData.append('nombre', this.profileForm.get('nombre')!.value);
@@ -57,13 +43,23 @@ export class RegistroComponent  {
     
     this.http.post('http://localhost:8090/registro', formData, {observe:'response', responseType:'text'})
         .subscribe({
-          next :(response) => {this.cookie = response.body,
-                              localStorage.setItem('cookie', this.cookie),
-                              console.log('algo'),
+          next :(response) => {Swal.fire({
+                                          title: 'Registro completado con éxito',
+                                          icon: 'success',
+                                          timer: 2000,
+                                          timerProgressBar: true,
+                                        }),
+                              //this.cookie = response.body,
+                              //localStorage.setItem('cookie', this.cookie),
+                              document.cookie = response.body!,
                               this.router.navigate(['/identificacion'])
-                            },
+                              },
                               
-          error: (error) => {alert(error.error)}
+          error: (error) => {Swal.fire({
+                                      title: 'Se ha producido un error al registrarse',
+                                      text: error.error,
+                                      icon: 'error',
+                                      });}
         });  
   }
 
