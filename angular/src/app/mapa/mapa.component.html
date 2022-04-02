@@ -68,67 +68,67 @@
   <g id="Lines" stroke="#494341" fill="#494341" visibility="visible" border-style="dotted">
 
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 586,550 L 570,495" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 586,549 L 544,580" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 387,142 L 418,150" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 430,155 L 460,170" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 441,174 L 460,170" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 430,155 L 442,175" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 370,430 L 383,420" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 578,418 L 579,386" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 347,100 L 287,120" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 347,100 L 250,175" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 347,100 L 327,167" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 25,120 L 00,120" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 1055,180 L 945,180" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 500,298 L 500,335" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 435,232 L 442,240" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 910,280 L 870,247" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 910,280 L 890,206" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 882,455 L 840,448" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 908,473 L 900,525" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 800,476 L 820,510" />
     <path
-      className="sea-line"
+      class="sea-line"
       d="M 785,426 L 798,440" />
   </g>
 </g>
@@ -318,9 +318,67 @@
 </g>
 <!--<circulos-tropas [coordX]="565" [coordY]="450"></circulos-tropas>-->
 </svg>
+
+<div class="containerJugadores">
+  <div id="fran" class="jugador">
+    <div class="datosJugadores">fran101</div>
+    <div class="datosJugadores">
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/soldier.png"/> 24 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/singapore-territory.png"/> 8 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/external-others-zufarizal-robiyanto/23/000000/external-cards-mutuline-ui-essential-others-zufarizal-robiyanto.png"/> 4
+    </div>
+  </div>
+  <div class="jugador">
+    <div class="datosJugadores">emiiidk</div>
+    <div class="datosJugadores">
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/soldier.png"/> 24 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/singapore-territory.png"/> 28 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/external-others-zufarizal-robiyanto/23/000000/external-cards-mutuline-ui-essential-others-zufarizal-robiyanto.png"/> 12
+    </div>
+  </div>
+  <div class="jugador">
+    <div class="datosJugadores">yorch</div>
+    <div class="datosJugadores">
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/soldier.png"/> 24 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/singapore-territory.png"/> 8 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/external-others-zufarizal-robiyanto/23/000000/external-cards-mutuline-ui-essential-others-zufarizal-robiyanto.png"/> 4
+    </div>
+  </div>
+  <div class="jugador">
+    <div class="datosJugadores">llaura</div>
+    <div class="datosJugadores">
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/soldier.png"/> 24 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/singapore-territory.png"/> 8 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/external-others-zufarizal-robiyanto/23/000000/external-cards-mutuline-ui-essential-others-zufarizal-robiyanto.png"/> 4
+    </div>
+  </div>
+  <div class="jugador">
+    <div class="datosJugadores">mapache</div>
+    <div class="datosJugadores">
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/soldier.png"/> 24 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/ios-filled/20/000000/singapore-territory.png"/> 8 &nbsp;&nbsp;
+      <img class="imagen" src="https://img.icons8.com/external-others-zufarizal-robiyanto/23/000000/external-cards-mutuline-ui-essential-others-zufarizal-robiyanto.png"/> 4
+    </div>
+  </div>
 </div>
 
+<div class="buttonClicked" id="hidden_buttons">
+        <div @mostrarSlide *ngIf="isShow" class="buttons">
+          <input class="imagen" type="image" id="user_but" src="https://img.icons8.com/ios/50/000000/user--v1.png" alt='user' height="60" width="60" />
+        </div> &nbsp;&nbsp;&nbsp;&nbsp;
+        <div @mostrarSlide *ngIf="isShow" class="buttons">
+          <input class="imagen" type="image" id="world_but" src="https://img.icons8.com/external-kmg-design-detailed-outline-kmg-design/64/000000/external-world-business-strategy-kmg-design-detailed-outline-kmg-design.png" alt='world' height="60" width="60"/>
+        </div>
+      </div>
 
-
-
+      <!-->Botones principales: botón desplegable mapas y botón cartas usuario-->
+      <div class="buttonsBox">
+        <div (click) = toggleDisplay() (click) = changeImage() class="buttons">
+          <input #bar_char_but class="imagen" type="image" src={{source}} alt='bar-chart' height="60" width="60" />
+        </div> &nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="buttons">
+          <input class="imagen" type="image" id="cards_but" src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-vitaly-gorbachev/60/000000/external-cards-children-toys-vitaliy-gorbachev-lineal-vitaly-gorbachev.png" alt='cards' height="60" width="60"/>
+        </div>
+      </div>
+</div>
 

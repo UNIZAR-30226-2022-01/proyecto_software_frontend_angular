@@ -25,6 +25,7 @@ import { TopBarJuegoComponent } from './top-bar-juego/top-bar-juego.component';
 import { CirculosTropasComponent } from './circulos-tropas/circulos-tropas.component';
 import { IdentificacionComponent } from './identificacion/identificacion.component';
 import { LobbyComponent } from './lobby/lobby.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -71,6 +72,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,

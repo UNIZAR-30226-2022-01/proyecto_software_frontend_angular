@@ -33,18 +33,15 @@ export class CrearPartidaComponent implements OnInit {
 
   actualizar(nombre:string){
     console.log(this.privada,this.publica);
-    if (nombre == 'privada' && this.publica == true){
+    if (nombre == 'privada' ){
       this.privada = true;
       this.publica = false;
-    }else if (nombre == 'publica' && this.privada == true){
+      document.getElementById('contrasenia')!.style.visibility="visible";
+    }else if (nombre == 'publica' ){
       this.privada = false;
       this.publica = true;
-    }else if(nombre == 'privada'){
-      this.privada = true;
-      this.publica = false;
-    }else if (nombre == 'publica'){
-      this.publica = true;
-      this.privada = false;
+      document.getElementById('contrasenia')!.style.visibility="hidden";
+    
     }
   }
 

@@ -21,7 +21,7 @@
 
         <label for="privada">Partida privada</label>
         <input type="checkbox" id="privada" [(ngModel)]="privada" name="privada" (change)="actualizar('privada')"><br><br>
-    <div id="contrasenia">
+    <div id="contrasenia" style="visibility: hidden;">
         <form [formGroup]="profileForm">
             <label for="password" >Contraseña</label>
             <input type="text" id="password" name="password" formControlName="password" ><br><br>
