@@ -7,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BuscarPartidaComponent implements OnInit {
 
+  hola = 7;
+  tipoPartida: string = "Partida privada";
+  nAmigos: number = 0;
+  jugadores: number = 0;
   constructor() { }
 
   ngOnInit(): void {
