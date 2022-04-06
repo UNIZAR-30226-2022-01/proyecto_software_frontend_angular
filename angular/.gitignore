@@ -6,6 +6,7 @@
 *.log
 node_modules
 .vscode
+../.vscode
 # CircleCI temporary file for cache key computation.
 # See `save_month_to_file` in `.circleci/config.yml`.
 month.txt
