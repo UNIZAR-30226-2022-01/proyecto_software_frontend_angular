@@ -1,7 +1,7 @@
 .bP{
   width:800px;
   height: 800px;
-  border:1.5px solid rgb(0, 0, 0);
+  border:1.5px solid rgb(54, 51, 51);
   position: fixed;
   left: 50%;
   top: 50%;
@@ -14,4 +14,30 @@
   height:150px;
   border:1.5px solid rgb(54, 51, 51);
   transform: translate(20px, 10px);
+}
+
+.tipoPartida{
+  width:200px;
+  height:50px;
+  border:1.5px solid rgb(54, 51, 51);
+  border-top: 0px;
+  border-left: 0px;
+}
+
+.txtTP {
+  position: fixed;
+  transform: translate(25px, 15px);
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.txtJugadores {
+  position: absolute;
+  transform: translate(550px, -35px);
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.txtAC {
+  position: absolute;
+  transform: translate(20px, 50px);
+  font-family:Arial, Helvetica, sans-serif;
 }

@@ -1,14 +1,37 @@
+
+<top-bar></top-bar>
+<down-bar></down-bar>
 <br>
-<h1 style="text-align: center;">Buscar Partida</h1>
+<!--<h1 style="text-align: center;">Buscar Partida</h1>-->
 
 <div class="bP">
-  <ng-container *ngFor="let _ of [].constructor(hola)">
-    <div class="partida"></div>
+  <ng-container *ngFor="let p of jsonArray">
+    <div class="partida">
+      <div class="tipoPartida">
+        <ng-component *ngIf="p.esPublica; else esPrivada"><a class="txtTP">Partida Publica</a></ng-component>
+        <ng-template #esPrivada><a class="txtTP">Partida Privada</a></ng-template>
+      </div>
+      <a class="txtJugadores">En sala: {{p.NumeroJugadores}}/{{p.MaxNumeroJugadores}}</a>
+      <a class="txtAC">Amigos conectados: {{p.NumAmigosPresentes}}</a>
+    </div>
     <br>
   </ng-container>
 
 
 </div>
 
+<!--<div class="bP">
+  <ng-container *ngFor="let _ of [].constructor(hola)">
+    <div class="partida">
+      <div class="tipoPartida"><a class="txtTP">Partida Publica</a></div>
+      <a class="txtJugadores">En sala: 0/6</a>
+      <a class="txtAC">Amigos conectados: 5</a>
+    </div>
+    <br>
+  </ng-container>
+
+
+</div>
+-->
 
 <!--*ngFor="let _ of [].constructor(hola)"-->

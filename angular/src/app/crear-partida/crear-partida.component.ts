@@ -41,7 +41,7 @@ export class CrearPartidaComponent implements OnInit {
       this.privada = false;
       this.publica = true;
       document.getElementById('contrasenia')!.style.visibility="hidden";
-    
+
     }
   }
 
@@ -68,7 +68,7 @@ export class CrearPartidaComponent implements OnInit {
                                         text: "Espera a que el resto de jugadores se unan a la partida",
                                         icon: 'success',
                                       });
-                              this.router.navigate(['/lobby'])
+                              this.router.navigate(['/buscarPartida'])
                             },
         error: (error) => {Swal.fire({
                                     title: 'Se ha producido un error al crear la partida',

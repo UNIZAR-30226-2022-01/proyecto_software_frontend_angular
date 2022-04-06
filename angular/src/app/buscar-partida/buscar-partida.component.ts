@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-buscar-partida',
@@ -7,13 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BuscarPartidaComponent implements OnInit {
 
-  hola = 7;
-  tipoPartida: string = "Partida privada";
-  nAmigos: number = 0;
-  jugadores: number = 0;
-  constructor() { }
+  hola = 5;
+  jsonArray: any;
+  constructor(private http: HttpClient) {
+  }
 
   ngOnInit(): void {
+    console.log(document.cookie),
+    this.http.get('http://localhost:8090/api/obtenerPartidas', {withCredentials: true}).subscribe(data => {
+      console.log(data);
+      this.jsonArray = data;
+    })
   }
 
 }

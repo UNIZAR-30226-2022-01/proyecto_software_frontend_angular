@@ -4,7 +4,7 @@
     overflow: hidden;
     margin-bottom:0px;
   }
-  
+
   /* Style the links inside the navigation bar */
   .topnav a {
     float: left;
@@ -14,14 +14,13 @@
     text-decoration: none;
     font-size: 17px;
   }
-  
 
   /* Change the color of links on hover */
   .topnav a:hover {
     background-color: #ddd;
     color: black;
   }
-  
+
   /* Add a color to the active/current link */
   .topnav a.active {
     background-color: #04AA6D;
@@ -48,7 +47,7 @@
     font-family: inherit; /* Important for vertical align on mobile phones */
     margin: 0; /* Important for vertical align on mobile phones */
   }
-  
+
   .navbar , .dropdown:hover .dropbtn {
     background-color: #ddd;
     color: black;
@@ -62,7 +61,7 @@
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
   }
-  
+
   /* Links inside the dropdown */
   .dropdown-content a {
     float: none;
@@ -82,7 +81,7 @@
     display: block;
   }
 
-  .imagenes { 
+  .imagenes {
     width: 46px;height: 46px;
     overflow: hidden;
     margin-top: -13px;
@@ -90,6 +89,9 @@
   }
 
   .invertida {
-    filter: invert(100%); 
+    filter: invert(100%);
   }
 
+  .invertida:hover {
+    filter: invert(100%);
+  }
