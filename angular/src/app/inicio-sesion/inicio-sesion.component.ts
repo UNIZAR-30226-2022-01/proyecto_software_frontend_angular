@@ -52,7 +52,9 @@ export class InicioSesionComponent  {
                                           timerProgressBar: true,}),
                               //this.cookie = response.body,
                               //localStorage.setItem('cookie', this.cookie),
-                              document.cookie = response.body!,this.router.navigate(['/identificacion'])
+                              document.cookie = response.body!,
+                              localStorage.setItem('nombre_usuario', response.body! );
+                              this.router.navigate(['/identificacion'])
                               },
             
           error: (error) => {Swal.fire({

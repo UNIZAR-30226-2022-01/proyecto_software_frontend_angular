@@ -1,0 +1,26 @@
+<div style="text-align: center;">
+    <h1>PERFIL</h1>
+    <form [formGroup]="profileForm">
+        <label> Nombre de usuario: </label> <br>
+        <input id="nombreUsuario" type="text" formControlName="nombreUsuario">
+
+        <br><br>
+        <label> Descripción: </label> <br>
+        <input id="descripcion" type="text" formControlName="descripcion">
+
+        <br><br>
+        <label> Correo electrónico: </label> <br>
+        <input id="correo" type="text" formControlName="correo">
+
+        <br><br>
+        <label> Contraseña: </label> <br>
+        <input id="password" type="password" ormControlName="password">
+    </form>
+
+    <br><br>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <button type="submit"> Actualizar</button>
+    </form>  
+</div>
+    
+    

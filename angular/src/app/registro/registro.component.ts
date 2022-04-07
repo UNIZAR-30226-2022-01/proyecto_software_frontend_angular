@@ -52,6 +52,7 @@ export class RegistroComponent  {
                               //this.cookie = response.body,
                               //localStorage.setItem('cookie', this.cookie),
                               document.cookie = response.body!,
+                              localStorage.setItem('nombre_usuario', response.body! );
                               this.router.navigate(['/identificacion'])
                               },
                               

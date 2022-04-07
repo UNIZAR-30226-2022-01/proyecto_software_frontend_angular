@@ -26,6 +26,7 @@ import { CirculosTropasComponent } from './circulos-tropas/circulos-tropas.compo
 import { IdentificacionComponent } from './identificacion/identificacion.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ConfigPerfilComponent } from './config-perfil/config-perfil.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -43,7 +44,8 @@ const appRoutes: Routes = [
   {path: 'ranking', component: RankingComponent},
   {path: 'amigos', component: AmigosComponent},
   {path: 'identificacion', component: IdentificacionComponent},
-  {path: 'lobby', component: LobbyComponent}
+  {path: 'lobby', component: LobbyComponent},
+  {path: 'configuaracionPerfil', component: ConfigPerfilComponent}
 ]
 
 
@@ -68,7 +70,8 @@ const appRoutes: Routes = [
     TopBarJuegoComponent,
     CirculosTropasComponent,
     IdentificacionComponent,
-    LobbyComponent
+    LobbyComponent,
+    ConfigPerfilComponent
   ],
   imports: [
     BrowserModule,

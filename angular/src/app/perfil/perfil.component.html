@@ -1,26 +1,17 @@
+<top-bar></top-bar>
+<down-bar></down-bar>
+
 <div style="text-align: center;">
-    <h1>PERFIL</h1>
-    <form [formGroup]="profileForm">
-        <label> Nombre de usuario: </label> <br>
-        <input id="nombreUsuario" type="text" formControlName="nombreUsuario">
-
-        <br><br>
-        <label> Descripción: </label> <br>
-        <input id="descripcion" type="text" formControlName="descripcion">
-
-        <br><br>
-        <label> Correo electrónico: </label> <br>
-        <input id="correo" type="text" formControlName="correo">
-
-        <br><br>
-        <label> Contraseña: </label> <br>
-        <input id="password" type="password" ormControlName="password">
-    </form>
-
-    <br><br>
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-        <button type="submit"> Actualizar</button>
-    </form>  
+    <br><br><br>
+    <h1> <img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
+        {{nombre}}
+       <a  [routerLink]="['/configuaracionPerfil']"><img src="https://img.icons8.com/material-sharp/48/000000/settings.png" /></a>   
+    </h1>
+    <br><br><br>
+       <h3>Biografía</h3>
+    <p>{{descripcion}}</p>
+    <br>
+    <h3>Email: {{email}}</h3>
+    <h3>Partidas ganadas: {{partidas_ganadas}}</h3>
+    <h3>Partidas totales: {{partidas_totales}}</h3>
 </div>
-    
-    

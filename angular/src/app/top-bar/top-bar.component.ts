@@ -18,7 +18,7 @@ export class TopBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.cookie = localStorage.getItem('cookie'),
-    this.nombre_usuario = this.getNombre_Usuario(this.cookie), 
+    this.nombre_usuario = this.getNombre_Usuario(localStorage.getItem('nombre_usuario')!), 
     this.ancho = this.nombre_usuario.length > 100 ? this.nombre_usuario.length: 100;
   }
   

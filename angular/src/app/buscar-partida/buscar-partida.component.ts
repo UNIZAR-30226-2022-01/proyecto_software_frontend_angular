@@ -14,7 +14,6 @@ export class BuscarPartidaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(document.cookie),
     this.http.get('http://localhost:8090/api/obtenerPartidas', {withCredentials: true}).subscribe(data => {
       console.log(data);
       this.jsonArray = data;
