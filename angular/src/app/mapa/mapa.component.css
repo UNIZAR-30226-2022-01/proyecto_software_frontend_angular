@@ -79,43 +79,6 @@ opacity: 0.8;
   clear:right;
 }
 
-.buttonsBox {
-  /* border: 1.5px solid white; */
-  transform: translate(-50px, -410px);
-  background-color:hsl(0, 0%, 0%, 0);
-  margin-left: 5%;
-  margin-bottom: 0;
-  width: 200px;
-  height: 80px;
-  display: flex;
-  list-style: none;
-}
-
-.buttons{
-  border: 1.5px solid white;
-  border-radius: 20px;
-  background-color: #CCF4FF;
-  height: "60";
-  width: "60";
-  padding: .5em;
-  cursor: pointer;
-}
-
-.buttons:hover {
-  background-color: #89ccdf;
-  transition: 0.3s;
-  transform: scale(1.003);
-}
-
-.buttonClicked {
-  transform: translate(-45px, -320px);
-  /* border: 1.5px solid yellow; */
-  padding: 10px;
-  margin: 80px;
-  width: 80px;
-  height: 200px;
-}
-
 .jugador {
   width: 475%;
   height: 100%;
@@ -146,3 +109,4 @@ opacity: 0.8;
 .imagen {
   background-color:hsl(0, 0%, 0%, 0);
 }
+

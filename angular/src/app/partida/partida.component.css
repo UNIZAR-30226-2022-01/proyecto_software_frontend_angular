@@ -1,0 +1,42 @@
+.imagen {
+  background-color:hsl(0, 0%, 0%, 0);
+}
+
+.buttonsBox {
+  background-color:hsl(0, 0%, 0%, 0);
+  margin-left: 5%;
+  margin-bottom: 0;
+  max-width: 200px;
+  max-height: 80px;
+  display: flex;
+  list-style: none;
+}
+
+.buttons{
+  border: 1.5px solid white;
+  border-radius: 20px;
+  background-color: #CCF4FF;
+  height: 60px;
+  width: 60px;
+  padding: .5em;
+  cursor: pointer;
+}
+
+.buttons:hover {
+  background-color: #89ccdf;
+  transition: 0.3s;
+  transform: scale(1.003);
+}
+
+.buttonClicked {
+  width: 80px;
+  transform: translate(15px, -187px);
+}
+
+.botonesPrincipal {
+  position: absolute;
+  transform: translate(15px, -125px);
+
+  display: flex;
+}
+
