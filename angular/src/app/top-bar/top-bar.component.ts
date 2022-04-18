@@ -30,7 +30,7 @@ export class TopBarComponent implements OnInit {
   }
 
   cerrarSesion(){
-    localStorage.clear()
+    document.cookie = '';
     this.router.navigate(['/'])
   }
 }

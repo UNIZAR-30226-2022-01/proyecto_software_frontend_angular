@@ -11,7 +11,18 @@
        <h3>Biografía</h3>
     <p>{{descripcion}}</p>
     <br>
-    <h3>Email: {{email}}</h3>
+    <h3>Puntos: {{puntos}}</h3>
     <h3>Partidas ganadas: {{partidas_ganadas}}</h3>
     <h3>Partidas totales: {{partidas_totales}}</h3>
+    <div *ngIf="esAmigo; then thenBlock; else elseBlock"></div>
+    <ng-template #thenBlock>
+        Sois amigos
+    </ng-template>
+    <ng-template #elseBlock>
+        <button onclick="enviarSolicitudAmistad()">Añadir amigo </button>
+    </ng-template>
+
+    
+
+    
 </div>

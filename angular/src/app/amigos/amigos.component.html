@@ -1,1 +1,11 @@
-<p>amigos works!</p>
+
+<input type="text" (change)="onChangeEvent($event)" />
+
+<div class="contenedor">
+    <div *ngFor="let p of busqueda">
+      <div class="partida">
+          <a [routerLink]="['/perfil/',p.Nombre]">{{p.Nombre}}</a>
+        <br>
+      </div>
+    </div>
+</div>

@@ -27,6 +27,7 @@ import { IdentificacionComponent } from './identificacion/identificacion.compone
 import { LobbyComponent } from './lobby/lobby.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfigPerfilComponent } from './config-perfil/config-perfil.component';
+import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
   {path: 'top-bar', component: TopBarComponent},
   {path: 'configuracionPartida', component: ConfigPartidaComponent},
   {path: 'buscarPartida', component: BuscarPartidaComponent},
-  {path: 'perfilUsuario', component: PerfilComponent},
+  {path: 'perfil/:nombre', component: PerfilComponent},
   {path: 'personalizacion', component: PersonalizacionComponent},
   {path: 'notificaciones', component: NotificacionesComponent},
   {path: 'mapa', component: MapaComponent},
@@ -45,7 +46,9 @@ const appRoutes: Routes = [
   {path: 'amigos', component: AmigosComponent},
   {path: 'identificacion', component: IdentificacionComponent},
   {path: 'lobby', component: LobbyComponent},
-  {path: 'configuaracionPerfil', component: ConfigPerfilComponent}
+  {path: 'configuaracionPerfil', component: ConfigPerfilComponent},
+  {path: 'miPerfil', component: MiPerfilComponent},
+  
 ]
 
 
@@ -71,7 +74,8 @@ const appRoutes: Routes = [
     CirculosTropasComponent,
     IdentificacionComponent,
     LobbyComponent,
-    ConfigPerfilComponent
+    ConfigPerfilComponent,
+    MiPerfilComponent
   ],
   imports: [
     BrowserModule,

@@ -1,39 +1,59 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'perfil',
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css']
 })
-export class PerfilComponent implements OnInit {
 
+export class PerfilComponent implements OnInit {
   nombre:any;
-  email:any;
+  puntos:any;
   descripcion:any;
   partidas_ganadas:any;
   partidas_totales:any;
-  constructor(private http: HttpClient){}
-  getNombre_Usuario(nombre:string) {
-    nombre = nombre.split('=')[1];
-    nombre = nombre.split('|')[0];
-    return nombre;
-  }
+  esAmigo:any;
 
+  constructor(private http: HttpClient, private router:Router){
+
+  }
+  
   ngOnInit(): void {
-    this.nombre = this.getNombre_Usuario(document.cookie), 
+    this.nombre = localStorage.getItem('param'),
     this.http.get<Perfil>('http://localhost:8090/api/obtenerPerfil/'+this.nombre, {observe:'body',withCredentials: true})
         .subscribe(
           data => {console.log(data);
             //this.nombre = data.NombreUsuario,
-            //this.descripcion = data.Biografia,
+            this.descripcion = data.Biografia,
             this.partidas_ganadas = data.PartidasGanadas,
             this.partidas_totales = data.PartidasTotales,
-            this.email = data.Email;
+            this.puntos = data.Puntos;
+            this.esAmigo = data.esAmigo;
         })
-    this.descripcion='Apasionado de los juegos de mesa. En mis tiempos libres soy ingeniero'
   }
+
+  enviarSolicitudAmistad(){
+    this.http.post('http://localhost:8090/api/crearPartida'+this.nombre,  { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {Swal.fire({
+                                        title: 'Solicitud de amistad enviada con exito',
+                                        icon: 'success',
+                                      });
+                              this.router.navigate(['/amigos'])
+                            },
+        error: (error) => {Swal.fire({
+                                    title: 'Se ha producido un error al enviar la solicitud de amistad',
+                                    text: error.error,
+                                    icon: 'error',
+                                    })
+                          }
+      });
+  }
+
+  
 }
 export interface Perfil {
   NombreUsuario: string;
@@ -41,5 +61,6 @@ export interface Perfil {
   Biografia: any;
   PartidasGanadas: any;
   PartidasTotales: any;
-
+  Puntos:any;
+  esAmigo:any;
 }
