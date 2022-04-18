@@ -1,0 +1,152 @@
+* {
+  background-color: #20BCE7;
+}
+
+.country{
+  cursor: pointer;
+}
+
+.special-country{
+opacity: 0.8;
+}
+
+.country:hover {
+  fill:#FFFFFF;
+  opacity: 0.8;
+  transition: 0.3s;
+  transform: scale(1.003);
+}
+
+#Lines {
+  stroke-dasharray: 5,5;
+}
+
+.circuloI{
+  stroke: black;
+  stroke-width: 2.5;
+  -webkit-filter: drop-shadow( 2px 2px 1px rgba(0, 0, 0, .5));
+  filter: drop-shadow( 2px 2px 1px rgba(0, 0, 0, .5));
+  fill: #928f8f;
+}
+
+.Africa_c .circuloI {
+  stroke: rgb(179, 113, 0);
+  fill:#e2bc75;
+}
+
+.Africa_c .rectanguloInfo {
+  stroke: rgb(179, 113, 0);
+  fill:#e2bc75;
+}
+
+.Oceania_c .circuloI {
+  stroke: #800f1e;
+  fill: #f7aab1;
+}
+
+.Oceania_c .rectanguloInfo {
+  stroke: #800f1e;
+  fill: #f7aab1;
+}
+
+.AmericaSur_c .circuloI {
+  stroke: #ba4c20;
+  fill: #ebad97;
+}
+
+.AmericaSur_c .rectanguloInfo {
+  stroke: #ba4c20;
+  fill: #ebad97;
+}
+
+.AmericaNorte_c .circuloI {
+  stroke: #956e14;
+  fill: #f8e0a2;
+}
+
+.AmericaNorte_c .rectanguloInfo {
+  stroke: #956e14;
+  fill: #f8e0a2;
+}
+
+.Europa_c .circuloI {
+  stroke: #7f52be;
+  fill: #e5dcec;
+}
+
+.Europa_c .rectanguloInfo {
+  stroke: #7f52be;
+  fill: #e5dcec;
+}
+
+.Asia_c .circuloI {
+  stroke: #638626;
+  fill: #e0f0c6;
+}
+
+.Asia_c .rectanguloInfo {
+  stroke: #638626;
+  fill: #e0f0c6;
+}
+
+.circulosI text{
+  font-family:Arial, Helvetica, sans-serif;
+  fill: white;
+  stroke: #000000;
+  stroke-width: 1.2px;
+  font-size: 32px;
+  font-weight: bold;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.text_info text{
+  font-family:Arial, Helvetica, sans-serif;
+  fill: white;
+  stroke: #000000;
+  stroke-width: 0.8px;
+  font-size: 20px;
+  font-weight: bold;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.containerJugadores {
+  width:3%;
+  height: 95px;
+  margin-top: 3%;
+  margin-right: 2.5%;
+  float:right;
+  clear:right;
+}
+
+.jugador {
+  width: 475%;
+  height: 100%;
+  margin-top: 45%;
+  float:right;
+  clear:right;
+  border-radius: 30px;
+  border: 1px solid #fafafa;
+  box-shadow:  rgba(0, 0, 0, 0.25) 0px 5px 10px;
+  background: #c3195d;
+  font-size: 50px;
+}
+
+.jugador:hover {
+  opacity: 0.9;
+  transition: 0.1s;
+}
+
+.datosJugadores {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color:hsl(0, 0%, 0%, 0);
+  font-size: 20px;
+  font-weight: 550;
+  padding: 9px 0;
+  color: #fafafa;
+}
+
+.imagen {
+  background-color:hsl(0, 0%, 0%, 0);
+}

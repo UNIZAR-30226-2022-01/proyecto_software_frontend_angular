@@ -27,9 +27,11 @@ import { IdentificacionComponent } from './identificacion/identificacion.compone
 import { LobbyComponent } from './lobby/lobby.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfigPerfilComponent } from './config-perfil/config-perfil.component';
+import { MapaInfoComponent } from './mapa-info/mapa-info.component';
+import { PartidaComponent } from './partida/partida.component';
 
 const appRoutes: Routes = [
-  {path: '', component: InicioComponent},
+  {path: 'inicio', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
   {path: 'inicioSesion', component: InicioSesionComponent},
   {path: 'tienda', component: TiendaComponent},
@@ -45,7 +47,9 @@ const appRoutes: Routes = [
   {path: 'amigos', component: AmigosComponent},
   {path: 'identificacion', component: IdentificacionComponent},
   {path: 'lobby', component: LobbyComponent},
-  {path: 'configuaracionPerfil', component: ConfigPerfilComponent}
+  {path: 'configuaracionPerfil', component: ConfigPerfilComponent},
+  {path: 'mapaInfo', component: MapaInfoComponent},
+  {path: '', component: PartidaComponent}
 ]
 
 
@@ -71,7 +75,9 @@ const appRoutes: Routes = [
     CirculosTropasComponent,
     IdentificacionComponent,
     LobbyComponent,
-    ConfigPerfilComponent
+    ConfigPerfilComponent,
+    MapaInfoComponent,
+    PartidaComponent
   ],
   imports: [
     BrowserModule,
