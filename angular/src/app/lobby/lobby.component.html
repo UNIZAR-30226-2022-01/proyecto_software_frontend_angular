@@ -1,1 +1,31 @@
-<p>lobby works!</p>
+<top-bar></top-bar>
+<down-bar></down-bar>
+<div style="text-align: center;">
+    <br><br>
+    <h1>Dominación Mundial</h1>
+    <h2>¡Domina y defiende todos los territorios del mapa!</h2>
+    <div class="contenedorJugadoresEspera">
+        <div *ngFor="let jugador of nombresJugadores; index as i;">
+         <div class="participante" id = {{i}}>
+            <div class ="datosParticipante"> 
+                {{jugador}}
+            </div>
+         </div>
+     </div>
+     
+     <div *ngFor="let number of jugadoresEsperando">
+         <div class="participante jugadorEspera">
+            <div class="datosParticipante">
+                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
+            </div>
+         </div>
+     </div>
+     
+
+     <button (click)="salir()" class="botonAtrasEspera">
+         SALIR DEL LOBBY
+     </button>
+
+</div>
+
+
