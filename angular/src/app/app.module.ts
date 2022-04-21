@@ -29,7 +29,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfigPerfilComponent } from './config-perfil/config-perfil.component';
 import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
 import { MapaInfoComponent } from './mapa-info/mapa-info.component';
-import { PartidaComponent } from './partida/partida.component';
+import { JuegoComponent } from './juego/juego.component';
 
 const appRoutes: Routes = [
   {path: 'inicio', component: InicioComponent},
@@ -51,7 +51,7 @@ const appRoutes: Routes = [
   {path: 'configuaracionPerfil', component: ConfigPerfilComponent},
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
-  {path: '', component: PartidaComponent}
+  {path: '', component: JuegoComponent}
 ]
 
 
@@ -80,7 +80,7 @@ const appRoutes: Routes = [
     ConfigPerfilComponent,
     MiPerfilComponent,
     MapaInfoComponent,
-    PartidaComponent
+    JuegoComponent
   ],
   imports: [
     BrowserModule,

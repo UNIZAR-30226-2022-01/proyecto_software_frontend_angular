@@ -1,0 +1,51 @@
+* {
+    background-color: #20BCE7;
+  }
+
+.imagen {
+    background-color:hsl(0, 0%, 0%, 0);
+  }
+
+.containerJugadores {
+    /* border: 1.5px solid white; */
+    width:17%;
+    height: 95px;
+    margin-top: 1.5%;
+    margin-right: 4%;
+    float:right;
+    clear:right;
+  }
+  
+  .botonesPrincipales {
+    /* border: 1.5px solid white; */
+    width: 180px;
+    display: flex;
+  }
+  
+  .boton {
+    border: 1.5px solid white; 
+    border-radius: 20px;
+    background-color: #CCF4FF;
+    padding: .5em;
+    cursor: pointer;
+    transition: width 0.5s, height 0.5s, transform 0.5s;
+  }
+  
+  .boton:hover {
+    background-color: #a4ebff;
+    transform: scale(1.05);
+  }
+  
+  .botonClick {
+    /*border: 1.5px solid yellow; */
+    width: 79px;
+    height: 200px;
+  }
+
+  .containerBotones {
+    /* border: 1.5px solid white; */
+    position: absolute;
+    transform: translate(0px, -330px);
+    float:left;
+    margin-left: 4%;
+  }
