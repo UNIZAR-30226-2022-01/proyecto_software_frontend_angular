@@ -1,51 +1,96 @@
 * {
-    background-color: #20BCE7;
-  }
+  background-color: #20BCE7;
+}
+
+.interfazFases {
+  position: absolute;
+  background-color:hsl(0, 0%, 0%, 0);
+  transform: scale(1); 
+} 
 
 .imagen {
-    background-color:hsl(0, 0%, 0%, 0);
-  }
+  background-color:hsl(0, 0%, 0%, 0);
+}
 
 .containerJugadores {
-    /* border: 1.5px solid white; */
-    width:17%;
-    height: 95px;
-    margin-top: 1.5%;
-    margin-right: 4%;
-    float:right;
-    clear:right;
-  }
-  
-  .botonesPrincipales {
-    /* border: 1.5px solid white; */
-    width: 180px;
-    display: flex;
-  }
-  
-  .boton {
-    border: 1.5px solid white; 
-    border-radius: 20px;
-    background-color: #CCF4FF;
-    padding: .5em;
-    cursor: pointer;
-    transition: width 0.5s, height 0.5s, transform 0.5s;
-  }
-  
-  .boton:hover {
-    background-color: #a4ebff;
-    transform: scale(1.05);
-  }
-  
-  .botonClick {
-    /*border: 1.5px solid yellow; */
-    width: 79px;
-    height: 200px;
-  }
+  width:17%;
+  height: 95px;
+  margin-top: 1.5%;
+  margin-right: 4%;
+  float:right;
+  clear:right;
+}
 
-  .containerBotones {
-    /* border: 1.5px solid white; */
+.botonesPrincipales {
+  width: 180px;
+  display: flex;
+}
+
+.boton {
+  border: 1.5px solid white; 
+  border-radius: 20px;
+  background-color: #CCF4FF;
+  padding: .5em;
+  cursor: pointer;
+  transition: width 0.5s, height 0.5s, transform 0.5s;
+}
+
+.boton:hover {
+  background-color: #a4ebff;
+  transform: scale(1.05);
+}
+
+.botonClick {
+  /*border: 1.5px solid yellow; */
+  width: 79px;
+  height: 200px;
+}
+
+.containerBotones {
+  /* border: 1.5px solid white; */
+  position: absolute;
+  transform: translate(0px, -330px);
+  float:left;
+  margin-left: 4%;
+}
+
+.containerFases {
     position: absolute;
-    transform: translate(0px, -330px);
-    float:left;
-    margin-left: 4%;
+    margin-left: 37%;
+    transform: translate(0,-105px);
+    width: 315px;
+    height: 90px;
+    clear:right;
+    border: 1px solid #fafafa;
+    box-shadow:  rgba(0, 0, 0, 0.25) 0px 5px 10px;
+    background: #b5bbbd;
+}
+
+.rectangulito {
+  position: absolute;
+  margin-top: 2.5%;
+  width: 56.7px;
+  height: 12px;
+  clear:right;
+  background: #ffffff;
+}
+
+.circuloFases {
+  position: fixed;
+  width: 110px;
+  height: 110px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: translate(0,-113px);
   }
+  
+.circuloDerecha{
+  right: 43%;
+  background: #562892;
+}
+.circuloIzquierda{
+  margin-left: 34%;
+  background: #002892;
+}

@@ -46,12 +46,12 @@ const appRoutes: Routes = [
   {path: 'crearPartida', component: CrearPartidaComponent},
   {path: 'ranking', component: RankingComponent},
   {path: 'amigos', component: AmigosComponent},
-  {path: '', component: IdentificacionComponent},
+  {path: 'identificacion', component: IdentificacionComponent},
   {path: 'lobby', component: LobbyComponent},
   {path: 'configuaracionPerfil', component: ConfigPerfilComponent},
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
-  {path: 'juego', component: JuegoComponent}
+  {path: '', component: JuegoComponent}
 ]
 
 
