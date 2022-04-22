@@ -68,7 +68,7 @@ export class CrearPartidaComponent implements OnInit {
                                         text: "Espera a que el resto de jugadores se unan a la partida",
                                         icon: 'success',
                                       });
-                              this.router.navigate(['/buscarPartida'])
+                              this.router.navigate(['/lobby'])
                             },
         error: (error) => {Swal.fire({
                                     title: 'Se ha producido un error al crear la partida',
