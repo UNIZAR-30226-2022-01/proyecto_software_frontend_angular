@@ -2,6 +2,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LogicaJuego } from '../logica-juego';
 
 @Component({
   selector: 'juego',
@@ -25,7 +26,6 @@ export class JuegoComponent implements OnInit {
   isShow = false;
   source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";
 
-
   toggleDisplay() { this.isShow = !this.isShow;}
 
   changeImage() {
@@ -43,23 +43,83 @@ export class JuegoComponent implements OnInit {
   }
 
 
-  cosaJSON: any;
+  jsonData: any;
   intervaloMio:any;
+  i:any;
+  logica:any;
   fnCall() {
- 
     this.intervaloMio = setInterval(() => {
-      this.http.get('http://localhost:8090/api/obtenerEstadoLobby', {observe:'body', responseType:'text', withCredentials: true})
+      this.http.get('http://localhost:8090/api/obtenerEstadoPartidaCompleto', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
           .subscribe(
             data => {
-              console.log(data)
-              this.cosaJSON = JSON.parse(data.toString());
+              this.jsonData = JSON.parse(data);
+              console.log("jsonData:",this.jsonData);
+              //this.jsonData = JSON.parse(data.toString());
+              //console.log("jsonData string:",this.jsonData);
+              this.logica = new LogicaJuego();
+              this.logica.metodoPrueba();
+              //console.log("tamaño:",this.jsonData.length);
+              //console.log("jsonData[0]", this.jsonData.at(0))
               
-              if (this.cosaJSON.MaxJugadores == this.cosaJSON.Jugadores) { //iniciarPartida
+              for(var i = 0; i < this.jsonData.length; i++) {
+                var obj = this.jsonData[i];
+                console.log("obj[",i,"]:",obj);
+                console.log("ID:",obj.IDAccion);
+                
+                switch(obj.IDAccion) { 
+                  case 0: { //IDAccionRecibirRegion
+                      
+                      break; 
+                  } 
+                  case 1: { // IDAccionCambioFase
+                 
+                      break; 
+                  } 
+                  case 2: { // IDAccionInicioTurno
+                      
+                      break; 
+                  } 
+                  case 3: { // IDAccionCambioCartas
+                 
+                      break; 
+                  } 
+                  case 4: { // IDAccionReforzar
+                    
+                      break; 
+                  }
+                  case 5: { // IDAccionAtaque
+                      
+                      break; 
+                  } 
+                  case 6: { // IDAccionOcupar
+                 
+                      break; 
+                  } 
+                  case 8: { // IDAccionFortificar
+                    
+                      break; 
+                  }
+                  case 9: { // IDAccionObtenerCarta
+                      
+                      break; 
+                  } 
+                  case 10: { // IDAccionJugadorEliminado
+                 
+                      break; 
+                  } 
+                  case 11: { // IDAccionPartidaFinalizada
+                    
+                      break; 
+                  }
+                }
+              }
+
+              /*if (this.cosaJSON.MaxJugadores == this.cosaJSON.Jugadores) { //iniciarPartida
                 clearInterval(this.intervaloMio)
                 //this.router.navigate(['/juego'])
-              }
+              }*/
             })
       
-    }, 1000);
+    }, 5000);
   }
 }

@@ -25,12 +25,13 @@ export class LobbyComponent implements OnInit {
   jugadoresEsperando:any;
   cosaJSON: any;
   intervaloMio:any;
+  enCurso:any;
 
   colores = ['red', 'purple','green', 'blue', 'orange']
   fnCall() {
  
     this.intervaloMio = setInterval(() => {
-      this.http.get('http://localhost:8090/api/obtenerEstadoLobby', {observe:'body', responseType:'text', withCredentials: true})
+      this.http.get('http://localhost:8090/api/obtenerEstadoLobby', {observe:'body', responseType:'text' as 'json', withCredentials: true})
           .subscribe(
             data => {
               console.log(data)
@@ -43,8 +44,11 @@ export class LobbyComponent implements OnInit {
               this.maxJugadores = this.cosaJSON.MaxJugadores,
               this.nombresJugadores = this.cosaJSON.NombresJugadores,
               this.jugadores = this.cosaJSON.Jugadores;
-              
-              if (this.cosaJSON.MaxJugadores == this.cosaJSON.Jugadores) { //iniciarPartida
+              this.enCurso = this.cosaJSON.EnCurso;
+
+
+
+              if (this.enCurso) { //iniciarPartida
                 clearInterval(this.intervaloMio)
                 this.router.navigate(['/juego'])
               }

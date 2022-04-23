@@ -6,11 +6,10 @@
     <form [formGroup]="profileForm">
         <label for="maxJugadores" >Número máximo de jugadores</label>
         <select id="maxJugadores" name="maxJugadores" formControlName="maxJugadores">
-            <option [value]="2" ngValue="2">2</option>
-            <option [value]="3" ngValue="3">3</option>
-            <option [value]="4" ngValue="4">4</option>
-            <option [value]="5" ngValue="5">5</option>
-            <option [value]="6" ngValue="6">6</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
         </select>
         <br><br>
     </form>    
