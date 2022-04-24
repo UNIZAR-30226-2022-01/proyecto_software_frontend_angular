@@ -1,44 +1,26 @@
-<top-bar-juego></top-bar-juego>
-<mapa *ngIf="!info"></mapa>
-<mapa-info *ngIf="info"></mapa-info>
-<div class='containerBotones'>
-    <div class="botonClick" id="hidden_buttons">
-        <div @mostrarSlide class="boton" *ngIf="isShow" (click)="setMapa()">
-            <input class="imagen" type="image" id="user_but" src="https://img.icons8.com/ios/50/000000/user--v1.png" alt='user' height="60" width="60" />
-        </div> &nbsp;&nbsp;&nbsp;&nbsp;
-        <div @mostrarSlide class="boton" *ngIf="isShow" (click)="setMapaInfo()">
-            <input class="imagen" type="image" id="world_but" src="https://img.icons8.com/external-kmg-design-detailed-outline-kmg-design/64/000000/external-world-business-strategy-kmg-design-detailed-outline-kmg-design.png" alt='world' height="60" width="60"/>
+<body>
+    <mapa style="height: 80;" *ngIf="!info"></mapa>
+    <mapa-info *ngIf="info"></mapa-info>
+    <div class='containerBotones'>
+        <div class="botonClick" id="hidden_buttons">
+            <div @mostrarSlide class="boton" *ngIf="isShow" (click)="setMapa()">
+                <input class="imagen" type="image" id="user_but" src="https://img.icons8.com/ios/50/000000/user--v1.png" alt='user' height="60" width="60" />
+            </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div @mostrarSlide class="boton" *ngIf="isShow" (click)="setMapaInfo()">
+                <input class="imagen" type="image" id="world_but" src="https://img.icons8.com/external-kmg-design-detailed-outline-kmg-design/64/000000/external-world-business-strategy-kmg-design-detailed-outline-kmg-design.png" alt='world' height="60" width="60"/>
+            </div>
+        </div>
+        <div class="botonesPrincipales">          
+            <div class="boton">
+                <input class="imagen" type="image" id="bar_char_but" (click)="toggleDisplay()" (click)="changeImage()" src={{source}} alt='bar-chart' height="60" width="60" />
+            </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="boton">
+                <input class="imagen" type="image" id="cards_but" src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-vitaly-gorbachev/60/000000/external-cards-children-toys-vitaliy-gorbachev-lineal-vitaly-gorbachev.png" alt='cards' height="60" width="60"/>
+            </div>
         </div>
     </div>
-    <div class="botonesPrincipales">          
-        <div class="boton">
-            <input class="imagen" type="image" id="bar_char_but" (click)="toggleDisplay()" (click)="changeImage()" src={{source}} alt='bar-chart' height="60" width="60" />
-        </div> &nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="boton">
-            <input class="imagen" type="image" id="cards_but" src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-vitaly-gorbachev/60/000000/external-cards-children-toys-vitaliy-gorbachev-lineal-vitaly-gorbachev.png" alt='cards' height="60" width="60"/>
-        </div>
-    </div>
-</div>
-<div>
-    <div class="containerFases">    
+</body>
 
-        <div class="rectangulito" style="margin-left: 21.8%;"></div>
-        <div class="rectangulito" style="margin-left: 41.8%; background-color: black; border: 1px solid white;"></div>
-        <div class="rectangulito" style="margin-left: 61.8%;"></div> 
-        <div class="nombreFase">[Nombre de Fase]</div>
-    </div>
-    <div id="perfil" class="circuloFases circuloIzquierda"></div>
-    <div id="tropas" class="circuloFases circuloDerecha">
-        <div class="round" style="transform: rotate(270deg);">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-        </div>
-    </div>
-    
-    
-</div>
     
     
 

@@ -1,7 +1,10 @@
 * {
   background-color: #20BCE7;
 }
-
+html,body{
+  margin:0;
+  
+}
 .interfazFases {
   position: absolute;
   background-color:hsl(0, 0%, 0%, 0);
