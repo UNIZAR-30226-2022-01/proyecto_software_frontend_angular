@@ -22,7 +22,19 @@ import { LogicaJuego } from '../logica-juego';
 })
 
 export class JuegoComponent implements OnInit {
-  info: number = 0;
+  territorios = ["Australia_Oriental", "Indonesia", "Nueva_Guinea", "Alaska", "Ontario", "Territorio_del_Noroeste", "Venezuela", "Madagascar", "Africa_del_Norte", "Groenlandia",
+                  "Islandia", "Reino_Unido", "Escandinavia", "Japon", "Yakutsk", "Kamchatka", "Siberia", "Ural", "Afganistan", "Oriente_Medio",
+                  "India", "Siam", "China", "Mongolia", "Irkutsk", "Ucrania", "Europa_del_Sur", "Europa_Occidental", "Europa_del_Norte", "Egipto",
+                  "Africa_Oriental", "Congo", "Sudafrica", "Brasil", "Argentina", "Este_de_los_Estados_Unidos", "Estados_Unidos_Occidental", "Quebec",
+                  "America_Central", "Peru", "Australia_Occidental", "Alberta"];
+  
+  circulosTerritorios = ["cAustralia_Oriental", "cIndonesia",
+                  "cNueva_Guinea", "cAlaska", "cOntario", "cTerritorio_del_Noroeste", "cVenezuela", "cMadagascar", "cAfrica_del_Norte", "cGroenlandia",
+                  "cIslandia", "cReino_Unido", "cEscandinavia", "cJapon", "cYakutsk", "cKamchatka", "cSiberia", "cUral", "cAfganistan", "cOriente_Medio",
+                  "cIndia", "cSiam", "cChina", "cMongolia", "cIrkutsk", "cUcrania", "cEuropa_del_Sur", "cEuropa_Occidental", "cEuropa_del_Norte", "cEgipto",
+                  "cAfrica_Oriental", "cCongo", "cSudafrica", "cBrasil", "cArgentina", "cEste_de_los_Estados_Unidos", "cEstados_Unidos_Occidental", "cQuebec",
+                  "cAmerica_Central", "cPeru", "cAustralia_Occidental", "cAlberta"];
+                  info: number = 0;
   isShow = false;
   source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";
 
@@ -57,29 +69,32 @@ export class JuegoComponent implements OnInit {
               //this.jsonData = JSON.parse(data.toString());
               //console.log("jsonData string:",this.jsonData);
               this.logica = new LogicaJuego();
-              this.logica.metodoPrueba();
+              //this.logica.metodoPrueba();
               //console.log("tamaño:",this.jsonData.length);
               //console.log("jsonData[0]", this.jsonData.at(0))
-              
+              //var territorios = ["Kamchatka"];
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
                 console.log("obj[",i,"]:",obj);
                 console.log("ID:",obj.IDAccion);
-                
+                //this.logica.recibirRegion(obj.IDAccion);
                 switch(obj.IDAccion) { 
-                  case 0: { //IDAccionRecibirRegion
-                      
+                  case 0: { // IDAccionCambioFase 
+                      console.log("Region a pintar:", obj.Region);
+                      console.log("territorio a pintar:", this.territorios[obj.Region]);
+                      document.getElementById(this.territorios[obj.Region])!.style.fill='red';
+                      this.logica.recibirRegion(obj.IDAccion, document);
                       break; 
                   } 
-                  case 1: { // IDAccionCambioFase
+                  case 1: { // IDAccionCambioCartas
                  
-                      break; 
+                    break; 
                   } 
-                  case 2: { // IDAccionInicioTurno
-                      
-                      break; 
+                  case 2: { // IDAccionCambioFase
+                  
+                    break; 
                   } 
-                  case 3: { // IDAccionCambioCartas
+                  case 3: { // IDAccionCambioTurno
                  
                       break; 
                   } 
