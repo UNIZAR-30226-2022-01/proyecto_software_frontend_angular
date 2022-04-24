@@ -33,7 +33,7 @@ import { JuegoComponent } from './juego/juego.component';
 import { FinPartidaComponent } from './fin-partida/fin-partida.component';
 
 const appRoutes: Routes = [
-  {path: '', component: InicioComponent},
+  {path: 'i', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
   {path: 'inicioSesion', component: InicioSesionComponent},
   {path: 'tienda', component: TiendaComponent},
@@ -52,7 +52,7 @@ const appRoutes: Routes = [
   {path: 'configuaracionPerfil', component: ConfigPerfilComponent},
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
-  {path: 'juego', component: JuegoComponent}
+  {path: '', component: JuegoComponent}
 ]
 
 
