@@ -1,6 +1,11 @@
+import { HttpClient } from '@angular/common/http';
+
 export class LogicaJuego {
-    //mapaJugadores: Map<string, Estado> = new Map();
+    http: HttpClient
+
     mapaJugadores = new Map<string, Estado>();
+    cartas : Array<Carta> = new Array<Carta>()
+    yo: any
 
     fase = 0;
     /*
@@ -13,21 +18,39 @@ export class LogicaJuego {
     jugadorTurno = "";
 
 
-    constructor() {
+    constructor(http: HttpClient) {
+      this.http = http
 
+      var nombre_usuario = localStorage.getItem("nombre_usuario")!
+
+      nombre_usuario = nombre_usuario.split('=')[1]
+      nombre_usuario = nombre_usuario.split('|')[0]
+
+      this.yo = nombre_usuario;
+
+      this.http.get('http://localhost:8090/api/obtenerJugadoresPartida', {observe:'body', responseType:'text', withCredentials: true})
+        .subscribe(
+          data => {
+            var jsonData = JSON.parse(data);
+
+            for(var i = 0; i < jsonData.length; i++) {
+              var estado : Estado = {
+                tropas: 0,
+                territorios: [],
+                numCartas: 0,
+                eliminado: false,
+                expulsado: false,
+              }
+              this.mapaJugadores.set(jsonData[i], estado)
+            }
+          })
     }
-
-    metodoPrueba(){
-        console.log("hola!");
-    }
-
 
     recibirRegion(json: any, document:Document) {
         var jugador = json.Jugador;
         var Region = json.Region;
 
         var estadoJugador = this.mapaJugadores.get(jugador)!
-
         estadoJugador.tropas = json.TropasRestantes; // mostrar en la barra inferior
         estadoJugador.territorios.push(json.Region)
 
@@ -72,35 +95,65 @@ export class LogicaJuego {
       var eliminador = json.JugadorEliminador;
       var cartasRecibidas = json.CartasRecibidas;
 
+      // Se contabiliza al jugador eliminado como tal
       var estadoJugador = this.mapaJugadores.get(eliminado)!
 
       estadoJugador.eliminado = true;
+      this.mapaJugadores.set(eliminado, estadoJugador)
 
-      // Si eliminador == yo y cartas > 0
-      //    llamada a API de obtener cartas y almacenarlas
+      if (eliminador == this.yo && cartasRecibidas > 0) {
+        // Se reinicia el almacén y el contador de cartas
+        this.consultarCartas()
+      }
     }
 
     jugadorExpulsado(json: any) {
       var jugador = json.JugadorEliminado;
 
+      // Marca al jugador como expulsado
       var estadoJugador = this.mapaJugadores.get(jugador)!
-
       estadoJugador.expulsado = true;
+      this.mapaJugadores.set(jugador, estadoJugador)
     }
 
     /*partidaFinalizada(json: JSON) {
 
     }*/
 
-    ////////////
+    // Auxiliares
+    private consultarCartas() {
+      this.http.get('http://localhost:8090/api/consultarCartas', {observe:'body', responseType:'text', withCredentials: true})
+        .subscribe(
+          data => {
+            var jsonData = JSON.parse(data);
 
+            // Actualiza el número de cartas
+            var estadoMio = this.mapaJugadores.get(this.yo)!
+            estadoMio.numCartas = jsonData.length;
+            this.mapaJugadores.set(this.yo, estadoMio)
 
+            // Y reinicializa el almacén de cartas
+            this.cartas = new Array<Carta>()
+            for(var i = 0; i < jsonData.length; i++) {
+              var carta : Carta = {
+                idCarta: jsonData[i].IdCarta,
+                tipo:  jsonData[i].Tipo,
+                region: jsonData[i].Region,
+                esComodin:  jsonData[i].EsComodin,
+              }
+
+              this.cartas.push(carta)
+            }
+
+            console.log("Cartas nuevas:", this.cartas)
+          })
+    }
 }
 
 export interface Estado{
     tropas: number;
-    carta: Carta[];
     territorios: number[];
+    numCartas: number;
     eliminado: boolean;
     expulsado: boolean;
 }
@@ -116,12 +169,3 @@ export interface Carta {
     region: number;
     esComodin: boolean;
 }
-
-
-// Estado
-//      tropas
-//      cartas
-//      territorios (array de numRegion)
-//      eliminado
-//      expulsado
-//

@@ -60,19 +60,14 @@ export class JuegoComponent implements OnInit {
   i:any;
   logica:any;
   fnCall() {
+    this.logica = new LogicaJuego(this.http);
     this.intervaloMio = setInterval(() => {
       this.http.get('http://localhost:8090/api/obtenerEstadoPartidaCompleto', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
           .subscribe(
             data => {
               this.jsonData = JSON.parse(data);
-              console.log("jsonData:",this.jsonData);
-              //this.jsonData = JSON.parse(data.toString());
-              //console.log("jsonData string:",this.jsonData);
-              this.logica = new LogicaJuego();
-              //this.logica.metodoPrueba();
-              //console.log("tamaño:",this.jsonData.length);
-              //console.log("jsonData[0]", this.jsonData.at(0))
-              //var territorios = ["Kamchatka"];
+              //console.log("jsonData:",this.jsonData);
+
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
                 console.log("obj[",i,"]:",obj);
@@ -80,18 +75,15 @@ export class JuegoComponent implements OnInit {
                 //this.logica.recibirRegion(obj.IDAccion);
                 switch(obj.IDAccion) {
                   case 0: { // IDAccionRecibirRegion
-                    console.log("Region a pintar:", obj.Region);
-                    console.log("territorio a pintar:", this.territorios[obj.Region]);
+                    //console.log("Region a pintar:", obj.Region);
+                    //console.log("territorio a pintar:", this.territorios[obj.Region]);
                     document.getElementById(this.territorios[obj.Region])!.style.fill='red';
-                    this.logica.recibirRegion(obj.IDAccion, document);
+                    this.logica.recibirRegion(obj, document);
                     break;
                   }
                   case 1: { // IDAccionCambioFase
-                      console.log("Region a pintar:", obj.Region);
-                      console.log("territorio a pintar:", this.territorios[obj.Region]);
-                      document.getElementById(this.territorios[obj.Region])!.style.fill='red';
-                      this.logica.recibirRegion(obj, document);
-                      break;
+
+                    break;
                   }
                   case 2: { // IDAccionInicioTurno
 
@@ -122,11 +114,13 @@ export class JuegoComponent implements OnInit {
                       break;
                   }
                   case 9: { // IDAccionJugadorEliminado
-
+                      this.logica.jugadorEliminado(obj)
+                      // TODO: Señalar al jugador eliminado como tal
                       break;
                   }
                   case 10: { // IDAccionJugadorExpulsado
-                      this.logica.jugadorExpulsado()
+                      this.logica.jugadorExpulsado(obj)
+                      // TODO: Señalar al jugador expulsado como tal
                       break;
                   }
                   case 11: { // IDAccionPartidaFinalizada
