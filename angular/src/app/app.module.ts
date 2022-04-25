@@ -30,9 +30,10 @@ import { ConfigPerfilComponent } from './config-perfil/config-perfil.component';
 import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
 import { MapaInfoComponent } from './mapa-info/mapa-info.component';
 import { JuegoComponent } from './juego/juego.component';
+import { FinPartidaComponent } from './fin-partida/fin-partida.component';
 
 const appRoutes: Routes = [
-  {path: '', component: InicioComponent},
+  {path: 'f', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
   {path: 'inicioSesion', component: InicioSesionComponent},
   {path: 'tienda', component: TiendaComponent},
@@ -51,7 +52,8 @@ const appRoutes: Routes = [
   {path: 'configuaracionPerfil', component: ConfigPerfilComponent},
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
-  {path: 'juego', component: JuegoComponent}
+  {path: '', component: JuegoComponent},
+  {path: 'finPartida', component: FinPartidaComponent}
 ]
 
 
@@ -80,7 +82,8 @@ const appRoutes: Routes = [
     ConfigPerfilComponent,
     MiPerfilComponent,
     MapaInfoComponent,
-    JuegoComponent
+    JuegoComponent,
+    FinPartidaComponent
   ],
   imports: [
     BrowserModule,

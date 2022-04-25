@@ -124,9 +124,20 @@ export class JuegoComponent implements OnInit {
                       break;
                   }
                   case 11: { // IDAccionPartidaFinalizada
-                      // Destruir almacen
-                      // Redirigir a pantalla de fin de partida teniendo en cuenta qué jugador ha ganado
+                      // Información a tratar por la pantalla de fin de partida
+                      localStorage.setItem("ganador", obj.JugadorGanador)
+                      if (this.logica.yo == obj.JugadorGanador) {
+                        localStorage.setItem("esGanador", "1")
+                      } else {
+                        localStorage.setItem("esGanador", "0")
+                      }
 
+                      localStorage.setItem("yo", this.logica.yo)
+
+                      // Se borra el almacen de lógica del juego y pasa a la pantalla de fin de partida
+                      //delete this.logica
+
+                      this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
                       break;
                   }
                 }
