@@ -55,6 +55,7 @@ html,body{
   transform: translate(0px, -330px);
   float:left;
   margin-left: 4%;
+  background-color: transparent;
 }
 
 .containerFases {
