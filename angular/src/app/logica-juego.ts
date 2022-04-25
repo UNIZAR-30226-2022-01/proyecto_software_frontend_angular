@@ -1,7 +1,7 @@
 export class LogicaJuego {
-    //mapaJugadores: Map<string, Estado> = new Map(); 
+    //mapaJugadores: Map<string, Estado> = new Map();
     mapaJugadores = new Map<string, Estado>();
- 
+
     fase = 0;
     /*
         Inicio      = 0 (Poblar el mapa)
@@ -14,9 +14,9 @@ export class LogicaJuego {
 
 
     constructor() {
-        
+
     }
-    
+
     metodoPrueba(){
         console.log("hola!");
     }
@@ -27,8 +27,8 @@ export class LogicaJuego {
         var Region = json.Region;
 
         var estadoJugador = this.mapaJugadores.get(jugador)!
-        
-        estadoJugador.tropas = json.TropasRestantes; // mostrar en la barra inferior 
+
+        estadoJugador.tropas = json.TropasRestantes; // mostrar en la barra inferior
         estadoJugador.territorios.push(json.Region)
 
         document.getElementById("Kamchatka")!.style.fill='red';
@@ -36,7 +36,7 @@ export class LogicaJuego {
     }
 
     cambioFase(json: any) {
-        
+
     }
 
     inicioTurno(json: any) {
@@ -67,21 +67,34 @@ export class LogicaJuego {
 
     }
 
-    jugadorEliminado(json: JSON) {
+    jugadorEliminado(json: any) {
+      var eliminado = json.JugadorEliminado;
+      var eliminador = json.JugadorEliminador;
+      var cartasRecibidas = json.CartasRecibidas;
 
+      var estadoJugador = this.mapaJugadores.get(eliminado)!
+
+      estadoJugador.eliminado = true;
+
+      // Si eliminador == yo y cartas > 0
+      //    llamada a API de obtener cartas y almacenarlas
     }
 
-    jugadorExpulsado(json: JSON) {
+    jugadorExpulsado(json: any) {
+      var jugador = json.JugadorEliminado;
 
+      var estadoJugador = this.mapaJugadores.get(jugador)!
+
+      estadoJugador.expulsado = true;
     }
 
-    partidaFinalizada(json: JSON) {
+    /*partidaFinalizada(json: JSON) {
 
-    }
+    }*/
 
     ////////////
-  
-    
+
+
 }
 
 export interface Estado{
@@ -94,12 +107,12 @@ export interface Estado{
 
 export interface Carta {
     idCarta: number; // para la API
-    tipo: number; 
+    tipo: number;
     /*
         Infanteria = 0
         Caballeria = 1
         Artilleria = 2
-    */ 
+    */
     region: number;
     esComodin: boolean;
 }
@@ -111,4 +124,4 @@ export interface Carta {
 //      territorios (array de numRegion)
 //      eliminado
 //      expulsado
-//      
+//

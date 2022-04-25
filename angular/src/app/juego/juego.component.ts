@@ -27,7 +27,7 @@ export class JuegoComponent implements OnInit {
                   "India", "Siam", "China", "Mongolia", "Irkutsk", "Ucrania", "Europa_del_Sur", "Europa_Occidental", "Europa_del_Norte", "Egipto",
                   "Africa_Oriental", "Congo", "Sudafrica", "Brasil", "Argentina", "Este_de_los_Estados_Unidos", "Estados_Unidos_Occidental", "Quebec",
                   "America_Central", "Peru", "Australia_Occidental", "Alberta"];
-  
+
   circulosTerritorios = ["cAustralia_Oriental", "cIndonesia",
                   "cNueva_Guinea", "cAlaska", "cOntario", "cTerritorio_del_Noroeste", "cVenezuela", "cMadagascar", "cAfrica_del_Norte", "cGroenlandia",
                   "cIslandia", "cReino_Unido", "cEscandinavia", "cJapon", "cYakutsk", "cKamchatka", "cSiberia", "cUral", "cAfganistan", "cOriente_Medio",
@@ -78,53 +78,62 @@ export class JuegoComponent implements OnInit {
                 console.log("obj[",i,"]:",obj);
                 console.log("ID:",obj.IDAccion);
                 //this.logica.recibirRegion(obj.IDAccion);
-                switch(obj.IDAccion) { 
-                  case 0: { // IDAccionCambioFase 
+                switch(obj.IDAccion) {
+                  case 0: { // IDAccionRecibirRegion
+                    console.log("Region a pintar:", obj.Region);
+                    console.log("territorio a pintar:", this.territorios[obj.Region]);
+                    document.getElementById(this.territorios[obj.Region])!.style.fill='red';
+                    this.logica.recibirRegion(obj.IDAccion, document);
+                    break;
+                  }
+                  case 1: { // IDAccionCambioFase
                       console.log("Region a pintar:", obj.Region);
                       console.log("territorio a pintar:", this.territorios[obj.Region]);
                       document.getElementById(this.territorios[obj.Region])!.style.fill='red';
-                      this.logica.recibirRegion(obj.IDAccion, document);
-                      break; 
-                  } 
-                  case 1: { // IDAccionCambioCartas
-                 
-                    break; 
-                  } 
-                  case 2: { // IDAccionCambioFase
-                  
-                    break; 
-                  } 
-                  case 3: { // IDAccionCambioTurno
-                 
-                      break; 
-                  } 
+                      this.logica.recibirRegion(obj, document);
+                      break;
+                  }
+                  case 2: { // IDAccionInicioTurno
+
+                    break;
+                  }
+                  case 3: { // IDAccionCambioCartas
+
+                    break;
+                  }
                   case 4: { // IDAccionReforzar
-                    
-                      break; 
+
+                      break;
                   }
                   case 5: { // IDAccionAtaque
-                      
-                      break; 
-                  } 
-                  case 6: { // IDAccionOcupar
-                 
-                      break; 
-                  } 
-                  case 8: { // IDAccionFortificar
-                    
-                      break; 
+
+                      break;
                   }
-                  case 9: { // IDAccionObtenerCarta
-                      
-                      break; 
-                  } 
-                  case 10: { // IDAccionJugadorEliminado
-                 
-                      break; 
-                  } 
+                  case 6: { // IDAccionOcupar
+
+                      break;
+                  }
+                  case 7: { // IDAccionFortificar
+
+                      break;
+                  }
+                  case 8: { // IDAccionObtenerCarta
+
+                      break;
+                  }
+                  case 9: { // IDAccionJugadorEliminado
+
+                      break;
+                  }
+                  case 10: { // IDAccionJugadorExpulsado
+                      this.logica.jugadorExpulsado()
+                      break;
+                  }
                   case 11: { // IDAccionPartidaFinalizada
-                    
-                      break; 
+                      // Destruir almacen
+                      // Redirigir a pantalla de fin de partida teniendo en cuenta qué jugador ha ganado
+
+                      break;
                   }
                 }
               }
@@ -134,7 +143,7 @@ export class JuegoComponent implements OnInit {
                 //this.router.navigate(['/juego'])
               }*/
             })
-      
+
     }, 5000);
   }
 }
