@@ -25,3 +25,76 @@
   left: 60%;
   transform: translate(-50%, -50%);
 }
+
+.participanteExpulsado {
+  width: 100%;
+  height: 90px;
+  margin: auto;
+  border-radius: 15px;
+  border: 1px solid #fafafa;
+  box-shadow:  rgba(0, 0, 0, 0.2) 0px 5px 10px;
+  background: #800f1e;
+  font-size: 50px;
+  transition: width 0.5s, height 0.5s, transform 0.5s;
+}
+
+.participanteEliminado {
+  width: 100%;
+  height: 90px;
+  margin: auto;
+  border-radius: 15px;
+  border: 1px solid #fafafa;
+  box-shadow:  rgba(0, 0, 0, 0.2) 0px 5px 10px;
+  background: #c3195d;
+  font-size: 50px;
+  transition: width 0.5s, height 0.5s, transform 0.5s;
+}
+
+.participanteGanador {
+  width: 100%;
+  height: 90px;
+  margin: auto;
+  border-radius: 15px;
+  border: 1px solid #fafafa;
+  box-shadow:  rgba(0, 0, 0, 0.2) 0px 5px 10px;
+  background: #04AA6D;
+  font-size: 50px;
+  transition: width 0.5s, height 0.5s, transform 0.5s;
+}
+
+.participante:hover {
+  opacity: 0.9;
+  transition: 0.2s;
+  transform: scale(1.01);
+}
+
+.datosParticipante {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color:#fafafa;
+  font-size: 20px;
+  font-weight: 550;
+  padding: 20px;
+}
+
+
+.contenedorJugadores {
+  display:flex;
+  flex-direction: row;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  gap:1em;
+  transform: translate(-50%, -50%);
+}
+
+.boton {
+  text-decoration: none;
+  color:black;
+}
+
+#botonRetorno {
+  position:fixed;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

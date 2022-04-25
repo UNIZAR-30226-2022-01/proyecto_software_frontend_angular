@@ -10,11 +10,40 @@
     <div class="centradoArriba">
       <h1> {{textoGanador}} </h1>
       <h1> {{textoGanadorAlt}} </h1>
-      <div> {{yo}} </div>
     </div>
 
 
-    <div class="jugadorGanador"> {{ganador}} </div>
+    <div class="contenedorJugadores">
+      <div *ngFor="let jugador of jugadores">
+              <div *ngIf="jugador.expulsado">
+                <div class="participanteExpulsado">
+                    <div class ="datosParticipante">
+                    {{jugador.nombre}}
+                    Expulsado
+                    </div>
+                </div>
+              </div>
 
-    <div class="restoJugadores"> </div>
+              <div *ngIf="jugador.eliminado">
+                <div class="participanteEliminado">
+                    <div class ="datosParticipante">
+                    {{jugador.nombre}}
+                    Eliminado
+                    </div>
+                </div>
+              </div>
+
+              <div *ngIf="!jugador.eliminado && !jugador.expulsado">
+                <div class="participanteGanador">
+                    <div class ="datosParticipante">
+                    {{jugador.nombre}}
+                    Ganador
+                </div>
+                </div>
+              </div>
+      </div>
+    </div>
+    <button id="botonRetorno"><a  class="boton" [routerLink]="['/identificacion']">Volver al menú principal</a></button>
 </div>
+
+

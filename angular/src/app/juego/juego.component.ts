@@ -2,7 +2,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LogicaJuego } from '../logica-juego';
+import {Estado, LogicaJuego} from '../logica-juego';
 
 @Component({
   selector: 'juego',
@@ -116,11 +116,15 @@ export class JuegoComponent implements OnInit {
                   case 9: { // IDAccionJugadorEliminado
                       this.logica.jugadorEliminado(obj)
                       // TODO: Señalar al jugador eliminado como tal
+
+                      // clearInterval(this.intervaloMio)
                       break;
                   }
                   case 10: { // IDAccionJugadorExpulsado
                       this.logica.jugadorExpulsado(obj)
                       // TODO: Señalar al jugador expulsado como tal
+
+                      // clearInterval(this.intervaloMio)
                       break;
                   }
                   case 11: { // IDAccionPartidaFinalizada
@@ -133,9 +137,28 @@ export class JuegoComponent implements OnInit {
                       }
 
                       localStorage.setItem("yo", this.logica.yo)
+                      // Borra la entrada para el jugador actual
+                      //this.logica.mapaJugadores.delete(this.logica.yo)
 
+                      var listaJugadores = new Array<jugadorFinPartida>();
+
+                      this.logica.mapaJugadores.forEach((jugador: Estado, i: string) => {
+                        var jugadorFin : jugadorFinPartida = {
+                          nombre: i,
+                          eliminado : jugador.eliminado,
+                          expulsado : jugador.expulsado,
+                        };
+
+                        listaJugadores.push(jugadorFin);
+                      });
+
+                      console.log("hola:", listaJugadores)
+
+                      localStorage.setItem("jugadores", JSON.stringify(listaJugadores))
                       // Se borra el almacen de lógica del juego y pasa a la pantalla de fin de partida
                       //delete this.logica
+
+                      clearInterval(this.intervaloMio)
 
                       this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
                       break;
@@ -151,4 +174,10 @@ export class JuegoComponent implements OnInit {
 
     }, 5000);
   }
+}
+
+export class jugadorFinPartida {
+  nombre : string = "";
+  eliminado : boolean = false;
+  expulsado : boolean = false;
 }

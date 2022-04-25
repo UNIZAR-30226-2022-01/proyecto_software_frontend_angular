@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Estado} from "../logica-juego";
+import {jugadorFinPartida} from "../juego/juego.component";
 
 @Component({
   selector: 'app-fin-partida',
@@ -15,6 +17,7 @@ export class FinPartidaComponent implements OnInit {
   textoGanador : string = "";
   textoGanadorAlt : string = "";
 
+  jugadores  = new Array<jugadorFinPartida>();
 
   constructor() { }
 
@@ -22,6 +25,7 @@ export class FinPartidaComponent implements OnInit {
     this.esGanador = localStorage.getItem("esGanador")!
     this.ganador = localStorage.getItem("ganador")!
     this.yo = localStorage.getItem("yo")!
+
 
     if (this.esGanador == "1") {
       this.textoGanador = "¡HAS GANADO!"
@@ -32,6 +36,10 @@ export class FinPartidaComponent implements OnInit {
       this.textoGanadorAlt = "La próxima vez será..."
       this.rutaAssetTop = "/assets/derrota.gif"
     }
+
+    this.jugadores = JSON.parse(localStorage.getItem("jugadores")!)
+
+    console.log("jugadores:", this.jugadores)
   }
 
 }
