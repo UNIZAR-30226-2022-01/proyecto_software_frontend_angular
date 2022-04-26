@@ -14,25 +14,14 @@
       </div>
       <a class="txtJugadores">En sala: {{p.NumeroJugadores}}/{{p.MaxNumeroJugadores}}</a>
       <a class="txtAC">Amigos conectados: {{p.NumAmigosPresentes}}</a>
+      <button *ngIf="p.EsPublica" type="submit" (click)="onSubmit(p.IdPartida, p.EsPublica)" [routerLink]="['/lobby']" class="botonJoin">UNIRSE</button>
+      <div [formGroup]="profileForm" *ngIf="!p.EsPublica">
+        <button type="submit" (click)="onSubmit(p.IdPartida, p.EsPublica)" class="botonJoin" >UNIRSE</button>
+        <input placeholder="Contraseña" class="pass" formControlName="password">
+      </div>
     </div>
     <br>
   </ng-container>
 
 
 </div>
-
-<!--<div class="bP">
-  <ng-container *ngFor="let _ of [].constructor(hola)">
-    <div class="partida">
-      <div class="tipoPartida"><a class="txtTP">Partida Publica</a></div>
-      <a class="txtJugadores">En sala: 0/6</a>
-      <a class="txtAC">Amigos conectados: 5</a>
-    </div>
-    <br>
-  </ng-container>
-
-
-</div>
--->
-
-<!--*ngFor="let _ of [].constructor(hola)"-->
