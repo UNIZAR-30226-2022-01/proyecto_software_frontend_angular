@@ -1,9 +1,11 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import {Alerta, Estado, LogicaJuego} from '../logica-juego';
 import Swal from "sweetalert2";
+import {MapaComponent} from "../mapa/mapa.component";
+import { SelectMultipleControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'juego',
@@ -22,7 +24,9 @@ import Swal from "sweetalert2";
   ]
 })
 
-export class JuegoComponent implements OnInit {
+export class JuegoComponent implements OnInit, AfterViewInit {
+  @ViewChild(MapaComponent) mapa: any;
+
   territorios = ["Australia_Oriental", "Indonesia", "Nueva_Guinea", "Alaska", "Ontario", "Territorio_del_Noroeste", "Venezuela", "Madagascar", "Africa_del_Norte", "Groenlandia",
                   "Islandia", "Reino_Unido", "Escandinavia", "Japon", "Yakutsk", "Kamchatka", "Siberia", "Ural", "Afganistan", "Oriente_Medio",
                   "India", "Siam", "China", "Mongolia", "Irkutsk", "Ucrania", "Europa_del_Sur", "Europa_Occidental", "Europa_del_Norte", "Egipto",
@@ -60,8 +64,12 @@ export class JuegoComponent implements OnInit {
   intervaloMio:any;
   i:any;
   logica:any;
+
+  intervarloDormir : any;
+
   fnCall() {
     this.logica = new LogicaJuego(this.http);
+
     this.intervaloMio = setInterval(() => {
       this.http.get('http://localhost:8090/api/obtenerEstadoPartidaCompleto', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
           .subscribe(
@@ -98,6 +106,20 @@ export class JuegoComponent implements OnInit {
                       // TODO
                       // Mostrar modal de qué territorio elegir de origen, destino y num tropas
                       // hacer llamada y  mostrar resultado
+                      this.mapa.permitirSeleccionTerritorios();
+                
+                      // TODO: Implementar con callbacks
+                      this.intervarloDormir = setInterval(() => 
+                      {
+                        if (this.mapa.paisSeleccionado != "") {
+                          clearInterval(this.intervarloDormir)
+                          console.log("parando intervalo")
+                          this.mapa.limitarSeleccionTerritorios();
+                        } else {
+                          console.log("Esperando a un click")
+                        }
+                      },
+                      200);
                     }
 
 
@@ -208,6 +230,8 @@ export class JuegoComponent implements OnInit {
       }
     })
   }
+
+  ngAfterViewInit() {}
 }
 
 export class jugadorFinPartida {
