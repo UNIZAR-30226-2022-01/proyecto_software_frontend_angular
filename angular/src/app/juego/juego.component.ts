@@ -2,7 +2,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {Estado, LogicaJuego} from '../logica-juego';
+import {Alerta, Estado, LogicaJuego} from '../logica-juego';
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'juego',
@@ -87,6 +88,18 @@ export class JuegoComponent implements OnInit {
                     break;
                   }
                   case 1: { // IDAccionCambioFase
+                    this.logica.fase = obj.Fase
+
+                    if (this.logica.fase == 1 && this.logica.jugadorTurno == this.logica.yo) { // Refuerzo
+                      // TODO
+                    } else if (this.logica.fase == 2 && this.logica.jugadorTurno == this.logica.yo) { // Ataque
+                      // TODO
+                    } else if (this.logica.fase == 3 && this.logica.jugadorTurno == this.logica.yo) { // Fortificar
+                      // TODO
+                      // Mostrar modal de qué territorio elegir de origen, destino y num tropas
+                      // hacer llamada y  mostrar resultado
+                    }
+
 
                     break;
                   }
@@ -95,7 +108,9 @@ export class JuegoComponent implements OnInit {
                     break;
                   }
                   case 3: { // IDAccionCambioCartas
+                    var alerta : Alerta = this.logica.cambioCartas(obj)
 
+                    this.mostrarAlerta(alerta.titulo, alerta.texto)
                     break;
                   }
                   case 4: { // IDAccionReforzar
@@ -111,11 +126,11 @@ export class JuegoComponent implements OnInit {
                       break;
                   }
                   case 7: { // IDAccionFortificar
-
+                      // TODO
                       break;
                   }
                   case 8: { // IDAccionObtenerCarta
-
+                      // TODO
                       break;
                   }
                   case 9: { // IDAccionJugadorEliminado
@@ -157,15 +172,13 @@ export class JuegoComponent implements OnInit {
                         listaJugadores.push(jugadorFin);
                       });
 
-                      console.log("hola:", listaJugadores)
-
                       localStorage.setItem("jugadores", JSON.stringify(listaJugadores))
                       // Se borra el almacen de lógica del juego y pasa a la pantalla de fin de partida
                       //delete this.logica
 
-                      clearInterval(this.intervaloMio)
+                      //clearInterval(this.intervaloMio)
 
-                      this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
+                      //this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
                       break;
                   }
                 }
@@ -178,6 +191,22 @@ export class JuegoComponent implements OnInit {
             })
 
     }, 5000);
+  }
+
+  mostrarAlerta(tituloAlerta: string, textoAlerta: string) {
+    var timerInterval : any
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'top',
+      width: '30%',
+      backdrop: false,
+      html: textoAlerta,
+      timer: 5000,
+      timerProgressBar: true,
+      willClose: () => {
+        clearInterval(timerInterval)
+      }
+    })
   }
 }
 
