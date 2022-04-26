@@ -75,9 +75,14 @@ export class JuegoComponent implements OnInit {
                 //this.logica.recibirRegion(obj.IDAccion);
                 switch(obj.IDAccion) {
                   case 0: { // IDAccionRecibirRegion
-                    //console.log("Region a pintar:", obj.Region);
-                    //console.log("territorio a pintar:", this.territorios[obj.Region]);
-                    document.getElementById(this.territorios[obj.Region])!.style.fill='red';
+                    console.log('jugador ts:', obj.Jugador)
+                    console.log('color ts:', this.logica.colorJugador.get(obj.Jugador))
+                    var color = this.logica.colorJugador.get(obj.Jugador);
+                    
+                    console.log('circulo', "c"+this.territorios[obj.Region])
+                    document.getElementById(this.territorios[obj.Region])!.style.fill=color;
+                    document.getElementById("c"+this.territorios[obj.Region])!.style.fill=color;
+                    document.getElementById("t"+this.territorios[obj.Region])!.innerHTML="1"
                     this.logica.recibirRegion(obj, document);
                     break;
                   }

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 
 export class LogicaJuego {
+    colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
     http: HttpClient
-
+    colorJugador = new Map<string, string>();
     mapaJugadores = new Map<string, Estado>();
     cartas : Array<Carta> = new Array<Carta>()
     yo: any
@@ -41,7 +42,9 @@ export class LogicaJuego {
                 eliminado: false,
                 expulsado: false,
               }
-              this.mapaJugadores.set(jsonData[i], estado)
+              this.mapaJugadores.set(jsonData[i], estado);
+              console.log('jugador logica:', jsonData[i])
+              this.colorJugador.set(jsonData[i],this.colores[i]);
             }
           })
     }
@@ -54,7 +57,7 @@ export class LogicaJuego {
         estadoJugador.tropas = json.TropasRestantes; // mostrar en la barra inferior
         estadoJugador.territorios.push(json.Region)
 
-        document.getElementById("Kamchatka")!.style.fill='red';
+        //document.getElementById("Kamchatka")!.style.fill='red';
         this.mapaJugadores.set(jugador, estadoJugador);
     }
 
