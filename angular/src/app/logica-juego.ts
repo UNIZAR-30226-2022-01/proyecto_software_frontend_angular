@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import Swal from "sweetalert2";
 
 export class LogicaJuego {
     http: HttpClient
@@ -67,7 +68,26 @@ export class LogicaJuego {
     }
 
     cambioCartas(json: any) {
+      var tropasObtenidas = json.NumTropasObtenidas
+      var bonificacionObtenida = json.BonificacionObtenida
+      //var regionesQueOtorganBonificacion = json.RegionesQueOtorganBonificacion // No usado de momento
+      var obligadoAHacerCambios = json.ObligadoAHacerCambios
 
+      var textoAlerta
+      if (obligadoAHacerCambios == true && bonificacionObtenida) {
+        textoAlerta = this.jugadorTurno + " ha recibido "+ tropasObtenidas + " tropas tras ser obligado a cambiar cartas, con bonificación"
+      } else if (obligadoAHacerCambios) {
+        textoAlerta = this.jugadorTurno + " ha recibido "+ tropasObtenidas + " tropas tras ser obligado a cambiar cartas"
+      } else if (bonificacionObtenida) {
+        textoAlerta = this.jugadorTurno + " ha recibido "+ tropasObtenidas + " tropas, con bonificación"
+      } else {
+        textoAlerta = this.jugadorTurno + " ha recibido "+ tropasObtenidas
+      }
+
+      var valorRetorno = new Alerta()
+      valorRetorno.titulo = "Robo de cartas"
+      valorRetorno.texto = textoAlerta
+      return valorRetorno
     }
 
     reforzar(json: any) {
@@ -168,4 +188,9 @@ export interface Carta {
     */
     region: number;
     esComodin: boolean;
+}
+
+export class Alerta {
+  titulo: string = "";
+  texto: string = "";
 }

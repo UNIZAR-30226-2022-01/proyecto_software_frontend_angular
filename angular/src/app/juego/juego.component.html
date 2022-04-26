@@ -1,4 +1,6 @@
 <body>
+
+    <div id="bannerAlertas"></div>
     <mapa style="height: 80;" *ngIf="!info"></mapa>
     <mapa-info *ngIf="info"></mapa-info>
     <div class='containerBotones'>
@@ -10,7 +12,7 @@
                 <input class="imagen" type="image" id="world_but" src="https://img.icons8.com/external-kmg-design-detailed-outline-kmg-design/64/000000/external-world-business-strategy-kmg-design-detailed-outline-kmg-design.png" alt='world' height="60" width="60"/>
             </div>
         </div>
-        <div class="botonesPrincipales">          
+        <div class="botonesPrincipales">
             <div class="boton">
                 <input class="imagen" type="image" id="bar_char_but" (click)="toggleDisplay()" (click)="changeImage()" src={{source}} alt='bar-chart' height="60" width="60" />
             </div> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -21,8 +23,8 @@
     </div>
 </body>
 
-    
-    
+
+
 
 
 

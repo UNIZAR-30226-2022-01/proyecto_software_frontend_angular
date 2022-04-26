@@ -33,13 +33,13 @@ import { JuegoComponent } from './juego/juego.component';
 import { FinPartidaComponent } from './fin-partida/fin-partida.component';
 
 const appRoutes: Routes = [
-  {path: 'inicio', component: InicioComponent},
+  {path: '', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
   {path: 'inicioSesion', component: InicioSesionComponent},
   {path: 'tienda', component: TiendaComponent},
   {path: 'top-bar', component: TopBarComponent},
   {path: 'configuracionPartida', component: ConfigPartidaComponent},
-  {path: '', component: BuscarPartidaComponent},
+  {path: 'buscarPartida', component: BuscarPartidaComponent},
   {path: 'perfil/:nombre', component: PerfilComponent},
   {path: 'personalizacion', component: PersonalizacionComponent},
   {path: 'notificaciones', component: NotificacionesComponent},
