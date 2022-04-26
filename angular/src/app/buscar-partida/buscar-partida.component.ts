@@ -24,6 +24,7 @@ export class BuscarPartidaComponent implements OnInit {
       console.log(data);
       this.jsonArray = data;
     })
+    console.log(this.jsonArray[0].EsPublica);
   }
 
   onSubmit(){

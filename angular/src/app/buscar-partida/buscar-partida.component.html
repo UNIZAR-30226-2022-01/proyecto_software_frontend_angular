@@ -11,8 +11,8 @@
   <ng-container *ngFor="let p of jsonArray">
     <div class="partida">
       <div class="tipoPartida">
-        <ng-component *ngIf="p.esPublica; else esPrivada"><a class="txtTP">Partida Publica</a></ng-component>
-        <ng-template #esPrivada><a class="txtTP">Partida Privada</a></ng-template>
+        <a *ngIf="p.EsPublica" class="txtTP">Partida Publica</a>
+        <a *ngIf="!p.EsPublica" class="txtTP">Partida Privada</a>
       </div>
       <a class="txtJugadores">En sala: {{p.NumeroJugadores}}/{{p.MaxNumeroJugadores}}</a>
       <a class="txtAC">Amigos conectados: {{p.NumAmigosPresentes}}</a>

@@ -1,6 +1,6 @@
 .bP{
-  width:800px;
-  height: 800px;
+  width: 41.8vw;
+  height: 80vh;
   border:1.5px solid rgb(54, 51, 51);
   position: fixed;
   left: 50%;
@@ -10,34 +10,37 @@
 }
 
 .partida{
-  width:750px;
-  height:150px;
+  width:38.8vw;
+  height:16.14vh;
   border:1.5px solid rgb(54, 51, 51);
-  transform: translate(20px, 10px);
+  transform: translate(1.25vw, 1.07vh);
 }
 
 .tipoPartida{
-  width:200px;
-  height:50px;
+  width:10.41vw;
+  height:5.38vh;
   border:1.5px solid rgb(54, 51, 51);
   border-top: 0px;
   border-left: 0px;
 }
 
 .txtTP {
+  font-size: 1vw;
   position: fixed;
-  transform: translate(25px, 15px);
+  transform: translate(1.30vw, 1.61vh);
   font-family:Arial, Helvetica, sans-serif;
 }
 
 .txtJugadores {
+  font-size: 1vw;
   position: absolute;
-  transform: translate(550px, -35px);
+  transform: translate(28.64vw, -3.76vh);
   font-family:Arial, Helvetica, sans-serif;
 }
 
 .txtAC {
+  font-size: 1vw;
   position: absolute;
-  transform: translate(20px, 50px);
+  transform: translate(1.04vw, 5.38vh);
   font-family:Arial, Helvetica, sans-serif;
 }

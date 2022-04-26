@@ -54,7 +54,7 @@ export class CrearPartidaComponent implements OnInit {
 
   //document.cookie = this.cookie;
 
-  if (this.publica = true){
+  if (this.publica == true){
     formData.append('tipo', 'Publica');
   }else{
     formData.append('tipo', 'Privada');
