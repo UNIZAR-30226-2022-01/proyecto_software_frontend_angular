@@ -37,6 +37,6 @@ export class MapaComponent implements OnInit {
     this.escucharClicks = true;
     this.territorioSeleccionado = "";
 
-    console.log("adelante señor")
+    console.log("Permitiendo seleccionar territorios...")
   }
 }

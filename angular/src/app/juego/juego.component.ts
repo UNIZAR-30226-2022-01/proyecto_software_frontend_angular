@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import {Alerta, Estado, LogicaJuego} from '../logica-juego';
-import Swal from "sweetalert2";
+import Swal, {SweetAlertResult} from "sweetalert2";
 import { interval, take } from 'rxjs';
 import {MapaComponent} from "../mapa/mapa.component";
 import { SelectMultipleControlValueAccessor } from '@angular/forms';
+import {LlamadasAPI} from "../llamadas-api";
 
 @Component({
   selector: 'juego',
@@ -59,6 +60,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private http: HttpClient, private router:Router){}
+
   ngOnInit(): void {
     this.fnCall();
   }
@@ -78,6 +80,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   territorio1 : string = "";
   territorio2 : string = "";
 
+  resultadoAlerta : Promise<SweetAlertResult> | undefined ;
+
+  tropasAMover : number = 0;
+
+  llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
 
   fnCall() {
     this.logica = new LogicaJuego(this.http);
@@ -127,39 +134,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     } else if (this.logica.fase == 2 && obj.Jugador == this.logica.yo) { // Ataque
                       // TODO
                     } else if (this.logica.fase == 3 && obj.Jugador == this.logica.yo) { // Fortificar
-                      console.log("Estamos en fase de fortificación!")
-
-                      // TODO: PopUp territorio1
-                      this.mapa.permitirSeleccionTerritorios();
-                      this.intervarloConsultaTerritorio = setInterval(() =>
-                      {
-                        if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
-
-                          // Asignar el territorio seleccionado
-                          // Si es el primer territorio seleccionado, se guarda y resetea en el mapa
-                          if (this.territorio1 == "") {
-                            console.log("seleccionado 1ro")
-
-                            this.territorio1 = this.mapa.territorioSeleccionado;
-                            this.mapa.territorioSeleccionado = "";
-
-                            // TODO: quitar popup territorio1 y poner PopUp territorio2
-                          } else {
-                            // TODO: quitar popup territorio2
-                            console.log("seleccionado 2do")
-                            // Si es el segundo territorio seleccionado, se deshabilita el intervalo de consulta
-                            // y deshabilitan las selecciones de territorio al hacer click en el mapa
-                            this.territorio2 = this.mapa.territorioSeleccionado;
-                            clearInterval(this.intervarloConsultaTerritorio)
-                            console.log("parando intervalo")
-                            this.mapa.limitarSeleccionTerritorios();
-
-                            // Una vez hecho, se llama por callback a la selección de tropas
-                            // TODO: que seleccion de tropas seleccione tropas, haga llamada y limpie territorio1 y 2, tropas
-                          }
-                        }
-                      },
-                      200);
+                      this.tratarFaseFortificar()
                     }
 
 
@@ -271,7 +246,90 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
+  mostrarAlertaPermanente(tituloAlerta: string, textoAlerta: string) {
+    //var timerInterval : any
+
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'top',
+      width: '40%',
+      backdrop: false,
+      html: textoAlerta,
+      showConfirmButton: false,
+      //timer: 5000,
+      //timerProgressBar: true,
+      //willClose: () => {
+      //  clearInterval(timerInterval)
+      //}
+    })
+  }
+
+  cerrarAlertaPermanente() {
+    Swal.close()
+  }
+
+  mostrarAlertaRangoAsincrona(tituloAlerta: string, min: string, max: string) {
+    var atributos : Record<string, string> = {
+      "min": min,
+      "max": max,
+      "step": "1"
+    };
+    return Swal.fire({
+      title: tituloAlerta,
+      //icon: 'question',
+      input: 'range',
+      inputAttributes: atributos,
+      //inputLabel: textoSelector,
+      inputValue: min,
+    }).then((result) => {
+        this.tropasAMover = result.value;
+        this.llamadasAPI.fortificar(this)
+    });
+  }
+
+
   ngAfterViewInit() {}
+
+
+  // Funciones de tratamiento del juego
+
+  tratarFaseFortificar() {
+    console.log("Estamos en fase de fortificación!")
+    this.territorio1 = "";
+    this.territorio2 = "";
+    this.tropasAMover = 0;
+
+
+    this.mostrarAlertaPermanente("Selecciona el territorio origen", "")
+    this.mapa.permitirSeleccionTerritorios();
+    this.intervarloConsultaTerritorio = setInterval(() =>
+      {
+        if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
+
+          // Asignar el territorio seleccionado
+          // Si es el primer territorio seleccionado, se guarda y resetea en el mapa
+          if (this.territorio1 == "") {
+            this.territorio1 = this.mapa.territorioSeleccionado;
+            this.mapa.territorioSeleccionado = "";
+            // Cierra el popup de seleccionar el primer territorio y crea otro para el segundo
+            this.cerrarAlertaPermanente()
+            this.mostrarAlertaPermanente("Selecciona el territorio destino", "")
+          } else {
+            // Cierra el popup de seleccionar el segundo territorio
+            this.cerrarAlertaPermanente()
+
+            // Deshabilita el intervalo de consulta y las selecciones de territorio
+            this.territorio2 = this.mapa.territorioSeleccionado;
+            clearInterval(this.intervarloConsultaTerritorio)
+            this.mapa.limitarSeleccionTerritorios();
+
+            // Una vez hecho, se llama por callback a la selección de tropas
+            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", "12");
+          }
+        }
+      },
+      200);
+  }
 }
 
 export class jugadorFinPartida {

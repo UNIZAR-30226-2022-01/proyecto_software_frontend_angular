@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import Swal from "sweetalert2";
+import {LlamadasAPI} from "./llamadas-api";
 
 export class LogicaJuego {
     colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
@@ -19,9 +20,11 @@ export class LogicaJuego {
 
     jugadorTurno = "";
 
+    llamadasAPI : LlamadasAPI;
 
     constructor(http: HttpClient) {
       this.http = http
+      this.llamadasAPI = new LlamadasAPI(this.http)
 
       var nombre_usuario = localStorage.getItem("nombre_usuario")!
 
@@ -30,23 +33,7 @@ export class LogicaJuego {
 
       this.yo = nombre_usuario;
 
-      this.http.get('http://localhost:8090/api/obtenerJugadoresPartida', {observe:'body', responseType:'text', withCredentials: true})
-        .subscribe(
-          data => {
-            var jsonData = JSON.parse(data);
-
-            for(var i = 0; i < jsonData.length; i++) {
-              var estado : Estado = {
-                tropas: 0,
-                territorios: [],
-                numCartas: 0,
-                eliminado: false,
-                expulsado: false,
-              }
-              this.mapaJugadores.set(jsonData[i], estado);
-              this.colorJugador.set(jsonData[i],this.colores[i]);
-            }
-          })
+      this.llamadasAPI.obtenerJugadoresPartida(this)
     }
 
     recibirRegion(json: any, document:Document) {
