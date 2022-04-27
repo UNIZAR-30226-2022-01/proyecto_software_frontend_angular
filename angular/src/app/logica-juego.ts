@@ -44,7 +44,6 @@ export class LogicaJuego {
                 expulsado: false,
               }
               this.mapaJugadores.set(jsonData[i], estado);
-              console.log('jugador logica:', jsonData[i])
               this.colorJugador.set(jsonData[i],this.colores[i]);
             }
           })

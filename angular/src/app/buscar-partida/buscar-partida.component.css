@@ -44,3 +44,21 @@
   transform: translate(1.04vw, 5.38vh);
   font-family:Arial, Helvetica, sans-serif;
 }
+
+.botonJoin {
+  width: 7vw;
+  height: 3.5vh;
+  font-size: 0.82vw;
+  transform: translate(29vw, 4.3vh);
+}
+
+.botonJoin:hover {
+  cursor: pointer;
+}
+
+.pass {
+  transform: translate(12vw, 4.3vh);
+  height: 2.8vh;
+  width: 6vw;
+  font-size: 1vw;
+}
