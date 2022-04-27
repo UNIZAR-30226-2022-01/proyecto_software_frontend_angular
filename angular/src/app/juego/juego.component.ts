@@ -56,7 +56,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
-  } 
+  }
 
   constructor(private http: HttpClient, private router:Router){}
   ngOnInit(): void {
@@ -65,24 +65,31 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
   jsonData: any;
-  intervaloMio:any;
+  intervaloConsultaEstado:any;
   i:any;
   logica:any;
+
   tiempo = 0;
   vez = 0;
   index = Array<number>();
   jugador = Array<string>();
-  intervarloDormir : any;
+
+  intervarloConsultaTerritorio : any;
+  territorio1 : string = "";
+  territorio2 : string = "";
+
 
   fnCall() {
     this.logica = new LogicaJuego(this.http);
 
-    this.intervaloMio = setInterval(() => {
+    this.intervaloConsultaEstado = setInterval(() => {
       this.http.get('http://localhost:8090/api/obtenerEstadoPartidaCompleto', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
           .subscribe(
             data => {
+              clearInterval(this.intervaloConsultaEstado) // TODO: DEBUG
+
               this.jsonData = JSON.parse(data);
-              //console.log("jsonData:",this.jsonData);
+              console.log("jsonData:",this.jsonData);
 
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
@@ -91,9 +98,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     this.logica.recibirRegion(obj, document);
                     this.index.push(obj.Region);
                     this.jugador.push(obj.Jugador);
-                    
-                    this.tiempo = this.tiempo + 100;
-                    var inter = setInterval(() => 
+
+                    /*this.tiempo = this.tiempo + 100;
+                    var inter = setInterval(() =>
                       {
                         this.vez = this.vez + 1;
                         console.log(this.vez)
@@ -103,33 +110,53 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                         document.getElementById(this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
                         document.getElementById("c"+this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
                         document.getElementById("t"+this.territorios[velemento])!.innerHTML="1"
-                        
-                      },this.tiempo);
-                             
+
+                      },this.tiempo);*/
+
                     break;
                   }
                   case 1: { // IDAccionCambioFase
                     this.logica.fase = obj.Fase
 
-                    if (this.logica.fase == 1 && this.logica.jugadorTurno == this.logica.yo) { // Refuerzo
+                    console.log("fase:", this.logica.fase)
+                    console.log("jugador:", obj.Jugador)
+                    console.log("yo:", this.logica.yo)
+
+                    if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
                       // TODO
-                    } else if (this.logica.fase == 2 && this.logica.jugadorTurno == this.logica.yo) { // Ataque
+                    } else if (this.logica.fase == 2 && obj.Jugador == this.logica.yo) { // Ataque
                       // TODO
-                    } else if (this.logica.fase == 3 && this.logica.jugadorTurno == this.logica.yo) { // Fortificar
-                      // TODO
-                      // Mostrar modal de qué territorio elegir de origen, destino y num tropas
-                      // hacer llamada y  mostrar resultado
+                    } else if (this.logica.fase == 3 && obj.Jugador == this.logica.yo) { // Fortificar
+                      console.log("Estamos en fase de fortificación!")
+
+                      // TODO: PopUp territorio1
                       this.mapa.permitirSeleccionTerritorios();
-                
-                      // TODO: Implementar con callbacks
-                      this.intervarloDormir = setInterval(() => 
+                      this.intervarloConsultaTerritorio = setInterval(() =>
                       {
-                        if (this.mapa.paisSeleccionado != "") {
-                          clearInterval(this.intervarloDormir)
-                          console.log("parando intervalo")
-                          this.mapa.limitarSeleccionTerritorios();
-                        } else {
-                          console.log("Esperando a un click")
+                        if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
+
+                          // Asignar el territorio seleccionado
+                          // Si es el primer territorio seleccionado, se guarda y resetea en el mapa
+                          if (this.territorio1 == "") {
+                            console.log("seleccionado 1ro")
+
+                            this.territorio1 = this.mapa.territorioSeleccionado;
+                            this.mapa.territorioSeleccionado = "";
+
+                            // TODO: quitar popup territorio1 y poner PopUp territorio2
+                          } else {
+                            // TODO: quitar popup territorio2
+                            console.log("seleccionado 2do")
+                            // Si es el segundo territorio seleccionado, se deshabilita el intervalo de consulta
+                            // y deshabilitan las selecciones de territorio al hacer click en el mapa
+                            this.territorio2 = this.mapa.territorioSeleccionado;
+                            clearInterval(this.intervarloConsultaTerritorio)
+                            console.log("parando intervalo")
+                            this.mapa.limitarSeleccionTerritorios();
+
+                            // Una vez hecho, se llama por callback a la selección de tropas
+                            // TODO: que seleccion de tropas seleccione tropas, haga llamada y limpie territorio1 y 2, tropas
+                          }
                         }
                       },
                       200);
