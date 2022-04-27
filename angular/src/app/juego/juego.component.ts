@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {Alerta, Estado, LogicaJuego} from '../logica-juego';
 import Swal from "sweetalert2";
+import { interval, take } from 'rxjs';
 
 @Component({
   selector: 'juego',
@@ -76,13 +77,8 @@ export class JuegoComponent implements OnInit {
                 //this.logica.recibirRegion(obj.IDAccion);
                 switch(obj.IDAccion) {
                   case 0: { // IDAccionRecibirRegion
-                    console.log('jugador ts:', obj.Jugador)
-                    console.log('color ts:', this.logica.colorJugador.get(obj.Jugador))
-                    var color = this.logica.colorJugador.get(obj.Jugador);
-                    
-                    console.log('circulo', "c"+this.territorios[obj.Region])
-                    document.getElementById(this.territorios[obj.Region])!.style.fill=color;
-                    document.getElementById("c"+this.territorios[obj.Region])!.style.fill=color;
+                    document.getElementById(this.territorios[obj.Region])!.style.fill=this.logica.colorJugador.get(obj.Jugador);
+                    document.getElementById("c"+this.territorios[obj.Region])!.style.fill=this.logica.colorJugador.get(obj.Jugador);
                     document.getElementById("t"+this.territorios[obj.Region])!.innerHTML="1"
                     this.logica.recibirRegion(obj, document);
                     break;
