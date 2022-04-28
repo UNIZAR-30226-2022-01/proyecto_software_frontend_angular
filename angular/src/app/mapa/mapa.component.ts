@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class MapaComponent implements OnInit {
 
-  paisSeleccionado : string = "";// = new Observable<string>();
+  territorioSeleccionado : string = "";// = new Observable<string>();
 
   escucharClicks : boolean = false;
 
@@ -22,19 +22,21 @@ export class MapaComponent implements OnInit {
 
   cambiarTerritorioSeleccionado(pais:string) {
     if (this.escucharClicks) {
-      this.paisSeleccionado = pais;
+      this.territorioSeleccionado = pais;
       console.log(pais)
+    } else {
+      console.log("selección denegada")
     }
   }
-  
+
   limitarSeleccionTerritorios() {
     this.escucharClicks = false;
   }
 
   permitirSeleccionTerritorios() {
     this.escucharClicks = true;
-    this.paisSeleccionado = "";
+    this.territorioSeleccionado = "";
 
-    console.log("adelante señor")
+    console.log("Permitiendo seleccionar territorios...")
   }
 }

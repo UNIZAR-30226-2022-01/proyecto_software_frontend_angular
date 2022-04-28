@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import Swal from "sweetalert2";
+import {LlamadasAPI} from "./llamadas-api";
 
 export class LogicaJuego {
     colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
@@ -19,9 +20,11 @@ export class LogicaJuego {
 
     jugadorTurno = "";
 
+    llamadasAPI : LlamadasAPI;
 
     constructor(http: HttpClient) {
       this.http = http
+      this.llamadasAPI = new LlamadasAPI(this.http)
 
       var nombre_usuario = localStorage.getItem("nombre_usuario")!
 
@@ -30,32 +33,16 @@ export class LogicaJuego {
 
       this.yo = nombre_usuario;
 
-      this.http.get('http://localhost:8090/api/obtenerJugadoresPartida', {observe:'body', responseType:'text', withCredentials: true})
-        .subscribe(
-          data => {
-            var jsonData = JSON.parse(data);
-
-            for(var i = 0; i < jsonData.length; i++) {
-              var estado : Estado = {
-                tropas: 0,
-                territorios: [],
-                numCartas: 0,
-                eliminado: false,
-                expulsado: false,
-              }
-              this.mapaJugadores.set(jsonData[i], estado);
-              this.colorJugador.set(jsonData[i],this.colores[i]);
-            }
-          })
+      this.llamadasAPI.obtenerJugadoresPartida(this)
     }
 
     recibirRegion(json: any, document:Document) {
         var jugador = json.Jugador;
-        var Region = json.Region;
+        var region = json.Region;
 
         var estadoJugador = this.mapaJugadores.get(jugador)!
         estadoJugador.tropas = json.TropasRestantes; // mostrar en la barra inferior
-        estadoJugador.territorios.push(json.Region)
+        estadoJugador.territorios.push(region)
 
         //document.getElementById("Kamchatka")!.style.fill='red';
         this.mapaJugadores.set(jugador, estadoJugador);
@@ -92,9 +79,8 @@ export class LogicaJuego {
       return valorRetorno
     }
 
-    reforzar(json: any) {
-
-    }
+    /*reforzar(json: any) {
+    }*/
 
     ataque(json: any) {
 
@@ -108,7 +94,38 @@ export class LogicaJuego {
 
     }
 
+    // Almacena la carta para el jugador si somos nosotros,
+    // o contabiliza que uno de los rivales tiene una carta más
+    // Devuelve una carta si la carta obtenida es para el jugador,
+    // null en caso contrario
     obtenerCarta(json: any) {
+      var tipo = json.Carta.Tipo
+      var region = json.Carta.Region
+      var esComodin = json.Carta.EsComodin
+
+      var jugador = json.Jugador
+
+      if (jugador == this.yo) {
+        var carta : Carta = {
+          idCarta: 0,
+          tipo:  tipo,
+          region: region,
+          esComodin:  esComodin,
+        }
+
+        // Almacena la nueva carta, consultándolas de nuevo para conocer su ID
+        this.consultarCartas()
+        // TODO: Mostrar cartas o indicar que hay una carta nueva?
+
+        return carta
+      } else {
+        // Contabiliza una carta más para el receptor
+        var estado = this.mapaJugadores.get(jugador)!
+        estado.numCartas++;
+        this.mapaJugadores.set(jugador, estado)
+
+        return null
+      }
 
     }
 
