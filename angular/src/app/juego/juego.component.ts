@@ -89,6 +89,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   fnCall() {
     this.logica = new LogicaJuego(this.http);
 
+    // Como la petición inicial de jugadores es asíncrona, se espera unos segundos a rellenar las cajas de jugadores
+    setTimeout(() =>{
+      this.rellenarCajasJugadores()
+    }, 4000);
+
+
     this.intervaloConsultaEstado = setInterval(() => {
       this.http.get('http://localhost:8090/api/obtenerEstadoPartidaCompleto', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
           .subscribe(
@@ -141,24 +147,17 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 2: { // IDAccionInicioTurno
-
+                    this.logica.jugadorTurno = obj.Jugador // Puesto temporalmente para que las otras funciones vayan
+                    // TODO
                     break;
                   }
                   case 3: { // IDAccionCambioCartas
-                    var alerta : Alerta = this.logica.cambioCartas(obj)
-
-                    this.mostrarAlerta(alerta.titulo, alerta.texto)
+                    this.tratarAccionCambioCartas(obj)
                     break;
                   }
                   case 4: { // IDAccionReforzar
-                    //this.logica.reforzar(obj)
-                    var jugador = obj.Jugador;
-                    var territorio = obj.TerritorioReforzado;
-                    var tropasRefuerzo = obj.TropasRefuerzo;
-
-                    this.aumentarTropasRegion(territorio, tropasRefuerzo)
-
-                    this.mostrarAlerta("Refuerzo", jugador + " ha reforzado " + this.territorios[territorio] + " con " + tropasRefuerzo + " tropas de refuerzo")
+                    //this.logica.reforzar(obj) // No se necesita lógica adicional, solo cambiar tropas en el mapa
+                    this.tratarAccionReforzar(obj)
 
                     break;
                   }
@@ -171,69 +170,33 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       break;
                   }
                   case 7: { // IDAccionFortificar
-                      // TODO
+                      this.tratarAccionFortificar(obj)
+
                       break;
                   }
                   case 8: { // IDAccionObtenerCarta
                       this.logica.obtenerCarta(obj)
-
+                      this.aumentarCartasCajaJugadores(obj.Jugador, 1)
                       break;
                   }
                   case 9: { // IDAccionJugadorEliminado
                       this.logica.jugadorEliminado(obj)
-                      // TODO: Señalar al jugador eliminado como tal
-
-                      // clearInterval(this.intervaloMio)
+                      this.tratarAccionJugadorEliminado(obj)
                       break;
                   }
                   case 10: { // IDAccionJugadorExpulsado
                       this.logica.jugadorExpulsado(obj)
-                      // TODO: Señalar al jugador expulsado como tal
+                      // Sabemos que no podemos ser nosotros, ya que estaríamos desvinculados de la partida
 
-                      // clearInterval(this.intervaloMio)
+                      this.mostrarAlerta("Jugador expulsado", "¡" + obj.JugadorEliminado + " ha sido expulsado de la partida por inactividad!")
                       break;
                   }
                   case 11: { // IDAccionPartidaFinalizada
-                      // Información a tratar por la pantalla de fin de partida
-                      localStorage.setItem("ganador", obj.JugadorGanador)
-                      if (this.logica.yo == obj.JugadorGanador) {
-                        localStorage.setItem("esGanador", "1")
-                      } else {
-                        localStorage.setItem("esGanador", "0")
-                      }
-
-                      localStorage.setItem("yo", this.logica.yo)
-                      // Borra la entrada para el jugador actual
-                      //this.logica.mapaJugadores.delete(this.logica.yo)
-
-                      var listaJugadores = new Array<jugadorFinPartida>();
-
-                      this.logica.mapaJugadores.forEach((jugador: Estado, i: string) => {
-                        var jugadorFin : jugadorFinPartida = {
-                          nombre: i,
-                          eliminado : jugador.eliminado,
-                          expulsado : jugador.expulsado,
-                        };
-
-                        listaJugadores.push(jugadorFin);
-                      });
-
-                      localStorage.setItem("jugadores", JSON.stringify(listaJugadores))
-                      // Se borra el almacen de lógica del juego y pasa a la pantalla de fin de partida
-                      //delete this.logica
-
-                      //clearInterval(this.intervaloMio)
-
-                      //this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
+                      this.tratarAccionPartidaFinalizada(obj)
                       break;
                   }
                 }
               }
-
-              /*if (this.cosaJSON.MaxJugadores == this.cosaJSON.Jugadores) { //iniciarPartida
-                clearInterval(this.intervaloMio)
-                //this.router.navigate(['/juego'])
-              }*/
             })
 
     }, 5000);
@@ -245,7 +208,69 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   aumentarTropasRegion(id : number, aumento : number) {
-    return document.getElementById("t"+this.territorios[id])!.innerHTML += aumento;
+    document.getElementById("t"+this.territorios[id])!.innerHTML += aumento;
+  }
+
+  sobreescribirTropasRegion(id : number, tropas : number) {
+    document.getElementById("t"+this.territorios[id])!.innerHTML = String(tropas);
+  }
+
+  // Inicializa las cajas de jugadores
+  rellenarCajasJugadores() {
+    var contador = 1
+
+    console.log("iterando")
+    this.logica.mapaJugadores.forEach((value: Estado, key: string) => {
+      document.getElementById("nombreJugador"+contador)!.innerHTML = String(key)
+      document.getElementById("tropasJugador"+contador)!.innerHTML = String(0)
+      document.getElementById("territoriosJugador"+contador)!.innerHTML = String(0)
+      document.getElementById("cartasJugador"+contador)!.innerHTML = String(0)
+      contador++
+    });
+
+    // Oculta los jugadores restantes
+    for (var i = contador+1; i <= 6; i++) {
+      console.log("Ocultando caja de jugador " + i)
+      document.getElementById("jugador" + i)!.style.display = 'none'
+    }
+  }
+
+  aumentarTropasCajaJugadores(jugador : string, aumento : number) {
+    var i = this.obtenerIndiceCajaJugadores(jugador);
+
+    var tropas  = parseInt(document.getElementById("tropasJugador"+i)!.innerHTML)
+
+    document.getElementById("tropasJugador"+i)!.innerHTML = String(tropas+aumento)
+  }
+
+  aumentarTerritoriosCajaJugadores(jugador : string, aumento : number) {
+    var i = this.obtenerIndiceCajaJugadores(jugador);
+
+    var territorios  = parseInt(document.getElementById("territoriosJugador"+i)!.innerHTML)
+
+    document.getElementById("territoriosJugador"+i)!.innerHTML = String(territorios+aumento)
+  }
+
+  aumentarCartasCajaJugadores(jugador : string, aumento : number) {
+    var i = this.obtenerIndiceCajaJugadores(jugador);
+
+    console.log("Aumentando cartas para "+jugador)
+
+    var cartas  = parseInt(document.getElementById("cartasJugador"+i)!.innerHTML)
+
+    document.getElementById("cartasJugador"+i)!.innerHTML = String(cartas+aumento)
+  }
+
+  // Obtiene el índice de caja dado un jugador. El jugador debe existir.
+  obtenerIndiceCajaJugadores(jugador : string) {
+    // Busca al jugador en las cajas, ya que pueden estar desordenadas
+    for (var i = 1; i <= 6; i++) {
+      if (document.getElementById("nombreJugador"+i)!.innerHTML == jugador) {
+        return i
+      }
+    }
+
+    return -1
   }
 
   // Funciones de alertas
@@ -307,10 +332,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     });
   }
 
-
-  ngAfterViewInit() {}
-
-
   // Funciones de tratamiento del juego
 
   tratarFaseFortificar() {
@@ -349,6 +370,86 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       },
       200);
   }
+
+  tratarAccionFortificar(obj : any) {
+    var tropasAntes = this.obtenerTropasRegion(obj.Destino)
+    console.log("antes:", tropasAntes)
+
+    this.sobreescribirTropasRegion(obj.Origen, obj.TropasOrigen)
+    this.sobreescribirTropasRegion(obj.Destino, obj.TropasDestino)
+
+    var nombreTerritorio1 = this.territorios[obj.Origen]
+    var nombreTerritorio2 = this.territorios[obj.Destino]
+
+    var tropasFortificacion = parseInt(this.obtenerTropasRegion(obj.Destino)) - parseInt(tropasAntes);
+
+    this.mostrarAlerta("Fortificación",
+      "El jugador "+obj.Jugador+" ha fortificado " + nombreTerritorio2 + " con " + tropasFortificacion + " tropas desde " + nombreTerritorio1)
+  }
+
+  tratarAccionJugadorEliminado(obj : any) {
+    // Somos el eliminado
+    if (obj.JugadorEliminado == this.logica.yo) {
+      // TODO: Ir a la pantalla de derrota
+    } else {
+      this.mostrarAlerta("Jugador eliminado", "¡" + obj.JugadorEliminado + " ha sido eliminado por" + obj.JugadorEliminador + "!")
+    }
+  }
+
+  tratarAccionReforzar(obj : any) {
+    var jugador = obj.Jugador;
+    var territorio = obj.TerritorioReforzado;
+    var tropasRefuerzo = obj.TropasRefuerzo;
+
+    this.aumentarTropasRegion(territorio, tropasRefuerzo)
+
+    this.mostrarAlerta("Refuerzo", jugador + " ha reforzado " + this.territorios[territorio] + " con " + tropasRefuerzo + " tropas de refuerzo")
+  }
+
+  tratarAccionCambioCartas(obj : any) {
+    var alerta : Alerta = this.logica.cambioCartas(obj)
+    this.aumentarCartasCajaJugadores(this.logica.jugadorTurno, -3)
+    this.mostrarAlerta(alerta.titulo, alerta.texto)
+  }
+
+  tratarAccionPartidaFinalizada(obj : any) {
+    // Información a tratar por la pantalla de fin de partida
+    localStorage.setItem("ganador", obj.JugadorGanador)
+    if (this.logica.yo == obj.JugadorGanador) {
+      localStorage.setItem("esGanador", "1")
+    } else {
+      localStorage.setItem("esGanador", "0")
+    }
+
+    localStorage.setItem("yo", this.logica.yo)
+    // Borra la entrada para el jugador actual
+    //this.logica.mapaJugadores.delete(this.logica.yo)
+
+    var listaJugadores = new Array<jugadorFinPartida>();
+
+    this.logica.mapaJugadores.forEach((jugador: Estado, i: string) => {
+      var jugadorFin : jugadorFinPartida = {
+        nombre: i,
+        eliminado : jugador.eliminado,
+        expulsado : jugador.expulsado,
+      };
+
+      listaJugadores.push(jugadorFin);
+    });
+
+    localStorage.setItem("jugadores", JSON.stringify(listaJugadores))
+    // Se borra el almacen de lógica del juego y pasa a la pantalla de fin de partida
+    //delete this.logica
+
+    //clearInterval(this.intervaloMio)
+
+    //this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
+  }
+
+
+  // Funciones para herencia de mapa<->juego
+
+  ngAfterViewInit() {}
 }
 
 export class jugadorFinPartida {
@@ -356,3 +457,4 @@ export class jugadorFinPartida {
   eliminado : boolean = false;
   expulsado : boolean = false;
 }
+

@@ -79,8 +79,8 @@ export class LogicaJuego {
       return valorRetorno
     }
 
-    reforzar(json: any) {
-    }
+    /*reforzar(json: any) {
+    }*/
 
     ataque(json: any) {
 
