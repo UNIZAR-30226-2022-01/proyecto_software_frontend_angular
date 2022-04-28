@@ -72,7 +72,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   vez = 0;
   index = Array<number>();
   jugador = Array<string>();
+  intervalos = Array<any>();
   intervarloDormir : any;
+  primeraVez = true;
 
   fnCall() {
     this.logica = new LogicaJuego(this.http);
@@ -82,8 +84,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           .subscribe(
             data => {
               this.jsonData = JSON.parse(data);
-              //console.log("jsonData:",this.jsonData);
-
+              console.log(this.jsonData);
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
                 switch(obj.IDAccion) {
@@ -92,20 +93,25 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     this.index.push(obj.Region);
                     this.jugador.push(obj.Jugador);
                     
-                    this.tiempo = this.tiempo + 100;
-                    var inter = setInterval(() => 
+                    this.tiempo = this.tiempo + 200;
+                    console.log("antess", obj)
+                    if (this.vez < 42){
+                      this.vez = this.vez + 1;
+                      console.log('vez',this.vez)
+                      this.intervalos.push(setTimeout(() => 
                       {
-                        this.vez = this.vez + 1;
-                        console.log(this.vez)
-                        if (true) clearInterval(inter)
+                        console.log('hola holita :(', this.intervalos.length)
                         var velemento = this.index.pop()!
                         var jugador = this.jugador.pop()!
                         document.getElementById(this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
                         document.getElementById("c"+this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
                         document.getElementById("t"+this.territorios[velemento])!.innerHTML="1"
-                        
-                      },this.tiempo);
-                             
+                      },this.tiempo));
+                    }else{
+                      console.log("holaaa", this.intervalos.length)
+                      clearInterval(this.intervalos.pop()!)
+                    }
+                    
                     break;
                   }
                   case 1: { // IDAccionCambioFase
@@ -216,9 +222,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       //this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
                       break;
                   }
+                  break;
                 }
               }
-
+              
               /*if (this.cosaJSON.MaxJugadores == this.cosaJSON.Jugadores) { //iniciarPartida
                 clearInterval(this.intervaloMio)
                 //this.router.navigate(['/juego'])
