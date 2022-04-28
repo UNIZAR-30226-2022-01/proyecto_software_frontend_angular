@@ -38,11 +38,11 @@ export class LogicaJuego {
 
     recibirRegion(json: any, document:Document) {
         var jugador = json.Jugador;
-        var Region = json.Region;
+        var region = json.Region;
 
         var estadoJugador = this.mapaJugadores.get(jugador)!
         estadoJugador.tropas = json.TropasRestantes; // mostrar en la barra inferior
-        estadoJugador.territorios.push(json.Region)
+        estadoJugador.territorios.push(region)
 
         //document.getElementById("Kamchatka")!.style.fill='red';
         this.mapaJugadores.set(jugador, estadoJugador);
@@ -80,7 +80,6 @@ export class LogicaJuego {
     }
 
     reforzar(json: any) {
-
     }
 
     ataque(json: any) {

@@ -151,8 +151,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 4: { // IDAccionReforzar
+                    //this.logica.reforzar(obj)
+                    var jugador = obj.Jugador;
+                    var territorio = obj.TerritorioReforzado;
+                    var tropasRefuerzo = obj.TropasRefuerzo;
 
-                      break;
+                    this.aumentarTropasRegion(territorio, tropasRefuerzo)
+
+                    this.mostrarAlerta("Refuerzo", jugador + " ha reforzado " + this.territorios[territorio] + " con " + tropasRefuerzo + " tropas de refuerzo")
+
+                    break;
                   }
                   case 5: { // IDAccionAtaque
 
@@ -230,6 +238,17 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     }, 5000);
   }
+
+  // Funciones auxiliares sobre el HTML
+  obtenerTropasRegion(id : number) {
+    return document.getElementById("t"+this.territorios[id])!.innerHTML
+  }
+
+  aumentarTropasRegion(id : number, aumento : number) {
+    return document.getElementById("t"+this.territorios[id])!.innerHTML += aumento;
+  }
+
+  // Funciones de alertas
 
   mostrarAlerta(tituloAlerta: string, textoAlerta: string) {
     var timerInterval : any
