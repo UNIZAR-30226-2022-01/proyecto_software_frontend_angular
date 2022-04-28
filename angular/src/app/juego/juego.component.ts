@@ -167,7 +167,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       break;
                   }
                   case 8: { // IDAccionObtenerCarta
-                      // TODO
+                      this.logica.obtenerCarta(obj)
+
                       break;
                   }
                   case 9: { // IDAccionJugadorEliminado
@@ -298,7 +299,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.territorio1 = "";
     this.territorio2 = "";
     this.tropasAMover = 0;
-
 
     this.mostrarAlertaPermanente("Selecciona el territorio origen", "")
     this.mapa.permitirSeleccionTerritorios();

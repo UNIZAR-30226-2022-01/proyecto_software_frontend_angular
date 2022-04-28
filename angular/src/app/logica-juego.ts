@@ -95,7 +95,38 @@ export class LogicaJuego {
 
     }
 
+    // Almacena la carta para el jugador si somos nosotros,
+    // o contabiliza que uno de los rivales tiene una carta más
+    // Devuelve una carta si la carta obtenida es para el jugador,
+    // null en caso contrario
     obtenerCarta(json: any) {
+      var tipo = json.Carta.Tipo
+      var region = json.Carta.Region
+      var esComodin = json.Carta.EsComodin
+
+      var jugador = json.Jugador
+
+      if (jugador == this.yo) {
+        var carta : Carta = {
+          idCarta: 0,
+          tipo:  tipo,
+          region: region,
+          esComodin:  esComodin,
+        }
+
+        // Almacena la nueva carta, consultándolas de nuevo para conocer su ID
+        this.consultarCartas()
+        // TODO: Mostrar cartas o indicar que hay una carta nueva?
+
+        return carta
+      } else {
+        // Contabiliza una carta más para el receptor
+        var estado = this.mapaJugadores.get(jugador)!
+        estado.numCartas++;
+        this.mapaJugadores.set(jugador, estado)
+
+        return null
+      }
 
     }
 
