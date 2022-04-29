@@ -9,7 +9,7 @@ export class LlamadasAPI {
   fortificar(juego : JuegoComponent) {
     console.log("fortificando...")
     var idTerritorio1 = juego.territorios.indexOf(juego.territorio1)
-    var idTerritorio2 = juego.territorios.indexOf(juego.territorio1)
+    var idTerritorio2 = juego.territorios.indexOf(juego.territorio2)
 
     this.http.post('http://localhost:8090/api/fortificar/'+idTerritorio1+'/'+idTerritorio2+'/'+juego.tropasAMover, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({

@@ -77,7 +77,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   jugador = Array<string>();
   intervalos = Array<any>();
   intervarloDormir : any;
-  primeraVez = true;
+  //primeraVez = 42;
 
   intervarloConsultaTerritorio : any;
   territorio1 : string = "";
@@ -110,31 +110,31 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                 var obj = this.jsonData[i];
                 switch(obj.IDAccion) {
                   case 0: { // IDAccionRecibirRegion
-                    this.logica.recibirRegion(obj, document);
-                    this.index.push(obj.Region);
-                    this.jugador.push(obj.Jugador);
-                    
-                    this.tiempo = this.tiempo + 200;
-                    console.log("antess", obj)
-                    if (this.vez < 42){
-                      this.vez = this.vez + 1;
-                      console.log('vez',this.vez)
-                      this.intervalos.push(setTimeout(() => 
-                      {
-                        console.log('hola holita :(', this.intervalos.length)
-                        var velemento = this.index.pop()!
-                        var jugador = this.jugador.pop()!
-                        document.getElementById(this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
-                        document.getElementById("c"+this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
-                        document.getElementById("t"+this.territorios[velemento])!.innerHTML="1"
-                      },this.tiempo));
-                    }else{
-                      console.log("holaaa", this.intervalos.length)
-                      clearInterval(this.intervalos.pop()!)
+                    if (this.vez != 42) {
+                      this.logica.recibirRegion(obj, document);
+                      this.index.push(obj.Region);
+                      this.jugador.push(obj.Jugador);
+
+                      this.tiempo = this.tiempo + 250;
+
+                      if (this.vez < 42) {
+                        this.vez = this.vez + 1;
+                        console.log('vez',this.vez)
+                        this.intervalos.push(setTimeout(() =>
+                        {
+                          var velemento = this.index.pop()!
+                          var jugador = this.jugador.pop()!
+                          document.getElementById(this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
+                          document.getElementById("c"+this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
+                          document.getElementById("t"+this.territorios[velemento])!.innerHTML="1"
+                        },this.tiempo));
+                      } else{
+                        clearInterval(this.intervalos.pop()!)
+                      }
                     }
-                    
                     break;
                   }
+
                   case 1: { // IDAccionCambioFase
                     this.logica.fase = obj.Fase
 
@@ -202,11 +202,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       this.tratarAccionPartidaFinalizada(obj)
                       break;
                   }
-                  break;
                 }
               }
             })
-
     }, 5000);
   }
 
@@ -216,7 +214,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   aumentarTropasRegion(id : number, aumento : number) {
-    document.getElementById("t"+this.territorios[id])!.innerHTML += aumento;
+    var tropas = parseInt(document.getElementById("t"+this.territorios[id])!.innerHTML) + aumento;
+
+    this.sobreescribirTropasRegion(id, tropas)
   }
 
   sobreescribirTropasRegion(id : number, tropas : number) {
@@ -227,7 +227,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   rellenarCajasJugadores() {
     var contador = 1
 
-    console.log("iterando")
     this.logica.mapaJugadores.forEach((value: Estado, key: string) => {
       document.getElementById("nombreJugador"+contador)!.innerHTML = String(key)
       document.getElementById("tropasJugador"+contador)!.innerHTML = String(0)
@@ -371,8 +370,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             clearInterval(this.intervarloConsultaTerritorio)
             this.mapa.limitarSeleccionTerritorios();
 
+            var tropasTerritorio1 = this.obtenerTropasRegion(this.territorios.indexOf(this.territorio1))
+
             // Una vez hecho, se llama por callback a la selección de tropas
-            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", "12");
+            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", tropasTerritorio1);
           }
         }
       },
@@ -399,6 +400,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     // Somos el eliminado
     if (obj.JugadorEliminado == this.logica.yo) {
       // TODO: Ir a la pantalla de derrota
+      // TODO: samuel
     } else {
       this.mostrarAlerta("Jugador eliminado", "¡" + obj.JugadorEliminado + " ha sido eliminado por" + obj.JugadorEliminador + "!")
     }
