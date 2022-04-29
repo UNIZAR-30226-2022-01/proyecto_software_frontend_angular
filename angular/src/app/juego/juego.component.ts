@@ -76,7 +76,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   index = Array<number>();
   jugador = Array<string>();
   intervalos = Array<any>();
-  intervarloDormir : any;
   //primeraVez = 42;
 
   intervarloConsultaTerritorio : any;
@@ -189,13 +188,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   case 9: { // IDAccionJugadorEliminado
                       this.logica.jugadorEliminado(obj)
                       this.tratarAccionJugadorEliminado(obj)
+
                       break;
                   }
                   case 10: { // IDAccionJugadorExpulsado
                       this.logica.jugadorExpulsado(obj)
                       // Sabemos que no podemos ser nosotros, ya que estaríamos desvinculados de la partida
-
-                      this.mostrarAlerta("Jugador expulsado", "¡" + obj.JugadorEliminado + " ha sido expulsado de la partida por inactividad!")
+                      this.tratarAccionJugadorExpulsado(obj)
                       break;
                   }
                   case 11: { // IDAccionPartidaFinalizada
@@ -298,9 +297,51 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
-  mostrarAlertaPermanente(tituloAlerta: string, textoAlerta: string) {
-    //var timerInterval : any
+  mostrarAlertaDerrotaPropia(tituloAlerta: string, textoAlerta: string) {
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'center',
+      width: '45%',
+      backdrop: true,
+      html: textoAlerta,
+      willClose: () => {
+        this.terminarAutomataJuego()
+        this.router.navigate(['/identificacion'])
+      }
+    })
+  }
 
+  mostrarAlertaDerrotaAjena(tituloAlerta: string, textoAlerta: string) {
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'center',
+      width: '45%',
+      backdrop: true,//"#0000000",
+      html: textoAlerta,
+      timer: 5000,
+      timerProgressBar: true,
+    })
+  }
+
+  mostrarAlertaPrueba(tituloAlerta: string, textoAlerta: string) {
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'center',
+      width: '45%',
+      backdrop: true,//"#0000000",
+      background: "#ffff0000",
+      color : "#ffffff",
+      html: textoAlerta,
+      timer: 5000,
+      timerProgressBar: true,
+      // Ejemplo de imagen
+      //imageUrl : "https://s3.getstickerpack.com/storage/uploads/sticker-pack/hide-the-pain-harold/sticker_5.png?35bc9a5413d14b83fb1eabdb6fe2523d&d=200x200",
+      //imageWidth : 300,
+      //imageHeight : 300,
+    })
+  }
+
+  mostrarAlertaPermanente(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
       position: 'top',
@@ -308,11 +349,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       backdrop: false,
       html: textoAlerta,
       showConfirmButton: false,
-      //timer: 5000,
-      //timerProgressBar: true,
-      //willClose: () => {
-      //  clearInterval(timerInterval)
-      //}
     })
   }
 
@@ -397,13 +433,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   tratarAccionJugadorEliminado(obj : any) {
-    // Somos el eliminado
-    if (obj.JugadorEliminado == this.logica.yo) {
-      // TODO: Ir a la pantalla de derrota
-      // TODO: samuel
+    if (obj.JugadorEliminado == this.logica.yo) { // Somos el jugador eliminado
+      // Oscurece la pantalla, indica que se ha sido derrotado, y permite únicamente volver al menú principal
+      this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
     } else {
-      this.mostrarAlerta("Jugador eliminado", "¡" + obj.JugadorEliminado + " ha sido eliminado por" + obj.JugadorEliminador + "!")
+      this.mostrarAlertaDerrotaAjena("Jugador eliminado", "¡" + obj.JugadorEliminado + " ha sido eliminado por " + obj.JugadorEliminador + "!")
     }
+  }
+
+  tratarAccionJugadorExpulsado(obj : any) {
+    this.mostrarAlertaDerrotaAjena("Jugador expulsado", "¡" + obj.JugadorEliminado + " ha sido expulsado de la partida por inactividad!")
   }
 
   tratarAccionReforzar(obj : any) {
@@ -456,6 +495,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     //this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
   }
 
+  // Funciones de terminación
+
+  terminarAutomataJuego() {
+    clearInterval(this.intervarloConsultaTerritorio)
+    // TODO: Más funciones de parada
+  }
 
   // Funciones para herencia de mapa<->juego
 
