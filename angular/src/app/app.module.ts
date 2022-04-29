@@ -42,7 +42,7 @@ const appRoutes: Routes = [
   {path: 'buscarPartida', component: BuscarPartidaComponent},
   {path: 'perfil/:nombre', component: PerfilComponent},
   {path: 'personalizacion', component: PersonalizacionComponent},
-  {path: 'notificaciones', component: NotificacionesComponent},
+  {path: '', component: NotificacionesComponent}, // notificaciones
   {path: 'mapa', component: MapaComponent},
   {path: 'crearPartida', component: CrearPartidaComponent},
   {path: 'ranking', component: RankingComponent},
@@ -52,7 +52,7 @@ const appRoutes: Routes = [
   {path: 'configuaracionPerfil', component: ConfigPerfilComponent},
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
-  {path: '', component: JuegoComponent},
+  {path: 'juego', component: JuegoComponent},
   {path: 'finPartida', component: FinPartidaComponent}
 ]
 
