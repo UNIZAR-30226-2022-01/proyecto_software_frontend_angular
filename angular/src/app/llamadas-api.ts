@@ -54,7 +54,7 @@ export class LlamadasAPI {
 
   // Obtiene la lista de notificaciones pendientes y las almacena en pantallaNotificaciones
   obtenerNotificaciones(pantallaNotificaciones : NotificacionesComponent) : any {
-    this.http.get('http://localhost:8090/api/obtenerNotificacionesDEBUG', {observe:'body', responseType:'text', withCredentials: true})
+    this.http.get('http://localhost:8090/api/obtenerNotificaciones', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           var jsonData = JSON.parse(response);
