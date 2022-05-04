@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./inicio-sesion.component.css']
 })
 export class InicioSesionComponent  {
-    
+
     profileForm = this.fb.group({
         nombre: new FormControl('',[
           Validators.required,
@@ -21,8 +21,8 @@ export class InicioSesionComponent  {
 
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) { }
 
-  cookie:any;       
-  //nombre_usuario:any; 
+  cookie:any;
+  //nombre_usuario:any;
 
   /*getNombre_Usuario(nombre:string) {
     nombre = nombre.split('=')[1];
@@ -56,7 +56,7 @@ export class InicioSesionComponent  {
                               localStorage.setItem('nombre_usuario', response.body! );
                               this.router.navigate(['/identificacion'])
                               },
-            
+
           error: (error) => {Swal.fire({
                                         title: 'Se ha producido un error al iniciar sesión',
                                         text: error.error,
@@ -65,6 +65,14 @@ export class InicioSesionComponent  {
                             }
           });
  }
+
+  resetearPassword() {
+
+  }
+
+  introducirToken() {
+
+  }
 
   get nombre() { return this.profileForm.get('nombre')!; }
   get password() { return this.profileForm.get('password')!; }
