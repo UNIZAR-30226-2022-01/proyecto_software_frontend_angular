@@ -53,7 +53,11 @@ export class LogicaJuego {
     }
 
     inicioTurno(json: any) {
-
+      var jugador = json.Jugador;
+      var tropasObtenidas = json.TropasObtenidas;
+      var estadoJugador = this.mapaJugadores.get(jugador)!
+      estadoJugador.tropas += tropasObtenidas; // Aumentamos el número de tropas
+      this.mapaJugadores.set(jugador, estadoJugador);
     }
 
     cambioCartas(json: any) {
