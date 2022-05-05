@@ -62,7 +62,15 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   constructor(private http: HttpClient, private router:Router){}
 
   ngOnInit(): void {
-    this.fnCall();
+    var volviendo = localStorage.getItem("volviendo")
+
+    if (volviendo == null) {
+      this.ejecutarAutomata()
+    } else {
+      localStorage.removeItem("volviendo")
+      this.obtenerEstadoCompleto()
+      this.ejecutarAutomata()
+    }
   }
 
 
@@ -88,7 +96,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
 
-  fnCall() {
+  obtenerEstadoCompleto()  {
+    // TODO: Implementar al tener el autómata completo, no mostrando alertas y no pidiendo interactuar en turnos propios,
+    // TODO: mirando en cambio si al final el jugador actual somos nosotros
+  }
+
+  ejecutarAutomata() {
     this.logica = new LogicaJuego(this.http);
 
     // Como la petición inicial de jugadores es asíncrona, se espera unos segundos a rellenar las cajas de jugadores
