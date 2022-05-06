@@ -1,0 +1,52 @@
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.flex-items:nth-child(n) {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+  margin: 2%;
+  border-style: solid; /* Para mostrar el área de click hasta que sea una imagen*/
+}
+
+.flex-itemsBotonera {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+  margin: 1%;
+  width: 10em;
+  height: 3em;
+}
+
+.dinero {
+  position: absolute;
+  right: 15%;
+  top: 15%;
+  border-style: solid;
+  transform: translate(15%, 15%)
+}
+
+.contenedor-bottom {
+  position: sticky;
+  bottom: 35%;
+  top: 50%;
+  left: 50%;
+  right: 50%;
+}
+
+.contenedor-superior {
+  position: absolute;
+  top: 15%;
+  right: 50%;
+  transform: translate(50%, 50%)
+}

@@ -99,4 +99,33 @@ export class LlamadasAPI {
 
     return ""
   }
+
+  // Intenta cambiar un aspecto al item dado su id, mostrando una alerta como feedback,
+  // y llama por callback para mostrar el item si se ha cambiado, o para indicar que ha
+  // habido fallo y no se ha cambiado el item
+  cambiarAspecto(item : number, llamador : any) {
+    this.http.post('http://localhost:8090/api/modificarAspecto/'+item, null, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          Swal.fire({
+            title: 'Aspecto modificado con éxito',
+            icon: 'success',
+            timer: 2000,
+          })
+
+          llamador.cambiarItemEnUso(item)
+
+        },
+        error: (error) => {
+          Swal.fire({
+            title: 'Se ha producido un error al intentar cambiar el aspecto',
+            text: error.error,
+            icon: 'error',
+            timer: 2000,
+          })
+
+          llamador.sinCambioItemEnUso(item)
+        }
+      });
+  }
 }

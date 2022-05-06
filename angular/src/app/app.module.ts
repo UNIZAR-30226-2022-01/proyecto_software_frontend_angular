@@ -35,7 +35,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { SolicitarTokenComponent } from './solicitar-token/solicitar-token.component';
 
 const appRoutes: Routes = [
-  {path: '', component: InicioComponent},
+  {path: 'e', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
   {path: 'inicioSesion', component: InicioSesionComponent},
   {path: 'tienda', component: TiendaComponent},
@@ -43,7 +43,7 @@ const appRoutes: Routes = [
   {path: 'configuracionPartida', component: ConfigPartidaComponent},
   {path: 'buscarPartida', component: BuscarPartidaComponent},
   {path: 'perfil/:nombre', component: PerfilComponent},
-  {path: 'personalizacion', component: PersonalizacionComponent},
+  {path: '', component: PersonalizacionComponent},
   {path: 'notificaciones', component: NotificacionesComponent},
   {path: 'mapa', component: MapaComponent},
   {path: 'crearPartida', component: CrearPartidaComponent},
