@@ -70,6 +70,9 @@ export class PersonalizacionComponent implements OnInit {
                     this.indiceDadoActual = index
                     document.getElementById("enUsoDado"+this.indiceDadoActual)!.style.display ="block";
                   }
+
+                  document.getElementById("nombreItemActual")!.innerHTML = this.dados[this.indiceDadoActual].nombre;
+                  document.getElementById("descripcionItemActual")!.innerHTML = this.dados[this.indiceDadoActual].descripcion;
                 })
 
                 this.avatares.forEach((avatar, index) => {
@@ -93,6 +96,9 @@ export class PersonalizacionComponent implements OnInit {
     for (let i = 0; i < dados.length; i++) {
       dados[i].style.display = "block";
     }
+
+    document.getElementById("nombreItemActual")!.innerHTML = this.dados[this.indiceDadoActual].nombre;
+    document.getElementById("descripcionItemActual")!.innerHTML = this.dados[this.indiceDadoActual].descripcion;
   }
 
   mostrarAvatares() {
@@ -105,6 +111,9 @@ export class PersonalizacionComponent implements OnInit {
     for (let i = 0; i < dados.length; i++) {
       dados[i].style.display = "none";
     }
+
+    document.getElementById("nombreItemActual")!.innerHTML = this.avatares[this.indiceAvatarActual].nombre;
+    document.getElementById("descripcionItemActual")!.innerHTML = this.avatares[this.indiceAvatarActual].descripcion;
   }
 
   cambiarItemEnUso(nuevo : number) {
@@ -120,8 +129,9 @@ export class PersonalizacionComponent implements OnInit {
         }
       })
 
+      document.getElementById("nombreItemActual")!.innerHTML = this.dados[this.indiceDadoActual].nombre;
+      document.getElementById("descripcionItemActual")!.innerHTML = this.dados[this.indiceDadoActual].descripcion;
 
-      document.getElementById("enUsoDado"+this.indiceDadoActual)!.style.display ="block";
     } else {
       this.avatarCambiado = false
       document.getElementById("enUsoAvatar"+this.indiceAvatarActual)!.style.display ="none";
@@ -132,6 +142,9 @@ export class PersonalizacionComponent implements OnInit {
           document.getElementById("enUsoAvatar"+this.indiceAvatarActual)!.style.display ="block";
         }
       })
+
+      document.getElementById("nombreItemActual")!.innerHTML = this.avatares[this.indiceAvatarActual].nombre;
+      document.getElementById("descripcionItemActual")!.innerHTML = this.avatares[this.indiceAvatarActual].descripcion;
     }
 
   }

@@ -50,3 +50,11 @@
   right: 50%;
   transform: translate(50%, 50%)
 }
+
+.contenedor-mitad {
+  position: absolute;
+  top: 30%;
+  right: 50%;
+  transform: translate(50%, 50%);
+  border-style: solid; /* Para mostrar el área hasta que sea una imagen*/
+}
