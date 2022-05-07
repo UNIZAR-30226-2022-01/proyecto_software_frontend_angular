@@ -22,7 +22,7 @@ export class LogicaJuego {
 
     llamadasAPI : LlamadasAPI;
 
-    constructor(http: HttpClient) {
+    constructor(http: HttpClient, consultar : boolean) {
       this.http = http
       this.llamadasAPI = new LlamadasAPI(this.http)
 
@@ -33,7 +33,9 @@ export class LogicaJuego {
 
       this.yo = nombre_usuario;
 
-      this.llamadasAPI.obtenerJugadoresPartida(this)
+      if (consultar) {
+        this.llamadasAPI.obtenerJugadoresPartida(this)
+      }
     }
 
     recibirRegion(json: any, document:Document) {
