@@ -52,7 +52,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     else {this.source = "https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-cross-100-most-used-icons-flaticons-lineal-color-flat-icons.png";}
   }
 
-  setMapa() {this.info = 0;}
+  setMapa() {this.info = 0; this.resumirPartida();}
   setMapaInfo() {this.info = 1;}
 
   delay(ms: number) {
@@ -103,7 +103,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   tropasAMover : number = 0;
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
-
   resumirPartida()  {
     this.http.get('http://localhost:8090/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
