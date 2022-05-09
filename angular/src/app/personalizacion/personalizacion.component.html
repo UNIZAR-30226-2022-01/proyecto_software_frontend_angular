@@ -15,6 +15,7 @@
 <div class="contenedor-mitad">
   <div id="nombreItemActual"></div>
   <div id="descripcionItemActual"></div>
+  <img id="imagenActual" class="img-fluid rounded" width="100" height="100">
 </div>
 
 <div class="dinero">
@@ -29,7 +30,9 @@ Tienes {{puntos}} puntos
          {{dado.nombre}}
          <br>
          {{dado.descripcion}}
-
+         <br>
+         <img id="{{dado.id}}" class="img-fluid rounded" width="100" height="100">
+         <br>
          <div id="enUsoDado{{i}}" style="display:none;">
          En uso!
          </div>
@@ -41,7 +44,9 @@ Tienes {{puntos}} puntos
          {{avatar.nombre}}
          <br>
          {{avatar.descripcion}}
-
+         <br>
+         <img id="{{avatar.id}}" class="img-fluid rounded" width="100" height="100">
+          <br>
          <div id ="enUsoAvatar{{i}}" style="display:none;">
          En uso!
          </div>
