@@ -1,1 +1,51 @@
-<p>personalizacion works!</p>
+<top-bar></top-bar>
+<down-bar></down-bar>
+
+<div class="contenedor-superior">
+  <div class="flex-container">
+    <button class="flex-itemsBotonera" (click)="mostrarAvatares()">
+    Avatares
+    </button>
+    <button class="flex-itemsBotonera" (click)="mostrarDados()">
+    Dados
+    </button>
+  </div>
+</div>
+
+<div class="contenedor-mitad">
+  <div id="nombreItemActual"></div>
+  <div id="descripcionItemActual"></div>
+</div>
+
+<div class="dinero">
+Tienes {{puntos}} puntos
+</div>
+
+<div class="contenedor-bottom">
+  <div class="flex-container">
+
+       <div class="dado flex-items" id ="dado{{i}}" *ngFor="let dado of dados; let i = index" (click)="cambiarDado(i)">
+
+         {{dado.nombre}}
+         <br>
+         {{dado.descripcion}}
+
+         <div id="enUsoDado{{i}}" style="display:none;">
+         En uso!
+         </div>
+
+       </div>
+
+       <div class="avatar flex-items" id ="avatar{{i}}" *ngFor="let avatar of avatares; let i = index" (click)="cambiarAvatar(i)" style="display:none;"> <!-- Por defecto ocultos -->
+
+         {{avatar.nombre}}
+         <br>
+         {{avatar.descripcion}}
+
+         <div id ="enUsoAvatar{{i}}" style="display:none;">
+         En uso!
+         </div>
+
+       </div>
+  </div>
+</div>

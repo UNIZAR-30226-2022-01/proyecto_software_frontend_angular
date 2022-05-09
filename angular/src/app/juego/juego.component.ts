@@ -35,6 +35,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   "Africa_Oriental", "Congo", "Sudafrica", "Brasil", "Argentina", "Este_de_los_Estados_Unidos", "Estados_Unidos_Occidental", "Quebec",
                   "America_Central", "Peru", "Australia_Occidental", "Alberta"];
 
+  colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
                   info: number = 0;
   isShow = false;
   source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";
@@ -46,7 +47,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     else {this.source = "https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-cross-100-most-used-icons-flaticons-lineal-color-flat-icons.png";}
   }
 
-  setMapa() {this.info = 0;}
+  setMapa() {this.info = 0; this.resumirPartida();}
   setMapaInfo() {this.info = 1;}
 
   delay(ms: number) {
@@ -59,12 +60,20 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     var volviendo = localStorage.getItem("volviendo")
 
     if (volviendo == null) {
-      this.ejecutarAutomata()
+      this.logica = new LogicaJuego(this.http, true);
+
+      // Como la petición inicial de jugadores es asíncrona, se espera unos segundos a rellenar las cajas de jugadores
+      setTimeout(() =>{
+        this.rellenarCajasJugadores()
+      }, 4000);
     } else {
       localStorage.removeItem("volviendo")
-      this.obtenerEstadoCompleto()
-      this.ejecutarAutomata()
+
+      this.logica = new LogicaJuego(this.http, false);
+      this.resumirPartida()
     }
+
+    this.ejecutarAutomata()
   }
 
 
@@ -91,21 +100,82 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   tropasRecibidas:number = 0;
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
+  resumirPartida()  {
+    this.http.get('http://localhost:8090/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          var jsonData = JSON.parse(response);
 
-  obtenerEstadoCompleto()  {
-    // TODO: Implementar al tener el autómata completo, no mostrando alertas y no pidiendo interactuar en turnos propios,
-    // TODO: mirando en cambio si al final el jugador actual somos nosotros
+          // Recuperar el estado de cada jugador
+          for (let i = 0; i < jsonData.Jugadores.length; i++) {
+
+            var jugador = jsonData.Jugadores[i]
+
+            var estadoJSON = jsonData.EstadosJugadores[jugador]
+
+            var estado : Estado = {
+              tropas: estadoJSON.Tropas,
+              territorios: [],
+              numCartas: estadoJSON.NumCartas,
+              eliminado: estadoJSON.Eliminado,
+              expulsado: estadoJSON.Expulsado,
+            }
+
+            // Si somos nosotros, se comprueba que no estemos eliminados y guardan las cartas
+            if (jugador == this.logica.yo) {
+              if(estado.eliminado) { // Si hemos sido eliminados, se sale de la partida
+                this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
+              } else {
+                for (let j = 0; j < estadoJSON.Cartas; j++) {
+                  this.logica.cartas.push(this.logica.Carta = {
+                    idCarta : estadoJSON.Cartas[j].IdCarta,
+                    tipo : estadoJSON.Cartas[j].Tipo,
+                    region : estadoJSON.Cartas[j].Region,
+                    esComodin : estadoJSON.Cartas[j].EsComodin,
+                  })
+                }
+              }
+            }
+
+            this.logica.mapaJugadores.set(jugador, estado);
+            this.logica.colorJugador.set(jugador, this.logica.colores[i]);
+          }
+
+          var estadoMapa = jsonData.Mapa
+
+          // Recuperar estado de todas las regiones
+          for (let i = 0; i < 42; i++) {
+            var estadoJugador = this.logica.mapaJugadores.get(estadoMapa[i].Ocupante)
+            estadoJugador.territorios.push(i)
+            this.logica.mapaJugadores.set(estadoMapa[i].Ocupante, estadoJugador)
+
+            this.sobreescribirTropasRegion(i, estadoMapa[i].NumTropas)
+
+            // Rellenar con el color del jugador
+            document.getElementById(this.territorios[i])!.style.fill=this.logica.colorJugador.get(estadoMapa[i].Ocupante);
+            document.getElementById("c"+this.territorios[i])!.style.fill=this.logica.colorJugador.get(estadoMapa[i].Ocupante);
+          }
+
+          this.rellenarCajasJugadores()
+      }
+    });
+
+    // Si era nuestro turno, hay que pasar a ejecutar la fase
+    if (this.logica.jugadorTurno == this.logica.yo) {
+      if (this.logica.fase == 1) { // Refuerzo
+        console.log("Tratando fase de refuerzo desde resumen")
+        // TODO
+      } else if (this.logica.fase == 2) { // Ataque
+        console.log("Tratando fase de ataque desde resumen")
+        // TODO
+      } else if (this.logica.fase == 3) { // Fortificar
+        console.log("Tratando fase de fortificar desde resumen")
+        this.tratarFaseFortificar()
+      }
+    }
   }
 
   ejecutarAutomata() {
-    this.logica = new LogicaJuego(this.http);
-
-    // Como la petición inicial de jugadores es asíncrona, se espera unos segundos a rellenar las cajas de jugadores
-    setTimeout(() =>{
-      this.rellenarCajasJugadores()
-    }, 4000);
-
-
     this.intervaloConsultaEstado = setInterval(() => {
       this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
           .subscribe(
@@ -235,12 +305,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   rellenarCajasJugadores() {
     var contador = 1
 
-    this.logica.mapaJugadores.forEach((value: Estado, key: string) => {
-      document.getElementById("nombreJugador"+contador)!.innerHTML = String(key)
-      document.getElementById("tropasJugador"+contador)!.innerHTML = String(0)
-      document.getElementById("territoriosJugador"+contador)!.innerHTML = String(0)
-      document.getElementById("cartasJugador"+contador)!.innerHTML = String(0)
-      document.getElementById("jugador"+contador)!.style.background=this.logica.colorJugador.get(key);
+    this.logica.mapaJugadores.forEach((estado: Estado, jugador: string) => {
+      document.getElementById("nombreJugador"+contador)!.innerHTML = String(jugador)
+      document.getElementById("tropasJugador"+contador)!.innerHTML = String(estado.tropas)
+      document.getElementById("territoriosJugador"+contador)!.innerHTML = String(estado.territorios.length)
+      document.getElementById("cartasJugador"+contador)!.innerHTML = String(estado.numCartas)
       contador++
     });
 
