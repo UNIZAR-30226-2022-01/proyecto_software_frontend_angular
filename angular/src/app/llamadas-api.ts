@@ -52,6 +52,33 @@ export class LlamadasAPI {
         })
   }
 
+  reforzarTerritorio(juego : JuegoComponent){
+    console.log('reforzando')
+    var idTerritorio1 = juego.territorios.indexOf(juego.territorio1)
+
+    this.http.post('http://localhost:8090/api/reforzarTerritorio/'+idTerritorio1+'/'+juego.tropasAMover, null, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          console.log("Refuerzo con éxito!")
+          juego.tropasRecibidas -= juego.tropasAMover;
+          juego.aumentarTropasRegion(juego.territorios.indexOf(juego.territorio1), juego.tropasAMover);
+          juego.tratarFaseReforzar();
+        },
+        
+        error: (error) => {Swal.fire({
+          title: 'Se ha producido un error al reforzar',
+          text: error.error,
+          icon: 'error',
+          timer: 2000,
+        }
+        ).then((result) => {
+          // Reintenta de nuevo todo el proceso de fortificación
+          
+          juego.tratarFaseReforzar();
+        });
+        }
+      });
+  }
   // Obtiene la lista de notificaciones pendientes y las almacena en pantallaNotificaciones
   obtenerNotificaciones(pantallaNotificaciones : NotificacionesComponent) : any {
     this.http.get('http://localhost:8090/api/obtenerNotificaciones', {observe:'body', responseType:'text', withCredentials: true})

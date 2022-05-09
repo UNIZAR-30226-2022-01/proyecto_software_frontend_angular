@@ -33,6 +33,7 @@ import { JuegoComponent } from './juego/juego.component';
 import { FinPartidaComponent } from './fin-partida/fin-partida.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SolicitarTokenComponent } from './solicitar-token/solicitar-token.component';
+import { CartasComponent } from './cartas/cartas.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -58,6 +59,7 @@ const appRoutes: Routes = [
   {path: 'finPartida', component: FinPartidaComponent},
   {path: 'resetPassword', component: ResetPasswordComponent},
   {path: 'solicitarToken', component: SolicitarTokenComponent},
+  {path: 'cartas', component: CartasComponent}
 ]
 
 
@@ -89,7 +91,8 @@ const appRoutes: Routes = [
     JuegoComponent,
     FinPartidaComponent,
     ResetPasswordComponent,
-    SolicitarTokenComponent
+    SolicitarTokenComponent,
+    CartasComponent
   ],
   imports: [
     BrowserModule,
