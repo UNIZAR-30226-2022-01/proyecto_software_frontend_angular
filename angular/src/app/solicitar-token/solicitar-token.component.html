@@ -5,30 +5,16 @@
 
     <p style="font-size: small; "><a [routerLink]="['/registroUsuario']" style="text-decoration: none;">¿Nuevo aquí? Regístrate</a></p>
     <br>
-    <p style="font-size: small; "><a [routerLink]="['/solicitarToken']" style="text-decoration: none;">¿Has olvidado tu contraseña?</a></p>
-    <br>
     <p style="font-size: small; "><a [routerLink]="['/resetPassword']" style="text-decoration: none;">¿Tienes un token de resetear tu contraseña?</a></p>
     <br>
-    <input id="nombre" type="text" formControlName="nombre" size="30" placeholder="Nombre de usuario">
-    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
+    <input id="usuario" type="text" formControlName="usuario" size="30" placeholder="Nombre de usuario">
+    <div *ngIf="usuario.invalid && (usuario.dirty || usuario.touched)"
       style="color:red;">
 
-      <div *ngIf="nombre.errors?.['required']">
+      <div *ngIf="usuario.errors?.['required']">
         El nombre de usuario es obligatorio.
       </div>
     </div>
-
-
-    <br><br>
-    <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
-        <div *ngIf="password.invalid && (password.dirty || password.touched)"
-          style="color:red;">
-
-            <div *ngIf="password.errors?.['required']">
-            La contraseña es un campo es obligatorio.
-            </div>
-      </div>
-
     <br><br>
 </form>
 

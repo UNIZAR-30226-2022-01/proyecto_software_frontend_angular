@@ -31,6 +31,9 @@ import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
 import { MapaInfoComponent } from './mapa-info/mapa-info.component';
 import { JuegoComponent } from './juego/juego.component';
 import { FinPartidaComponent } from './fin-partida/fin-partida.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { SolicitarTokenComponent } from './solicitar-token/solicitar-token.component';
+import { CartasComponent } from './cartas/cartas.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -49,11 +52,14 @@ const appRoutes: Routes = [
   {path: 'amigos', component: AmigosComponent},
   {path: 'identificacion', component: IdentificacionComponent},
   {path: 'lobby', component: LobbyComponent},
-  {path: 'configuaracionPerfil', component: ConfigPerfilComponent},
+  {path: 'configuracionPerfil', component: ConfigPerfilComponent},
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
   {path: 'juego', component: JuegoComponent},
-  {path: 'finPartida', component: FinPartidaComponent}
+  {path: 'finPartida', component: FinPartidaComponent},
+  {path: 'resetPassword', component: ResetPasswordComponent},
+  {path: 'solicitarToken', component: SolicitarTokenComponent},
+  {path: 'cartas', component: CartasComponent}
 ]
 
 
@@ -83,7 +89,10 @@ const appRoutes: Routes = [
     MiPerfilComponent,
     MapaInfoComponent,
     JuegoComponent,
-    FinPartidaComponent
+    FinPartidaComponent,
+    ResetPasswordComponent,
+    SolicitarTokenComponent,
+    CartasComponent
   ],
   imports: [
     BrowserModule,

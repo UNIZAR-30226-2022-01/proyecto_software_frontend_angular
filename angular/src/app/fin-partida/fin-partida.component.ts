@@ -26,6 +26,9 @@ export class FinPartidaComponent implements OnInit {
     this.ganador = localStorage.getItem("ganador")!
     this.yo = localStorage.getItem("yo")!
 
+    localStorage.removeItem("esGanador")
+    localStorage.removeItem("ganador")
+    localStorage.removeItem("yo")
 
     if (this.esGanador == "1") {
       this.textoGanador = "¡HAS GANADO!"

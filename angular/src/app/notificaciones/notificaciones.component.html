@@ -1,1 +1,34 @@
-<p>notificaciones works!</p>
+<top-bar></top-bar>
+<down-bar></down-bar>
+
+<br>
+<!--<h1 style="text-align: center;">Buscar Partida</h1>-->
+
+<div class="contenedorNotificaciones">
+  <ng-container *ngFor="let n of notificaciones; let i = index">
+
+    <div  class="notificacion" *ngIf="n.IDNotificacion == 0" > <!-- NotificacionAmistad -->
+      <div id="texto{{i}}" class="textoNotificacion"> ¡{{n.Jugador}} te ha enviado una solicitud de amistad! </div>
+      <button id="botonRechazar{{i}}" class="botonRechazar" (click)="rechazarAmistad(n.Jugador, i)"> Rechazar </button>
+      <button id="botonAceptar{{i}}" class="botonAceptar"  (click)="aceptarAmistad(n.Jugador, i)"> Aceptar </button>
+    </div>
+
+    <div id="{{i}}" class="notificacion" *ngIf="n.IDNotificacion == 1" > <!-- NotificacionTurno -->
+      <div class="textoNotificacion"> ¡La partida en la que estás participando está esperando a que realices tu jugada! </div>
+      <button class="botonAceptar"> <a routerLink="/juego" style="text-decoration: none; color: inherit;">Ir a la partida</a> </button>
+    </div>
+
+    <div id="{{i}}" class="notificacion" *ngIf="n.IDNotificacion == 2" > <!-- NotificacionPuntosObtenidos -->
+      <div *ngIf="n.PartidaGanada" class="textoNotificacion"> ¡Enhorabuena! Has recibido {{n.Puntos}} puntos por ganar.</div>
+      <div *ngIf="!n.PartidaGanada" class="textoNotificacion"> ¡La siguiente vez será! Has recibido {{n.Puntos}} puntos por participar.</div>
+
+      <button class="botonTienda"> <a routerLink="/tienda" style="text-decoration: none; color: inherit;">Ir a la tienda</a> </button>
+    </div>
+
+    <div id="{{i}}" class="notificacion" *ngIf="n.IDNotificacion == 3" > <!-- NewNotificacionExpulsion -->
+       <div class="textoNotificacion"> ¡Has sido expulsado de la partida por inactividad! Por favor, evite abandonar la partida la próxima vez. </div>
+    </div>
+
+    <br>
+  </ng-container>
+</div>

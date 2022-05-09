@@ -35,12 +35,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   "Africa_Oriental", "Congo", "Sudafrica", "Brasil", "Argentina", "Este_de_los_Estados_Unidos", "Estados_Unidos_Occidental", "Quebec",
                   "America_Central", "Peru", "Australia_Occidental", "Alberta"];
 
-  circulosTerritorios = ["cAustralia_Oriental", "cIndonesia",
-                  "cNueva_Guinea", "cAlaska", "cOntario", "cTerritorio_del_Noroeste", "cVenezuela", "cMadagascar", "cAfrica_del_Norte", "cGroenlandia",
-                  "cIslandia", "cReino_Unido", "cEscandinavia", "cJapon", "cYakutsk", "cKamchatka", "cSiberia", "cUral", "cAfganistan", "cOriente_Medio",
-                  "cIndia", "cSiam", "cChina", "cMongolia", "cIrkutsk", "cUcrania", "cEuropa_del_Sur", "cEuropa_Occidental", "cEuropa_del_Norte", "cEgipto",
-                  "cAfrica_Oriental", "cCongo", "cSudafrica", "cBrasil", "cArgentina", "cEste_de_los_Estados_Unidos", "cEstados_Unidos_Occidental", "cQuebec",
-                  "cAmerica_Central", "cPeru", "cAustralia_Occidental", "cAlberta"];
                   info: number = 0;
   isShow = false;
   source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";
@@ -62,7 +56,15 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   constructor(private http: HttpClient, private router:Router){}
 
   ngOnInit(): void {
-    this.fnCall();
+    var volviendo = localStorage.getItem("volviendo")
+
+    if (volviendo == null) {
+      this.ejecutarAutomata()
+    } else {
+      localStorage.removeItem("volviendo")
+      this.obtenerEstadoCompleto()
+      this.ejecutarAutomata()
+    }
   }
 
 
@@ -76,8 +78,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   index = Array<number>();
   jugador = Array<string>();
   intervalos = Array<any>();
-  intervarloDormir : any;
-  primeraVez = true;
+  todoOk:boolean = false;
+  //primeraVez = 42;
 
   intervarloConsultaTerritorio : any;
   territorio1 : string = "";
@@ -90,7 +92,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
 
-  fnCall() {
+  obtenerEstadoCompleto()  {
+    // TODO: Implementar al tener el autómata completo, no mostrando alertas y no pidiendo interactuar en turnos propios,
+    // TODO: mirando en cambio si al final el jugador actual somos nosotros
+  }
+
+  ejecutarAutomata() {
     this.logica = new LogicaJuego(this.http);
 
     // Como la petición inicial de jugadores es asíncrona, se espera unos segundos a rellenar las cajas de jugadores
@@ -129,9 +136,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     }else{
                       clearInterval(this.intervalos.pop()!)
                     }
-                    
                     break;
                   }
+
                   case 1: { // IDAccionCambioFase
                     this.logica.fase = obj.Fase
 
@@ -164,7 +171,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   }
                   case 4: { // IDAccionReforzar
                     //this.logica.reforzar(obj) // No se necesita lógica adicional, solo cambiar tropas en el mapa
-                    this.tratarAccionReforzar(obj)
+                    if (obj.Jugador != this.logica.yo) this.tratarAccionReforzar(obj)
                     
                     
                     break;
@@ -190,24 +197,22 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   case 9: { // IDAccionJugadorEliminado
                       this.logica.jugadorEliminado(obj)
                       this.tratarAccionJugadorEliminado(obj)
+
                       break;
                   }
                   case 10: { // IDAccionJugadorExpulsado
                       this.logica.jugadorExpulsado(obj)
                       // Sabemos que no podemos ser nosotros, ya que estaríamos desvinculados de la partida
-
-                      this.mostrarAlerta("Jugador expulsado", "¡" + obj.JugadorEliminado + " ha sido expulsado de la partida por inactividad!")
+                      this.tratarAccionJugadorExpulsado(obj)
                       break;
                   }
                   case 11: { // IDAccionPartidaFinalizada
                       this.tratarAccionPartidaFinalizada(obj)
                       break;
                   }
-                  break;
                 }
               }
             })
-
     }, 5000);
   }
 
@@ -217,7 +222,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   aumentarTropasRegion(id : number, aumento : number) {
-    document.getElementById("t"+this.territorios[id])!.innerHTML += aumento;
+    var tropas = parseInt(document.getElementById("t"+this.territorios[id])!.innerHTML) + aumento;
+
+    this.sobreescribirTropasRegion(id, tropas)
   }
 
   sobreescribirTropasRegion(id : number, tropas : number) {
@@ -228,7 +235,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   rellenarCajasJugadores() {
     var contador = 1
 
-    console.log("iterando")
     this.logica.mapaJugadores.forEach((value: Estado, key: string) => {
       document.getElementById("nombreJugador"+contador)!.innerHTML = String(key)
       document.getElementById("tropasJugador"+contador)!.innerHTML = String(0)
@@ -315,13 +321,57 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         clearInterval(timerInterval)
       }
     }).then((result) => {
-      this.tratarFaseReforzar();
+        this.tratarFaseReforzar();
   });
   }
 
-  mostrarAlertaPermanente(tituloAlerta: string, textoAlerta: string) {
+  
     //var timerInterval : any
+  mostrarAlertaDerrotaPropia(tituloAlerta: string, textoAlerta: string) {
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'center',
+      width: '45%',
+      backdrop: true,
+      html: textoAlerta,
+      willClose: () => {
+        this.terminarAutomataJuego()
+        this.router.navigate(['/identificacion'])
+      }
+    })
+  }
 
+  mostrarAlertaDerrotaAjena(tituloAlerta: string, textoAlerta: string) {
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'center',
+      width: '45%',
+      backdrop: true,//"#0000000",
+      html: textoAlerta,
+      timer: 5000,
+      timerProgressBar: true,
+    })
+  }
+
+  mostrarAlertaPrueba(tituloAlerta: string, textoAlerta: string) {
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'center',
+      width: '45%',
+      backdrop: true,//"#0000000",
+      background: "#ffff0000",
+      color : "#ffffff",
+      html: textoAlerta,
+      timer: 5000,
+      timerProgressBar: true,
+      // Ejemplo de imagen
+      //imageUrl : "https://s3.getstickerpack.com/storage/uploads/sticker-pack/hide-the-pain-harold/sticker_5.png?35bc9a5413d14b83fb1eabdb6fe2523d&d=200x200",
+      //imageWidth : 300,
+      //imageHeight : 300,
+    })
+  }
+
+  mostrarAlertaPermanente(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
       position: 'top',
@@ -329,11 +379,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       backdrop: false,
       html: textoAlerta,
       showConfirmButton: false,
-      //timer: 5000,
-      //timerProgressBar: true,
-      //willClose: () => {
-      //  clearInterval(timerInterval)
-      //}
     })
   }
 
@@ -343,6 +388,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   mostrarAlertaRangoAsincrona(tituloAlerta: string, min: string, max: string) {
     var atributos : Record<string, string> = {
+      icon: 'info',
       "min": min,
       "max": max,
       "step": "1"
@@ -362,6 +408,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   mostrarAlertaRangoRefuerzo(tituloAlerta: string, min: string, max: string) {
     var atributos : Record<string, string> = {
+      icon: 'info',
       "min": min,
       "max": max,
       "step": "1"
@@ -411,8 +458,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             clearInterval(this.intervarloConsultaTerritorio)
             this.mapa.limitarSeleccionTerritorios();
 
+            var tropasTerritorio1 = this.obtenerTropasRegion(this.territorios.indexOf(this.territorio1))
+
             // Una vez hecho, se llama por callback a la selección de tropas
-            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", "12");
+            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", tropasTerritorio1);
           }
         }
       },
@@ -451,15 +500,18 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   
 
   tratarAccionJugadorEliminado(obj : any) {
-    // Somos el eliminado
-    if (obj.JugadorEliminado == this.logica.yo) {
-      // TODO: Ir a la pantalla de derrota
+    if (obj.JugadorEliminado == this.logica.yo) { // Somos el jugador eliminado
+      // Oscurece la pantalla, indica que se ha sido derrotado, y permite únicamente volver al menú principal
+      this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
     } else {
-      this.mostrarAlerta("Jugador eliminado", "¡" + obj.JugadorEliminado + " ha sido eliminado por" + obj.JugadorEliminador + "!")
+      this.mostrarAlertaDerrotaAjena("Jugador eliminado", "¡" + obj.JugadorEliminado + " ha sido eliminado por " + obj.JugadorEliminador + "!")
     }
   }
 
   tratarFaseReforzar() {
+    console.log('tropas:', this.tropasRecibidas, "todoOk:", this.todoOk)
+    
+    
     if (this.tropasRecibidas == 0) return
     console.log("Estamos en fase de proyecto!", this.tropasRecibidas)
     this.territorio1 = "";
@@ -486,6 +538,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         }
       },
       200);
+  }
+  
+  tratarAccionJugadorExpulsado(obj : any) {
+    this.mostrarAlertaDerrotaAjena("Jugador expulsado", "¡" + obj.JugadorEliminado + " ha sido expulsado de la partida por inactividad!")
   }
 
   tratarAccionReforzar(obj : any) {
@@ -540,6 +596,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     //this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
   }
 
+  // Funciones de terminación
+
+  terminarAutomataJuego() {
+    clearInterval(this.intervarloConsultaTerritorio)
+    // TODO: Más funciones de parada
+  }
 
   // Funciones para herencia de mapa<->juego
 

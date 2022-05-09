@@ -20,9 +20,10 @@ export class PerfilComponent implements OnInit {
   constructor(private http: HttpClient, private router:Router){
 
   }
-  
+
   ngOnInit(): void {
-    this.nombre = localStorage.getItem('param'),
+    this.nombre = localStorage.getItem('nombre')
+
     this.http.get<Perfil>('http://localhost:8090/api/obtenerPerfil/'+this.nombre, {observe:'body',withCredentials: true})
         .subscribe(
           data => {console.log(data);
@@ -31,12 +32,12 @@ export class PerfilComponent implements OnInit {
             this.partidas_ganadas = data.PartidasGanadas,
             this.partidas_totales = data.PartidasTotales,
             this.puntos = data.Puntos;
-            this.esAmigo = data.esAmigo;
+            this.esAmigo = data.EsAmigo;
         })
   }
 
-  enviarSolicitudAmistad(){
-    this.http.post('http://localhost:8090/api/crearPartida'+this.nombre,  { observe:'response', responseType:'text', withCredentials: true})
+  enviarSolicitudAmistad(nombre : string) {
+    this.http.post('http://localhost:8090/api/enviarSolicitudAmistad/'+nombre,   null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {Swal.fire({
                                         title: 'Solicitud de amistad enviada con exito',
@@ -53,7 +54,25 @@ export class PerfilComponent implements OnInit {
       });
   }
 
-  
+  eliminarAmigo(nombre : string) {
+    this.http.get('http://localhost:8090/api/eliminarAmigo/'+nombre, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {Swal.fire({
+          title: 'Amigo eliminado con éxito',
+          icon: 'success',
+        });
+          this.router.navigate(['/amigos'])
+        },
+        error: (error) => {Swal.fire({
+          title: 'Se ha producido un error al eliminar el amigo',
+          text: error.error,
+          icon: 'error',
+        })
+        }
+      });
+  }
+
+
 }
 export interface Perfil {
   NombreUsuario: string;
@@ -62,5 +81,5 @@ export interface Perfil {
   PartidasGanadas: any;
   PartidasTotales: any;
   Puntos:any;
-  esAmigo:any;
+  EsAmigo:any;
 }
