@@ -155,5 +155,31 @@ export class LlamadasAPI {
         }
       });
   }
+
+  /*obtenerAvatar(llamador : any, usuario : string) : any {
+    this.http.get('http://localhost:8090/api/obtenerFotoPerfil/'+usuario, {observe:'body', responseType:'blob', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          llamador.cambiarAvatar(response, usuario)
+        },
+        error: (error) => {
+          console.log("Error:", error)
+        }
+      });
+  }*/
+
+  // Obtiene el blob de imagen dado su id, y llama por callback para devolverlo
+  obtenerImagenItem(llamador : any, id : string) : any {
+    this.http.get('http://localhost:8090/api/obtenerImagenItem/'+id, {observe:'body', responseType:'blob', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          llamador.introducirImagen(response, id)
+        },
+        error: (error) => {
+          console.log("Error:", error)
+        }
+      });
+  }
+
 }
 
