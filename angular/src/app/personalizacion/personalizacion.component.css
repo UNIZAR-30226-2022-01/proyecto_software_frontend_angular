@@ -5,6 +5,7 @@
   justify-content: center;
   align-items: center;
   align-content: center;
+  gap: 2rem;
 }
 
 .flex-items:nth-child(n) {
@@ -13,8 +14,6 @@
   flex-shrink: 1;
   flex-basis: auto;
   align-self: auto;
-  margin: 2%;
-  border-style: solid; /* Para mostrar el área de click hasta que sea una imagen*/
 }
 
 .flex-itemsBotonera {
@@ -32,12 +31,11 @@
   position: absolute;
   right: 15%;
   top: 15%;
-  border-style: solid;
   transform: translate(15%, 15%)
 }
 
 .contenedor-bottom {
-  position: sticky;
+  position: absolute;
   bottom: 35%;
   top: 50%;
   left: 50%;
@@ -53,8 +51,7 @@
 
 .contenedor-mitad {
   position: absolute;
-  top: 30%;
+  top: 22%;
   right: 50%;
-  transform: translate(50%, 50%);
-  border-style: solid; /* Para mostrar el área hasta que sea una imagen*/
+  transform: translate(50%, 0%);
 }
