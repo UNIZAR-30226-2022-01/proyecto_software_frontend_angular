@@ -102,7 +102,7 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
                   }, 100);
                 })
 
-                // Marca el avatar en uso como tal
+                // Marca el avatar en uso como tal y oculta su botón de equipar
                 this.avatares.forEach((avatar, index) => {
                   if (avatar.id == jsonData.ID_avatar) {
                     this.indiceAvatarActual = index
@@ -228,7 +228,7 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
     this.dadoCambiado = true
 
     Swal.fire({
-      title: "¿Quieres cambiar tus dados por"+ this.dados[i].nombre +" ?",
+      title: "¿Quieres cambiar tus dados por "+ this.dados[i].nombre +" ?",
       icon: 'question',
       showDenyButton: true,
     }).then((result) => {
@@ -242,7 +242,7 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
     this.avatarCambiado = true
 
     Swal.fire({
-      title: "¿Quieres cambiar tu avatar por"+ this.avatares[i].nombre +" ?",
+      title: "¿Quieres cambiar tu avatar por "+ this.avatares[i].nombre +" ?",
       icon: 'question',
       showDenyButton: true,
     }).then((result) => {

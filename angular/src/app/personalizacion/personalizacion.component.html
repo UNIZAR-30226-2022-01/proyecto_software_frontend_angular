@@ -3,54 +3,73 @@
 
 <div class="contenedor-superior">
   <div class="flex-container">
-    <button class="flex-itemsBotonera" (click)="mostrarAvatares()">
-    Avatares
-    </button>
-    <button class="flex-itemsBotonera" (click)="mostrarDados()">
-    Dados
-    </button>
+    <div class="btn-group" role="group" ngbRadioGroup>
+      <!-- Si no se ponen values, no funcionan -->
+      <label ngbButtonLabel class="btn-primary">
+        <input ngbButton type="radio" class="btn-check" value="avatares" (click)="mostrarAvatares()"> Avatares
+      </label>
+      <label ngbButtonLabel class="btn-primary">
+        <input ngbButton type="radio" class="btn-check" value="dados" (click)="mostrarDados()"> Dados
+      </label>
+    </div>
   </div>
 </div>
 
 <div class="contenedor-mitad">
-  <div id="nombreItemActual"></div>
-  <div id="descripcionItemActual"></div>
-  <img id="imagenActual" class="img-fluid rounded" width="100" height="100">
+  <div class="card" style="width: 15rem;">
+    <img id="imagenActual" class="card-img-top">
+    <div class="card-body">
+        <h5 class="card-title" id="nombreItemActual"></h5>
+        <p class="card-text" id="descripcionItemActual"></p>
+    </div>
+  </div>
 </div>
 
-<div class="dinero">
+<div class="dinero alert alert-primary" >
 Tienes {{puntos}} puntos
 </div>
 
 <div class="contenedor-bottom">
   <div class="flex-container">
+       <div class="dado flex-items" id ="dado{{i}}" *ngFor="let dado of dados; let i = index" style="display:none;"> <!-- Por defecto ocultos -->
+         <div class="card" style="width: 13rem; height: 24rem;">
+           <img id="{{dado.id}}" class="card-img-top">
+           <div class="card-body text-justify">
+               <h5 class="card-title">{{dado.nombre}}</h5>
+               <p class="card-text">{{dado.descripcion}}</p>
 
-       <div class="dado flex-items" id ="dado{{i}}" *ngFor="let dado of dados; let i = index" (click)="cambiarDado(i)">
-
-         {{dado.nombre}}
-         <br>
-         {{dado.descripcion}}
-         <br>
-         <img id="{{dado.id}}" class="img-fluid rounded" width="100" height="100">
-         <br>
-         <div id="enUsoDado{{i}}" style="display:none;">
-         En uso!
+               <div id="enUsoDado{{i}}" class="text-center" style="display:none;">
+                 <div class="alert alert-success" role="alert">
+                   En uso
+                 </div>
+               </div>
+           </div>
          </div>
 
-       </div>
-
-       <div class="avatar flex-items" id ="avatar{{i}}" *ngFor="let avatar of avatares; let i = index" (click)="cambiarAvatar(i)" style="display:none;"> <!-- Por defecto ocultos -->
-
-         {{avatar.nombre}}
-         <br>
-         {{avatar.descripcion}}
-         <br>
-         <img id="{{avatar.id}}" class="img-fluid rounded" width="100" height="100">
-          <br>
-         <div id ="enUsoAvatar{{i}}" style="display:none;">
-         En uso!
+         <div class="card-footer text-center">
+            <button type="button" class="btn btn-primary" (click)="cambiarDado(i)">Equipar</button>
          </div>
+      </div>
 
+
+       <div class="avatar flex-items" id ="avatar{{i}}" *ngFor="let avatar of avatares; let i = index" style="display:none;"> <!-- Por defecto ocultos -->
+          <div class="card" style="width: 13rem; height: 23rem; ">
+            <img id="{{avatar.id}}" class="card-img-top">
+            <div class="card-body text-justify">
+                <h5 class="card-title">{{avatar.nombre}}</h5>
+                <p class="card-text">{{avatar.descripcion}}</p>
+
+                <div id="enUsoAvatar{{i}}" class="text-center" style="display:none;">
+                  <div class="alert alert-success" role="alert">
+                    En uso
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="card-footer text-center">
+             <button type="button" class="btn btn-primary" (click)="cambiarAvatar(i)">Equipar</button>
+          </div>
        </div>
   </div>
 </div>
