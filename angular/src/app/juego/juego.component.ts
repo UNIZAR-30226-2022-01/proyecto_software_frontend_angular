@@ -81,7 +81,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       // Como la petición inicial de jugadores es asíncrona, se espera unos segundos a rellenar las cajas de jugadores
       setTimeout(() =>{
         this.rellenarCajasJugadores()
-      }, 4000);
+      }, 2000);
+
+      // Del mismo modo, se espera para los avatares
+      setTimeout(() =>{
+        this.obtenerAvataresJugadores()
+      }, 3000);
+
     } else {
       localStorage.removeItem("volviendo")
 
@@ -92,6 +98,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.ejecutarAutomata()
   }
 
+  // Solicita los avatares de los jugadores presentes, que se rellenarán mediante callback
+  obtenerAvataresJugadores() {
+    this.logica.mapaJugadores.forEach((estado: any, key: string) => {
+      this.llamadasAPI.obtenerAvatar(this, key)
+    })
+  }
 
   jsonData: any;
   intervaloConsultaEstado:any;
@@ -176,6 +188,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           }
 
           this.rellenarCajasJugadores()
+          this.obtenerAvataresJugadores()
       }
     });
 
@@ -210,11 +223,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     this.logica.recibirRegion(obj, document);
                     this.index.push(obj.Region);
                     this.jugador.push(obj.Jugador);
-                    
+
                     this.tiempo = this.tiempo + 200;
                     if (this.vez < 42){
                       this.vez = this.vez + 1;
-                      this.intervalos.push(setTimeout(() => 
+                      this.intervalos.push(setTimeout(() =>
                       {
                         var velemento = this.index.pop()!
                         var jugador = this.jugador.pop()!
@@ -250,7 +263,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     this.logica.jugadorTurno = obj.Jugador // Puesto temporalmente para que las otras funciones vayan
                     this.logica.inicioTurno(obj);
                     this.tratarInicioTurno(obj);
-                    
+
                     // TODO
                     break;
                   }
@@ -261,8 +274,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   case 4: { // IDAccionReforzar
                     //this.logica.reforzar(obj) // No se necesita lógica adicional, solo cambiar tropas en el mapa
                     if (obj.Jugador != this.logica.yo) this.tratarAccionReforzar(obj)
-                    
-                    
+
+
                     break;
                   }
                   case 5: { // IDAccionAtaque
@@ -413,7 +426,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   });
   }
 
-  
+
     //var timerInterval : any
   mostrarAlertaDerrotaPropia(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
@@ -520,7 +533,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       inputValue: min,
     }).then((result) => {
         this.tropasAMover = result.value;
-        
+
         this.llamadasAPI.reforzarTerritorio(this)
     });
   }
@@ -532,7 +545,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     console.log("Estamos en fase de ataque!")
     this.territorio1 = "";
     this.territorio2 = "";
-    
+
     this.mostrarAlertaPermanente("Selecciona el territorio desde el que atacar", "");
     this.mapa.permitirSeleccionTerritorios();
     this.intervarloConsultaTerritorio = setInterval(() =>
@@ -620,14 +633,14 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.sobreescribirTropasRegion(obj.Destino, restantesDestino);
     this.sobreescribirTropasRegion(obj.Origen, restantesOrigen);
 
-    this.mostrarAlerta("Resultados del ataque", "El atacante " + obj.JugadorAtacante + " ha perdido " + tropasPerdidasOrigen + " (" + restantesDestino + 
-                      " tropas restantes) " + " y el defensor " + obj.JugadorDefensor + " ha perdido " + tropasPerdidasDestino + " (" + restantesOrigen + 
+    this.mostrarAlerta("Resultados del ataque", "El atacante " + obj.JugadorAtacante + " ha perdido " + tropasPerdidasOrigen + " (" + restantesDestino +
+                      " tropas restantes) " + " y el defensor " + obj.JugadorDefensor + " ha perdido " + tropasPerdidasDestino + " (" + restantesOrigen +
                       " tropas restantes)");
 
     // Comprobamos si se pasa a ocupar el territorio atacado
     if (restantesDestino < 1) {
       this.tratarOcupar(obj);
-      
+
     }
 
   }
@@ -645,10 +658,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     var idTerritorioOrigen = obj.Destino;
     var nTropasOcupar = obj.TropasDestino;
 
-    
+
 
     console.log("El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[obj.Destino] + " con "
-                + nTropasOcupar + " procedentes de " + this.territorios[obj.origen] + " previamente capturado por " 
+                + nTropasOcupar + " procedentes de " + this.territorios[obj.origen] + " previamente capturado por "
                 + obj.JugadorOcupado);
 
 
@@ -680,10 +693,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     var mensaje = (numContinentes>0)? "y " + numContinentes + " continentes " : "";
     this.mostrarAlertaProyecto("Proyecto",
       "El jugador "+obj.Jugador+" ha recibido " + tropasObtenidas + " por ocupar " + numTerritorios + " territorios " + mensaje)
-  
+
   }
 
-  
+
 
   tratarAccionJugadorEliminado(obj : any) {
     if (obj.JugadorEliminado == this.logica.yo) { // Somos el jugador eliminado
@@ -696,8 +709,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   tratarFaseReforzar() {
     console.log('tropas:', this.tropasRecibidas, "todoOk:", this.todoOk)
-    
-    
+
+
     if (this.tropasRecibidas == 0) return
     console.log("Estamos en fase de proyecto!", this.tropasRecibidas)
     this.territorio1 = "";
@@ -714,18 +727,18 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           this.mapa.territorioSeleccionado = "";
           // Cierra el popup de seleccionar el primer territorio y crea otro para el segundo
           this.cerrarAlertaPermanente()
-          
+
           clearInterval(this.intervarloConsultaTerritorio)
           this.mapa.limitarSeleccionTerritorios();
 
           // Una vez hecho, se llama por callback a la selección de tropas
           this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", this.tropasRecibidas.toString());
-          
+
         }
       },
       200);
   }
-  
+
   tratarAccionJugadorExpulsado(obj : any) {
     this.mostrarAlertaDerrotaAjena("Jugador expulsado", "¡" + obj.JugadorEliminado + " ha sido expulsado de la partida por inactividad!")
   }
@@ -740,7 +753,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.mostrarAlerta("Refuerzo", jugador + " ha reforzado " + this.territorios[territorio] + " con " + tropasRefuerzo + " tropas de refuerzo")
   }
 
-  
+
 
   tratarAccionCambioCartas(obj : any) {
     var alerta : Alerta = this.logica.cambioCartas(obj)
@@ -787,6 +800,27 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   terminarAutomataJuego() {
     clearInterval(this.intervarloConsultaTerritorio)
     // TODO: Más funciones de parada
+  }
+
+  // Funciones de carga de assets
+
+  // Carga de un avatar
+  introducirAvatar(blob : any, jugador : string) {
+    const img = URL.createObjectURL(blob);
+
+    // Busca la caja de jugador, y escribe la URL de la imagen parseada
+    for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
+      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == jugador) {
+        var imagen = document.getElementById("avatarJugador" + (i+1))! as HTMLImageElement;
+        imagen.src = img;
+        return
+      }
+    }
+  }
+
+  // Carga de dados
+  devolverDados(blob : any, jugador : string) {
+    // TODO
   }
 
   // Funciones para herencia de mapa<->juego
