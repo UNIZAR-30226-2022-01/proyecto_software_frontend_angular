@@ -7,6 +7,56 @@ import {NotificacionesComponent} from "./notificaciones/notificaciones.component
 export class LlamadasAPI {
   constructor(private http : HttpClient){}
 
+
+  atacar(juego : JuegoComponent)  {
+    var idTerritorio1 = juego.territorios.indexOf(juego.territorio1);
+    var idTerritorio2 = juego.territorios.indexOf(juego.territorio2);
+    var nDados = juego.nDadosAtaque;
+    this.http.post('http://localhost:8090/api/atacar/'+idTerritorio1+'/'+idTerritorio2+'/'+ nDados, null, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          console.log("atacar con éxito!")
+          console.log("Territorio desde el que atacar: " + juego.territorio1);
+          console.log("Territorio al que atacar: " + juego.territorio2);
+          console.log("Numero de dados: " + nDados);
+          console.log(response);
+          console.log()
+        },
+        error: (error) => {Swal.fire({
+          title: 'Se ha producido un error al atacar',
+          text: error.error,
+          icon: 'error',
+          timer: 2000,
+        }).then((result) => {
+          // Reintenta de nuevo todo el proceso de ataque
+          juego.tratarFaseAtacar();
+        });
+        }
+      });
+  }
+
+
+  ocupar(juego : JuegoComponent) {
+    var idTerritorio = juego.territorioDestino;
+    var nTropas = juego.nTropasOcupar;
+    this.http.post('http://localhost:8090/api/ocupar'+idTerritorio+'/'+ nTropas, null, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          console.log(response)
+          console.log("Territorio " + idTerritorio + " ocupado con " + nTropas + " tropas");
+        },
+        error: (error) => {Swal.fire({
+          title: 'Se ha producido un error al ocupar el territorio',
+          text: error.error,
+          icon: 'error',
+          timer: 2000,
+        }).then((result) => {
+          // Reintenta de nuevo todo el proceso de ataque
+        });
+        }
+      });
+  }
+  
   // Realiza una acción de fortificar y llama por callback a juego para repetir la fase si ocurre un error
   fortificar(juego : JuegoComponent) {
     var idTerritorio1 = juego.territorios.indexOf(juego.territorio1)
