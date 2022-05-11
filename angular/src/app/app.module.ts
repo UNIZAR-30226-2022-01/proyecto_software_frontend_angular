@@ -34,6 +34,7 @@ import { FinPartidaComponent } from './fin-partida/fin-partida.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SolicitarTokenComponent } from './solicitar-token/solicitar-token.component';
 import { CartasComponent } from './cartas/cartas.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -102,6 +103,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
+    NgbModule,
   ],
   exports:[RouterModule],
   providers: [],

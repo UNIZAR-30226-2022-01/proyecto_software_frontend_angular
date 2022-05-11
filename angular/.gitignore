@@ -5,6 +5,7 @@
 /integration/bazel/bazel-*
 *.log
 node_modules
+.node_modules/
 .vscode
 ../.vscode
 # CircleCI temporary file for cache key computation.
