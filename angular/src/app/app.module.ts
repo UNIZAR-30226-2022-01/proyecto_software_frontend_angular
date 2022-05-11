@@ -37,10 +37,10 @@ import { CartasComponent } from './cartas/cartas.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
-  {path: 'a', component: InicioComponent},
+  {path: '', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
   {path: 'inicioSesion', component: InicioSesionComponent},
-  {path: '', component: TiendaComponent},
+  {path: 'tienda', component: TiendaComponent},
   {path: 'top-bar', component: TopBarComponent},
   {path: 'configuracionPartida', component: ConfigPartidaComponent},
   {path: 'buscarPartida', component: BuscarPartidaComponent},
