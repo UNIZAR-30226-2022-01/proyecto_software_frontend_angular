@@ -47,6 +47,22 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     else {this.source = "https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-cross-100-most-used-icons-flaticons-lineal-color-flat-icons.png";}
   }
 
+  cambiarFase() {
+    console.log("Cambiando de fase");
+      this.http.post('http://localhost:8090/api/pasarDeFase', null, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          console.log("Exito en el cambio de fase");
+        },
+        error: (error) => {Swal.fire({
+          title: 'Se ha producido un error al cambiar de fase',
+          text: error.error,
+          icon: 'error',
+          timer: 2000,
+        })}
+      });
+  }
+
   setMapa() {this.info = 0; this.resumirPartida();}
   setMapaInfo() {this.info = 1;}
 
@@ -93,6 +109,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   intervarloConsultaTerritorio : any;
   territorio1 : string = "";
   territorio2 : string = "";
+  territorioDestino : string = "";
+  nDadosAtaque : number = 0;
+  nTropasOcupar : number = 0;
 
   resultadoAlerta : Promise<SweetAlertResult> | undefined ;
 
@@ -217,9 +236,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     console.log("yo:", this.logica.yo)
 
                     if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
-                      //this.tratarFaseReforzar();
+                      this.tratarFaseReforzar()
                     } else if (this.logica.fase == 2 && obj.Jugador == this.logica.yo) { // Ataque
-                      
+                      this.tratarFaseAtacar()
                     } else if (this.logica.fase == 3 && obj.Jugador == this.logica.yo) { // Fortificar
                       this.tratarFaseFortificar()
                     }
@@ -247,11 +266,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 5: { // IDAccionAtaque
-
+                    this.tratarAccionAtacar(obj);
                       break;
                   }
                   case 6: { // IDAccionOcupar
-
+                    this.tratarAccionOcupar(obj);
                       break;
                   }
                   case 7: { // IDAccionFortificar
@@ -455,7 +474,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     Swal.close()
   }
 
-  mostrarAlertaRangoAsincrona(tituloAlerta: string, min: string, max: string) {
+  mostrarAlertaRangoAsincrona(tituloAlerta: string, min: string, max: string, fase: string) {
     var atributos : Record<string, string> = {
       icon: 'info',
       "min": min,
@@ -470,8 +489,18 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       //inputLabel: textoSelector,
       inputValue: min,
     }).then((result) => {
+      if (fase == "fortificar") {
         this.tropasAMover = result.value;
         this.llamadasAPI.fortificar(this)
+      }
+      else if (fase == "atacar") {
+        this.nDadosAtaque = result.value;
+        this.llamadasAPI.atacar(this)
+      }
+      else if (fase == "ocupar") {
+        this.nTropasOcupar = result.value;
+        this.llamadasAPI.ocupar(this)
+      }
     });
   }
 
@@ -498,6 +527,44 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   // Funciones de tratamiento del juego
 
+
+  tratarFaseAtacar() {
+    console.log("Estamos en fase de ataque!")
+    this.territorio1 = "";
+    this.territorio2 = "";
+    
+    this.mostrarAlertaPermanente("Selecciona el territorio desde el que atacar", "");
+    this.mapa.permitirSeleccionTerritorios();
+    this.intervarloConsultaTerritorio = setInterval(() =>
+      {
+        if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
+
+          // Asignar el territorio seleccionado
+          // Si es el primer territorio seleccionado, se guarda y resetea en el mapa
+          if (this.territorio1 == "") {
+            this.territorio1 = this.mapa.territorioSeleccionado;
+            this.mapa.territorioSeleccionado = "";
+            // Cierra el popup de seleccionar el primer territorio y crea otro para el segundo
+            this.cerrarAlertaPermanente()
+            this.mostrarAlertaPermanente("Selecciona el territorio al que atacar", "")
+          } else {
+            // Cierra el popup de seleccionar el segundo territorio
+            this.cerrarAlertaPermanente()
+
+            // Deshabilita el intervalo de consulta y las selecciones de territorio
+            this.territorio2 = this.mapa.territorioSeleccionado;
+            clearInterval(this.intervarloConsultaTerritorio)
+            this.mapa.limitarSeleccionTerritorios();
+
+            // TODO: pedir numero de dados
+            // Una vez hecho, se llama por callback a la selección de tropas
+            this.mostrarAlertaRangoAsincrona("Selecciona el número de dados", "1", "3", "atacar");
+          }
+        }
+      },
+      200);
+
+  }
   tratarFaseFortificar() {
     console.log("Estamos en fase de fortificación!")
     this.territorio1 = "";
@@ -530,11 +597,61 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             var tropasTerritorio1 = this.obtenerTropasRegion(this.territorios.indexOf(this.territorio1))
 
             // Una vez hecho, se llama por callback a la selección de tropas
-            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", tropasTerritorio1);
+            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", tropasTerritorio1, "fortificar");
           }
         }
       },
       200);
+  }
+
+  tratarAccionAtacar(obj : any) {
+    var tropasAntesDestino = this.obtenerTropasRegion(obj.Destino);
+    var tropasPerdidasDestino = obj.TropasPerdidasDefensor;
+    var tropasAntesOrigen = this.obtenerTropasRegion(obj.Origen);
+    var tropasPerdidasOrigen = obj.TropasPerdidasAtacante;
+    var restantesDestino = Number(tropasAntesDestino) - tropasPerdidasDestino;
+    var restantesOrigen = Number(tropasAntesOrigen) - tropasPerdidasOrigen;
+
+    console.log("Antes defensor: " + tropasAntesDestino);
+    console.log("Tropas perdidas en la defensa: " + tropasPerdidasDestino);
+    console.log("Antes atacante: " + tropasAntesOrigen);
+    console.log("Tropas perdidas en el ataque: " + tropasPerdidasOrigen);
+
+    this.sobreescribirTropasRegion(obj.Destino, restantesDestino);
+    this.sobreescribirTropasRegion(obj.Origen, restantesOrigen);
+
+    this.mostrarAlerta("Resultados del ataque", "El atacante " + obj.JugadorAtacante + " ha perdido " + tropasPerdidasOrigen + " (" + restantesDestino + 
+                      " tropas restantes) " + " y el defensor " + obj.JugadorDefensor + " ha perdido " + tropasPerdidasDestino + " (" + restantesOrigen + 
+                      " tropas restantes)");
+
+    // Comprobamos si se pasa a ocupar el territorio atacado
+    if (restantesDestino < 1) {
+      this.tratarOcupar(obj);
+      
+    }
+
+  }
+
+  tratarOcupar(obj : any) {
+    this.territorioDestino = obj.Destino;
+    var tropasAntesOrigen = this.obtenerTropasRegion(obj.Origen);
+    var tropasPerdidasOrigen = obj.TropasPerdidasAtacante;
+    var restantesOrigen = Number(tropasAntesOrigen) - tropasPerdidasOrigen;
+    this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas a asignar al nuevo territorio", "1", String(restantesOrigen), "ocupar");
+    this.llamadasAPI.ocupar(this)
+  }
+
+  tratarAccionOcupar(obj : any) {
+    var idTerritorioOrigen = obj.Destino;
+    var nTropasOcupar = obj.TropasDestino;
+
+    
+
+    console.log("El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[obj.Destino] + " con "
+                + nTropasOcupar + " procedentes de " + this.territorios[obj.origen] + " previamente capturado por " 
+                + obj.JugadorOcupado);
+
+
   }
 
   tratarAccionFortificar(obj : any) {
