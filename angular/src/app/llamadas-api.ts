@@ -64,7 +64,7 @@ export class LlamadasAPI {
           juego.aumentarTropasRegion(juego.territorios.indexOf(juego.territorio1), juego.tropasAMover);
           juego.tratarFaseReforzar();
         },
-        
+
         error: (error) => {Swal.fire({
           title: 'Se ha producido un error al reforzar',
           text: error.error,
@@ -73,7 +73,7 @@ export class LlamadasAPI {
         }
         ).then((result) => {
           // Reintenta de nuevo todo el proceso de fortificación
-          
+
           juego.tratarFaseReforzar();
         });
         }
@@ -180,6 +180,34 @@ export class LlamadasAPI {
         }
       });
   }
+
+
+  comprarAspecto(item : number, llamador : any) {
+    this.http.post('http://localhost:8090/api/comprarObjeto/'+item, null, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          Swal.fire({
+            title: 'Ítem comprado con éxito',
+            icon: 'success',
+            timer: 2000,
+          })
+
+          llamador.marcarItemComprado(item)
+
+        },
+        error: (error) => {
+          Swal.fire({
+            title: 'Se ha producido un error al intentar cambiar el aspecto',
+            text: error.error,
+            icon: 'error',
+            timer: 2000,
+          })
+
+          llamador.sinCambioItemComprado()
+        }
+      });
+  }
+
 
 }
 

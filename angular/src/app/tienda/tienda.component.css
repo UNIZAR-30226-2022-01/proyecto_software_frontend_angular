@@ -1,0 +1,59 @@
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 2rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 2rem;
+}
+
+.flex-items:nth-child(n) {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+}
+
+.flex-itemsBotonera {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+  margin: 1%;
+  width: 10em;
+  height: 3em;
+}
+
+.dinero {
+  position: absolute;
+  right: 15%;
+  top: 10%;
+  transform: translate(15%, 15%)
+}
+
+.contenedor-bottom {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  right: 50%;
+  height: 100vh;
+}
+
+.contenedor-superior {
+  position: absolute;
+  top: 10%;
+  right: 50%;
+  transform: translate(50%, 50%)
+}
