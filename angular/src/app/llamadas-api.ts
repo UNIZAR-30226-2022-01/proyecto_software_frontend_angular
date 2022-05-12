@@ -56,7 +56,7 @@ export class LlamadasAPI {
         }
       });
   }
-  
+
   // Realiza una acción de fortificar y llama por callback a juego para repetir la fase si ocurre un error
   fortificar(juego : JuegoComponent) {
     var idTerritorio1 = juego.territorios.indexOf(juego.territorio1)
@@ -114,7 +114,7 @@ export class LlamadasAPI {
           juego.aumentarTropasRegion(juego.territorios.indexOf(juego.territorio1), juego.tropasAMover);
           juego.tratarFaseReforzar();
         },
-        
+
         error: (error) => {Swal.fire({
           title: 'Se ha producido un error al reforzar',
           text: error.error,
@@ -123,7 +123,7 @@ export class LlamadasAPI {
         }
         ).then((result) => {
           // Reintenta de nuevo todo el proceso de fortificación
-          
+
           juego.tratarFaseReforzar();
         });
         }
@@ -206,17 +206,29 @@ export class LlamadasAPI {
       });
   }
 
-  /*obtenerAvatar(llamador : any, usuario : string) : any {
+  obtenerAvatar(llamador : any, usuario : string) : any {
     this.http.get('http://localhost:8090/api/obtenerFotoPerfil/'+usuario, {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next :(response) => {
-          llamador.cambiarAvatar(response, usuario)
+          llamador.introducirAvatar(response, usuario)
         },
         error: (error) => {
           console.log("Error:", error)
         }
       });
-  }*/
+  }
+
+  obtenerDados(llamador : any, usuario : string) : any {
+    this.http.get('http://localhost:8090/api/obtenerDados/'+usuario+'/5', {observe:'body', responseType:'blob', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          llamador.devolverDados(response, usuario)
+        },
+        error: (error) => {
+          console.log("Error:", error)
+        }
+      });
+  }
 
   // Obtiene el blob de imagen dado su id, y llama por callback para devolverlo
   obtenerImagenItem(llamador : any, id : string) : any {
@@ -230,6 +242,34 @@ export class LlamadasAPI {
         }
       });
   }
+
+
+  comprarAspecto(item : number, llamador : any) {
+    this.http.post('http://localhost:8090/api/comprarObjeto/'+item, null, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          Swal.fire({
+            title: 'Ítem comprado con éxito',
+            icon: 'success',
+            timer: 2000,
+          })
+
+          llamador.marcarItemComprado(item)
+
+        },
+        error: (error) => {
+          Swal.fire({
+            title: 'Se ha producido un error al intentar cambiar el aspecto',
+            text: error.error,
+            icon: 'error',
+            timer: 2000,
+          })
+
+          llamador.sinCambioItemComprado()
+        }
+      });
+  }
+
 
 }
 

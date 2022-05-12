@@ -63,7 +63,8 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
               nombre: jsonData[i].Nombre,
               descripcion: jsonData[i].Descripcion,
               precio: jsonData[i].Precio,
-              blob: jsonData[i].Imagen
+              blob: jsonData[i].Imagen,
+              comprado: false
             }
 
             if (jsonData[i].Tipo == "dado") {
@@ -265,4 +266,5 @@ export class item {
   descripcion: string = ""
   precio: number = 0
   blob : Blob | undefined
+  comprado: boolean = false
 }
