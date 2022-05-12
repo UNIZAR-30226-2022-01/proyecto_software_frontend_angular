@@ -268,7 +268,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
                     this.turno = obj.Jugador;
 
-                    if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
+                    if (this.logica.fase == 0 && obj.Jugador == this.logica.yo) { // Refuerzo
                       // Rellenar primer rectangulito
                       //this.rellenarFase(1);
                       this.tratarFaseReforzar()
