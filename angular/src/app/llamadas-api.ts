@@ -39,7 +39,7 @@ export class LlamadasAPI {
   ocupar(juego : JuegoComponent) {
     var idTerritorio = juego.territorioDestino;
     var nTropas = juego.nTropasOcupar;
-    this.http.post('http://localhost:8090/api/ocupar'+idTerritorio+'/'+ nTropas, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post('http://localhost:8090/api/ocupar/'+idTerritorio+'/'+ nTropas, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           console.log(response)
@@ -51,7 +51,6 @@ export class LlamadasAPI {
           icon: 'error',
           timer: 2000,
         }).then((result) => {
-          // Reintenta de nuevo todo el proceso de ataque
         });
         }
       });

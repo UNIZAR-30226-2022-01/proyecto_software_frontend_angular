@@ -80,7 +80,7 @@ opacity: 0.8;
 }
 
 .jugador {
-  width: 475%;
+  width: auto;
   height: 100%;
   margin-top: 45%;
   float:right;
@@ -91,6 +91,8 @@ opacity: 0.8;
   background: #c3195d;
   font-size: 50px;
   display:flex;
+  padding-right: 20%;
+  padding-left: 15%;
 }
 
 .imagenJugador {
