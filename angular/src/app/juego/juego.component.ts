@@ -90,7 +90,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     } else {
       localStorage.removeItem("volviendo")
-
+      console.log("Se ha vuelto, resumiendo partida...")
       this.logica = new LogicaJuego(this.http, false);
       this.resumirPartida()
     }
@@ -139,75 +139,90 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         next :(response) => {
           var jsonData = JSON.parse(response);
 
-          // Recuperar el estado de cada jugador
-          for (let i = 0; i < jsonData.Jugadores.length; i++) {
+          if (!jsonData.Terminada) {
+            // Recuperar el estado de cada jugador
+            for (let i = 0; i < jsonData.Jugadores.length; i++) {
 
-            var jugador = jsonData.Jugadores[i]
+              var jugador = jsonData.Jugadores[i]
 
-            var estadoJSON = jsonData.EstadosJugadores[jugador]
+              var estadoJSON = jsonData.EstadosJugadores[jugador]
 
-            var estado : Estado = {
-              tropas: estadoJSON.Tropas,
-              territorios: [],
-              numCartas: estadoJSON.NumCartas,
-              eliminado: estadoJSON.Eliminado,
-              expulsado: estadoJSON.Expulsado,
-            }
+              var estado : Estado = {
+                tropas: estadoJSON.Tropas,
+                territorios: [],
+                numCartas: estadoJSON.NumCartas,
+                eliminado: estadoJSON.Eliminado,
+                expulsado: estadoJSON.Expulsado,
+              }
 
-            // Si somos nosotros, se comprueba que no estemos eliminados y guardan las cartas
-            if (jugador == this.logica.yo) {
-              if(estado.eliminado) { // Si hemos sido eliminados, se sale de la partida
-                this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
-              } else {
-                for (let j = 0; j < estadoJSON.Cartas; j++) {
-                  this.logica.cartas.push(this.logica.Carta = {
-                    idCarta : estadoJSON.Cartas[j].IdCarta,
-                    tipo : estadoJSON.Cartas[j].Tipo,
-                    region : estadoJSON.Cartas[j].Region,
-                    esComodin : estadoJSON.Cartas[j].EsComodin,
-                  })
+              // Si somos nosotros, se comprueba que no estemos eliminados y guardan las cartas
+              if (jugador == this.logica.yo) {
+                if(estado.eliminado) { // Si hemos sido eliminados, se sale de la partida
+                  this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
+                } else {
+                  for (let j = 0; j < estadoJSON.Cartas; j++) {
+                    this.logica.cartas.push(this.logica.Carta = {
+                      idCarta : estadoJSON.Cartas[j].IdCarta,
+                      tipo : estadoJSON.Cartas[j].Tipo,
+                      region : estadoJSON.Cartas[j].Region,
+                      esComodin : estadoJSON.Cartas[j].EsComodin,
+                    })
+                  }
                 }
               }
+
+              this.logica.mapaJugadores.set(jugador, estado);
+              this.logica.colorJugador.set(jugador, this.logica.colores[i]);
             }
 
-            this.logica.mapaJugadores.set(jugador, estado);
-            this.logica.colorJugador.set(jugador, this.logica.colores[i]);
+            var estadoMapa = jsonData.Mapa
+
+            // Recuperar estado de todas las regiones
+            for (let i = 0; i < 42; i++) {
+              var estadoJugador = this.logica.mapaJugadores.get(estadoMapa[i].Ocupante)
+              estadoJugador.territorios.push(i)
+              this.logica.mapaJugadores.set(estadoMapa[i].Ocupante, estadoJugador)
+
+              this.sobreescribirTropasRegion(i, estadoMapa[i].NumTropas)
+
+              // Rellenar con el color del jugador
+              document.getElementById(this.territorios[i])!.style.fill=this.logica.colorJugador.get(estadoMapa[i].Ocupante);
+              document.getElementById("c"+this.territorios[i])!.style.fill=this.logica.colorJugador.get(estadoMapa[i].Ocupante);
+            }
+
+            // Recuperar fase, turno y estado global de la partida
+            this.logica.jugadorTurno = jsonData.TurnoJugador
+            this.logica.fase = jsonData.Fase
+
+            this.rellenarCajasJugadores()
+            this.obtenerAvataresJugadores()
+
+            console.log("Resumir: turno de " + this.logica.jugadorTurno)
+            console.log("Resumir: fase " + this.logica.fase)
+            // Si era nuestro turno, hay que pasar a ejecutar la fase
+            if (this.logica.jugadorTurno == this.logica.yo) {
+              if (this.logica.fase == 0) { // Inicio
+                console.log("Tratando fase de inicio desde resumen")
+                this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
+                this.tratarFaseReforzar()
+              } else if (this.logica.fase == 1) { // Refuerzo
+                console.log("Tratando fase de refuerzo desde resumen")
+                this.tratarFaseReforzar()
+              } else if (this.logica.fase == 2) { // Ataque
+                console.log("Tratando fase de ataque desde resumen")
+                this.tratarFaseAtacar()
+              } else if (this.logica.fase == 3) { // Fortificar
+                console.log("Tratando fase de fortificar desde resumen")
+                this.tratarFaseFortificar()
+              }
+            }
+          } else { // Sabemos que hemos perdido si hemos vuelto, y ya estaba terminada
+            // TODO alerta de perder
           }
-
-          var estadoMapa = jsonData.Mapa
-
-          // Recuperar estado de todas las regiones
-          for (let i = 0; i < 42; i++) {
-            var estadoJugador = this.logica.mapaJugadores.get(estadoMapa[i].Ocupante)
-            estadoJugador.territorios.push(i)
-            this.logica.mapaJugadores.set(estadoMapa[i].Ocupante, estadoJugador)
-
-            this.sobreescribirTropasRegion(i, estadoMapa[i].NumTropas)
-
-            // Rellenar con el color del jugador
-            document.getElementById(this.territorios[i])!.style.fill=this.logica.colorJugador.get(estadoMapa[i].Ocupante);
-            document.getElementById("c"+this.territorios[i])!.style.fill=this.logica.colorJugador.get(estadoMapa[i].Ocupante);
-          }
-
-          this.rellenarCajasJugadores()
-          this.obtenerAvataresJugadores()
       }
     });
 
-    console.log("Turno: " + this.logica.jugadorTurno)
-    // Si era nuestro turno, hay que pasar a ejecutar la fase
-    if (this.logica.jugadorTurno == this.logica.yo) {
-      if (this.logica.fase == 1) { // Refuerzo
-        console.log("Tratando fase de refuerzo desde resumen")
-        this.tratarFaseReforzar()
-      } else if (this.logica.fase == 2) { // Ataque
-        console.log("Tratando fase de ataque desde resumen")
-        this.tratarFaseAtacar()
-      } else if (this.logica.fase == 3) { // Fortificar
-        console.log("Tratando fase de fortificar desde resumen")
-        this.tratarFaseFortificar()
-      }
-    }
+
   }
 
   ejecutarAutomata() {
@@ -254,6 +269,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     this.turno = obj.Jugador;
 
                     if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
+                      // Rellenar primer rectangulito
+                      //this.rellenarFase(1);
+                      this.tratarFaseReforzar()
+                    } else if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
                       // Rellenar primer rectangulito
                       this.rellenarFase(1);
                       this.tratarFaseReforzar()
@@ -374,7 +393,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   aumentarTropasRegion(id : number, aumento : number) {
-    var tropas = parseInt(document.getElementById("t"+this.territorios[id])!.innerHTML) + aumento;
+    var tropas = Number.parseInt(document.getElementById("t"+this.territorios[id])!.innerHTML.toString()) + Number(aumento)
 
     this.sobreescribirTropasRegion(id, tropas)
   }
@@ -781,7 +800,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
     if (this.tropasRecibidas == 0) return
-    console.log("Estamos en fase de proyecto!", this.tropasRecibidas)
+    console.log("Estamos en fase de refuerzo!", this.tropasRecibidas)
     this.territorio1 = "";
     this.tropasAMover = 0;
 
