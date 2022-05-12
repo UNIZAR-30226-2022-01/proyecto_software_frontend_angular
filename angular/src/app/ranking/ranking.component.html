@@ -1,1 +1,45 @@
-<p>ranking works!</p>
+<top-bar></top-bar>
+<down-bar></down-bar>
+<div style="text-align: center; ">
+    <div class="contenedorJugadoresEspera">
+      <h2>RANKING GLOBAL</h2>
+        <div *ngFor="let jugador of jugadores; let i = index;">
+         <div *ngIf="jugador.NombreUsuario==yo" class ="participante yo">  
+                <div class = "datosJugador">
+                    <div *ngIf="i==0" class ="posicion primero"> {{i+1}}. </div>
+                    <div *ngIf="i==1" class ="posicion segundo"> {{i+1}}. </div>
+                    <div *ngIf="i==2" class ="posicion tercero"> {{i+1}}. </div>
+                    <div *ngIf="i>2" class ="posicion"> {{i+1}}. </div>
+                    <div class ="nombreUsuario" > {{jugador.NombreUsuario}} </div>
+                    <div class ="estadisticas"> Partidas Ganadas: {{jugador.PartidasGanadas}} </div>
+                </div>
+         </div>
+         <div *ngIf="jugador.NombreUsuario!=yo" class ="participante">  
+            <div class = "datosJugador">
+                <div *ngIf="i==0" class ="posicion primero"> {{i+1}}. </div>
+                <div *ngIf="i==1" class ="posicion segundo"> {{i+1}}. </div>
+                <div *ngIf="i==2" class ="posicion tercero"> {{i+1}}. </div>
+                <div *ngIf="i>2" class ="posicion"> {{i+1}}. </div>
+                <div class ="nombreUsuario" > {{jugador.NombreUsuario}} </div>
+                <div class ="estadisticas"> Partidas Ganadas: {{jugador.PartidasGanadas}} </div>
+            </div>
+         </div>
+     </div>
+     
+     <div *ngIf="noSoyTop==true" >
+        <h2> .   .   . </h2>
+        <div class="participante yo"  >
+            <div class = "datosJugador">
+                <div class ="posicion"> {{miPosicion}}. </div>
+                <div class ="nombreUsuario" > {{yo}} </div>
+                <div class ="estadisticas"> Partidas Ganadas: {{misPartidasGanadas}} </div>
+            </div>
+        </div>
+     </div>
+</div>
+     
+
+
+</div>
+
+

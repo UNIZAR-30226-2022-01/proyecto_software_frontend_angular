@@ -1,0 +1,102 @@
+h2{
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 30px;
+  font-weight: 550;
+  padding: 20px;
+}
+.participante {
+    text-align: left;
+    width: 35%;
+    height: 70px;
+    margin: 0 auto;
+    margin-top: 0.75%;
+    border-radius: 15px;
+    border: 1px solid #fafafa;
+    box-shadow:  rgba(0, 0, 0, 0.2) 0px 5px 10px;
+    background: #909090;
+    font-size: 50px;   
+    transition: width 0.5s, height 0.5s, transform 0.5s;
+    z-index: -1;
+  } 
+  
+  .topParticipante {
+    display:inline-table;
+    width: 30%;
+    height: 50px;
+    margin: 0 auto;
+    border-radius: 15px;
+    border: 1px solid #fafafa;
+    box-shadow:  rgba(0, 0, 0, 0.2) 0px 5px 10px;
+    background: #909090;
+    font-size: 50px;   
+    transition: width 0.5s, height 0.5s, transform 0.5s;
+  } 
+
+  .primero{
+    border-radius: 12px;
+    border: 1px solid #fafafa;
+    background: #FFD700;
+  }
+
+  .segundo{
+    border-radius: 12px;
+    border: 1px solid #fafafa;
+    background: #aaa9ad;
+  }
+
+  .tercero{
+    border-radius: 12px;
+    border: 1px solid #fafafa;
+    background: #a97142;
+  }
+
+  .participante:hover {
+    opacity: 0.9;
+    transition: 0.2s;
+    transform: scale(1.01);
+    z-index: -1;
+  }
+
+  .yo{
+    background: #90ee90;
+  }
+  
+  .datosJugador {
+    
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    color:#fafafa;
+    font-size: 21px;
+    font-weight: 550;
+    padding: 20px;
+  }
+  
+  
+  .contenedorJugadoresEspera {
+      width: 100%;
+      height: 50%;
+      margin-top: 5%;
+      margin-right: 4%;
+      margin: auto;
+      padding-top: 0.1%;
+      padding-bottom: 2%;
+      margin-bottom: 2%;
+  }
+  
+  .posicion{
+
+    padding-left: 1%;
+    padding-right: 1%;
+    display:inline-table;
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+  
+  .nombreUsuario{
+    display:inline-table;
+    cursor: pointer;
+    min-width: 43%;
+  }
+
+  .estadisticas{
+    display:inline-table;
+  }
