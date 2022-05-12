@@ -110,8 +110,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   territorio1 : string = "";
   territorio2 : string = "";
   territorioDestino : string = "";
+  nTropasOrigen : number = 0;
   nDadosAtaque : number = 0;
   nTropasOcupar : number = 0;
+  turno : string = "-------";
 
   resultadoAlerta : Promise<SweetAlertResult> | undefined ;
 
@@ -179,14 +181,15 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       }
     });
 
+    console.log("Turno: " + this.logica.jugadorTurno)
     // Si era nuestro turno, hay que pasar a ejecutar la fase
     if (this.logica.jugadorTurno == this.logica.yo) {
       if (this.logica.fase == 1) { // Refuerzo
         console.log("Tratando fase de refuerzo desde resumen")
-        // TODO
+        this.tratarFaseReforzar()
       } else if (this.logica.fase == 2) { // Ataque
         console.log("Tratando fase de ataque desde resumen")
-        // TODO
+        this.tratarFaseAtacar()
       } else if (this.logica.fase == 3) { // Fortificar
         console.log("Tratando fase de fortificar desde resumen")
         this.tratarFaseFortificar()
@@ -199,7 +202,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
           .subscribe(
             data => {
-              //clearInterval(this.intervaloConsultaEstado) // TODO: DEBUG
+              // clearInterval(this.intervaloConsultaEstado) // TODO: DEBUG
 
               this.jsonData = JSON.parse(data);
               console.log(this.jsonData);
@@ -235,11 +238,19 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     console.log("jugador:", obj.Jugador)
                     console.log("yo:", this.logica.yo)
 
+                    this.turno = obj.Jugador;
+
                     if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
+                      // Rellenar primer rectangulito
+                      this.rellenarFase(1);
                       this.tratarFaseReforzar()
                     } else if (this.logica.fase == 2 && obj.Jugador == this.logica.yo) { // Ataque
+                      // Rellenar segundo rectangulito
+                      this.rellenarFase(2);
                       this.tratarFaseAtacar()
                     } else if (this.logica.fase == 3 && obj.Jugador == this.logica.yo) { // Fortificar
+                      // Rellenar tercer rectangulito
+                      this.rellenarFase(3);
                       this.tratarFaseFortificar()
                     }
 
@@ -266,6 +277,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 5: { // IDAccionAtaque
+                    this.mostrarAlertaDados(obj);
                     this.tratarAccionAtacar(obj);
                       break;
                   }
@@ -303,6 +315,44 @@ export class JuegoComponent implements OnInit, AfterViewInit {
               }
             })
     }, 5000);
+  }
+
+  mostrarFase() {
+    switch(this.logica.fase) {
+      case 1: {
+        return "REFUERZO";
+      }
+      case 2: {
+        return "ATAQUE";
+      }
+      case 3: {
+        return "FORTIFICACION";
+      }
+      default: {
+        return "-------";
+      }
+    }
+  }
+
+  rellenarFase(id : number) {
+    document.getElementById("rReforzar")!.style.fill="white";
+    document.getElementById("rAtacar")!.style.fill="white";
+    document.getElementById("rFortificar")!.style.fill="white";
+    switch(id) {
+      case 1: {
+        document.getElementById("rReforzar")!.style.fill="black";
+        break;
+      }
+      case 2: {
+        document.getElementById("rAtacar")!.style.fill="black";
+        break;
+      }
+      case 3: {
+        document.getElementById("rFortificar")!.style.fill="black";
+        break;
+      }
+    }
+
   }
 
   // Funciones auxiliares sobre el HTML
@@ -528,6 +578,22 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   // Funciones de tratamiento del juego
 
 
+
+  mostrarAlertaDados(obj : any) {
+    var resultadoDadosAtacante = 0;
+    var resultadoDadosDefensor = 0;
+
+    // Atacante
+    for (var i = 0; i < obj.DadosAtacante.length; i++) {
+      this.http.get("http://localhost:8090/api/obtenerDados/" + obj.DadosAtacantes[i], {observe:'body', responseType:'text', withCredentials: true})
+      .subscribe({
+        next : (response) => {
+            // almacenar los resultados de cada dado
+        }
+      });
+    }
+  }
+
   tratarFaseAtacar() {
     console.log("Estamos en fase de ataque!")
     this.territorio1 = "";
@@ -543,6 +609,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           // Si es el primer territorio seleccionado, se guarda y resetea en el mapa
           if (this.territorio1 == "") {
             this.territorio1 = this.mapa.territorioSeleccionado;
+            this.nTropasOrigen = Number(this.obtenerTropasRegion(this.territorios.indexOf(this.territorio1)));
+            console.log("Numero de tropas origen: " + this.nTropasOrigen);
+
             this.mapa.territorioSeleccionado = "";
             // Cierra el popup de seleccionar el primer territorio y crea otro para el segundo
             this.cerrarAlertaPermanente()
