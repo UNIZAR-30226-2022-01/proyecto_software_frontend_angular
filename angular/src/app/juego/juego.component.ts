@@ -240,7 +240,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   ejecutarAutomata() {
     this.intervaloConsultaEstado = setInterval(() => {
-      this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
+      this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
           .subscribe(
             data => {
              // clearInterval(this.intervaloConsultaEstado) // TODO: DEBUG

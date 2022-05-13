@@ -73,14 +73,16 @@ html, body{
 
 .botonClick {
   /*border: 1.5px solid yellow; */
-  width: 79px;
-  height: 200px;
+  width: 55%;
+  height: auto;
+  display:flex;
+  flex-direction: column;
 }
 
 .containerBotones {
   /* border: 1.5px solid white; */
   position: absolute;
-  transform: translate(0px, -330px);
+  transform: translate(0%, -100%);
   float:left;
   margin-left: 4%;
   background-color: transparent;
