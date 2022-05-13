@@ -24,7 +24,7 @@ import {LlamadasAPI} from "../llamadas-api";
         animate('200ms ease-in', style({transform: 'translateY(100%)', opacity: '0'})),
       ])
     ]),
-  ]
+  ],
 })
 
 export class JuegoComponent implements OnInit, AfterViewInit {
@@ -74,6 +74,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   constructor(private http: HttpClient, private router:Router){}
 
   ngOnInit(): void {
+    // Fuerza el background-color en el body en el constructor, Angular no lo aplica si no.
+    document.body.style.backgroundColor = "#20BCE7";
+
     var volviendo = localStorage.getItem("volviendo")
 
     console.log("volviendo es", volviendo)
