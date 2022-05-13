@@ -243,10 +243,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
           .subscribe(
             data => {
-             // clearInterval(this.intervaloConsultaEstado) // TODO: DEBUG
+              //clearInterval(this.intervaloConsultaEstado) // Para debugging
+              //console.log(this.jsonData);
 
-              this.jsonData = JSON.parse(data);
-              console.log(this.jsonData);
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
                 switch(obj.IDAccion) {
@@ -658,6 +657,33 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
+
+  mostrarAlertaInformativaAvatar(titulo : string, texto : string, usuario : string) {
+    var imagen : any;
+
+    // Busca al jugador en las cajas, y obtiene la URL de su avatar
+    for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
+      if (document.getElementById("nombreJugador" + (i + 1))!.innerHTML == usuario) {
+        imagen = document.getElementById("avatarJugador" + (i + 1))! as HTMLImageElement;
+        break
+      }
+    }
+
+    Swal.fire({
+      title: titulo,
+      text: texto,
+      imageUrl: imagen.src,
+      imageWidth: 200,
+      imageHeight: 200,
+      imageAlt: 'Avatar usuario',
+      customClass: {image: "imagenJugador"},
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3085d6',
+      allowOutsideClick: false
+    })
+  }
+
+
   // Funciones de tratamiento del juego
 
   mostrarAlertaDados(obj : any) {
@@ -867,6 +893,14 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     } else {
       this.mostrarAlertaDerrotaAjena("Jugador eliminado", "El jugador " + obj.JugadorEliminador + " ha eliminado a " + obj.JugadorEliminado + ".")
     }
+
+    // Busca la caja de jugador, y sobreescribe su color por uno gris
+    /*for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
+      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == obj.JugadorEliminado) {
+        document.getElementById("jugador" + (i+1))!.style.backgroundColor = "#808080"
+        return
+      }
+    }*/
   }
 
 
@@ -902,10 +936,19 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       200);
   }
 
+
   tratarAccionJugadorExpulsado(obj : any) {
     this.mostrarAlertaDerrotaAjena("Jugador eliminado",
       "El jugador " + obj.JugadorEliminado + " ha sido desconectado de la partida por inactividad." +
       "Sus territorios pueden ser conquistados sin restricciones.");
+
+    // Busca la caja de jugador, y sobreescribe su color por uno gris
+    /*for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
+      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == obj.JugadorEliminado) {
+        document.getElementById("jugador" + (i+1))!.style.backgroundColor = "#808080"
+        return
+      }
+    }*/
   }
 
 
@@ -995,11 +1038,5 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   // Funciones para herencia de mapa<->juego
 
   ngAfterViewInit() {}
-}
-
-export class jugadorFinPartida {
-  JugadorGanador : string = ""
-  JugadorEliminador : string = ""
-  JugadorEliminado : string = ""
 }
 
