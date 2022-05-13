@@ -8,6 +8,7 @@ import { interval, take } from 'rxjs';
 import {MapaComponent} from "../mapa/mapa.component";
 import { SelectMultipleControlValueAccessor } from '@angular/forms';
 import {LlamadasAPI} from "../llamadas-api";
+//import * as QueryString from "Querystring";
 
 @Component({
   selector: 'juego',
@@ -38,13 +39,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
                   info: number = 0;
   isShow = false;
-  source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";
+  source = "assets/bar-chart.png";
 
   toggleDisplay() { this.isShow = !this.isShow;}
 
   changeImage() {
-    if (!this.isShow) {this.source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";}
-    else {this.source = "https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-cross-100-most-used-icons-flaticons-lineal-color-flat-icons.png";}
+    if (!this.isShow) {this.source = "assets/bar-chart.png";}
+    else {this.source = "assets/world.png";}
   }
 
   cambiarFase() {
@@ -133,6 +134,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   tropasAMover : number = 0;
   tropasRecibidas:number = 0;
+
+  jugadorChat : string = "";
+  mensajeChat : string ="";
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
   resumirPartida()  {
@@ -351,6 +355,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       this.tratarAccionPartidaFinalizada(obj)
                       break;
                   }
+
+                  case 12: { // IDAccionMensaje
+                    this.tratarAccionMensaje(obj)
+                    break;
+                  }
                 }
               }
             })
@@ -398,13 +407,14 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         break;
       }
     }
-
   }
+
 
   // Funciones auxiliares sobre el HTML
   obtenerTropasRegion(id : number) {
     return document.getElementById("t"+this.territorios[id])!.innerHTML
   }
+
 
   aumentarTropasRegion(id : number, aumento : number) {
     var tropas = Number.parseInt(document.getElementById("t"+this.territorios[id])!.innerHTML.toString()) + Number(aumento)
@@ -412,9 +422,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.sobreescribirTropasRegion(id, tropas)
   }
 
+
   sobreescribirTropasRegion(id : number, tropas : number) {
     document.getElementById("t"+this.territorios[id])!.innerHTML = String(tropas);
   }
+
 
   // Inicializa las cajas de jugadores
   rellenarCajasJugadores() {
@@ -441,6 +453,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     }
   }
 
+
   aumentarTropasCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
 
@@ -449,6 +462,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     document.getElementById("tropasJugador"+i)!.innerHTML = String(tropas+aumento)
   }
 
+
   aumentarTerritoriosCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
 
@@ -456,6 +470,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     document.getElementById("territoriosJugador"+i)!.innerHTML = String(territorios+aumento)
   }
+
 
   aumentarCartasCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
@@ -466,6 +481,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     document.getElementById("cartasJugador"+i)!.innerHTML = String(cartas+aumento)
   }
+
 
   // Obtiene el índice de caja dado un jugador. El jugador debe existir.
   obtenerIndiceCajaJugadores(jugador : string) {
@@ -478,6 +494,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     return -1
   }
+
 
   // Funciones de alertas
 
@@ -496,6 +513,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       }
     })
   }
+
 
   mostrarAlertaRefuerzo(tituloAlerta: string, textoAlerta: string, obj : any) {
     var timerInterval : any
@@ -516,6 +534,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   });
   }
 
+
   mostrarAlertaDerrotaPropia(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
@@ -531,6 +550,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
+
   mostrarAlertaDerrotaAjena(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
@@ -544,6 +564,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
+
   mostrarAlertaPermanente(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
@@ -554,6 +575,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       showConfirmButton: false,
     })
   }
+
 
   cerrarAlertaPermanente() {
     Swal.close()
@@ -589,6 +611,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     });
   }
 
+
   mostrarAlertaRangoRefuerzo(tituloAlerta: string, min: string, max: string) {
     var atributos : Record<string, string> = {
       icon: 'info',
@@ -610,6 +633,27 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     });
   }
 
+
+  mostrarAlertaChat() {
+    var atributos : Record<string, any> = {
+      autocapitalize: 'off',
+      maxlength: 32
+    };
+
+    Swal.fire({
+      title: 'Escribe en el chat',
+      input: 'text',
+      inputAttributes: atributos,
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Enviar',
+      reverseButtons: true,
+      showLoaderOnConfirm: true,
+      preConfirm: (mensaje) => {
+        this.llamadasAPI.enviarMensaje(mensaje)
+      }
+    })
+  }
 
   // Funciones de tratamiento del juego
 
@@ -906,8 +950,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         }
       })
     }
+  }
 
 
+  tratarAccionMensaje(obj : any) {
+    console.log("cambio caja chat")
+    document.getElementById("cajaChat")!.innerHTML = obj.JugadorEmisor + ": "+obj.Mensaje
   }
 
 

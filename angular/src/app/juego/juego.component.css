@@ -1,9 +1,16 @@
 * {
   background-color: #20BCE7;
 }
-html,body{
-  margin:0;
 
+
+
+inline {
+  background-color: #20BCE7;
+}
+
+html, body{
+  margin:0;
+  background-color: #20BCE7;
 }
 
 /*#bannerAlertas.swal2-container {
@@ -19,6 +26,21 @@ html,body{
 
 .imagen {
   background-color:hsl(0, 0%, 0%, 0);
+}
+
+.cajaChat {
+  background-color:hsl(0, 0%, 0%, 0);
+  width: max-content;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.itemChat {
+  display:flex;
+  background-color:hsl(0, 0%, 0%, 0);
+  justify-content: center;
+  align-items: center;
 }
 
 .containerJugadores {
@@ -78,19 +100,19 @@ html,body{
 }
 
 .rectangulito {
-position: absolute;
-margin-top: 4.7%;
-border: 0.2px solid black;
-width: 3.5vw;
-height: 1.29vh;
-clear:right;
-background: #ffffff;
+  position: absolute;
+  margin-top: 4.7%;
+  border: 0.2px solid black;
+  width: 3.5vw;
+  height: 1.29vh;
+  clear:right;
+  background: #ffffff;
 }
 
 .turno {
-background-color: hsl(0, 0%, 0%, 0);
-text-align: center;
-transform: translate(-2.3vw, 1vh);
+  background-color: hsl(0, 0%, 0%, 0);
+  text-align: center;
+  transform: translate(-2.3vw, 1vh);
 }
 
 .fase{
@@ -101,14 +123,14 @@ transform: translate(5.4vw, 3.9vh);
 }
 
 .round {
-border: 1px solid rgb(71, 70, 70);
-position: absolute;
-margin-left: 3.5%;
-margin-top: 3.5%;
-width: 5.20vw;
-height: 10.75vh;
-border-radius: 100%;
-background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(71, 70, 70);
+  position: absolute;
+  margin-left: 3.5%;
+  margin-top: 3.5%;
+  width: 5.20vw;
+  height: 10.75vh;
+  border-radius: 100%;
+  background-color: rgb(255, 255, 255);
 }
 
 .round:hover {
@@ -170,4 +192,27 @@ transform: rotate(225deg);
 
 .round:hover span:nth-child(4) {
 transform: rotate(-225deg);
+}
+
+.botonChat {
+  border: 1.5px solid white;
+  border-radius: 20px;
+  background-color: #CCF4FF;
+  height: 75px;
+  width: 280px;
+  padding: .5em;
+  margin-left: 20px;
+}
+
+.textoChat {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color:#000000;
+  font-size: 16px;
+  font-weight: 400;
+  display: block;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 5em;
+  line-height:2.3em;
 }

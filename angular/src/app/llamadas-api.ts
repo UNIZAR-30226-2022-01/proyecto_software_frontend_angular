@@ -269,6 +269,25 @@ export class LlamadasAPI {
       });
   }
 
+  enviarMensaje(mensaje : string) {
+    var formData: any = new FormData();
+    formData.append('mensaje', mensaje);
+
+    console.log("enviando ", mensaje)
+
+    this.http.post('http://localhost:8090/api/enviarMensaje', formData, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          return ""
+        },
+        error: (error) => {
+          return String(error)
+        }
+      });
+
+    return ""
+  }
+
 
 }
 

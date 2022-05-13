@@ -1,5 +1,4 @@
 <body>
-
     <div id="bannerAlertas"></div>
     <mapa style="height: 80;" *ngIf="!info"></mapa>
     <mapa-info *ngIf="info"></mapa-info>
@@ -14,11 +13,18 @@
         </div>
         <div class="botonesPrincipales">
             <div class="boton">
-                <input class="imagen" type="image" id="bar_char_but" (click)="toggleDisplay()" (click)="changeImage()" src={{source}} alt='bar-chart' height="60" width="60" />
+                <input class="imagen" type="image" id="bar_char_but" (click)="toggleDisplay()" (click)="changeImage()" src={{source}} alt='bar-chart' height="80" width="80" />
             </div> &nbsp;&nbsp;&nbsp;&nbsp;
             <div class="boton">
-                <input class="imagen" type="image" id="cards_but" src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-vitaly-gorbachev/60/000000/external-cards-children-toys-vitaliy-gorbachev-lineal-vitaly-gorbachev.png" alt='cards' height="60" width="60"/>
+                <input class="imagen" type="image" id="cards_but" src="assets/cards.png" alt='cards' height="80" width="80"/>
+            </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="boton">
+              <input class="imagen" type="image" id="chat_but" (click)="mostrarAlertaChat()" src="assets/chat.png" alt='chat' height="80" width="80"/>
+            </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="boton">
+                <div class="cajaChat" id="cajaChat"><div class="itemChat">Chat vacío</div></div>
             </div>
+
         </div>
     </div>
     <div class="containerFases">
