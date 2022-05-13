@@ -22,8 +22,8 @@ Tienes {{puntos}} puntos
 <div class="contenedor-bottom">
   <div class="grid-container">
        <div class="dado flex-items" id ="dado{{i}}" *ngFor="let dado of dados; let i = index" style="display:none;"> <!-- Por defecto ocultos -->
-         <div class="card" style="width: 13rem; height: 24rem;">
-           <img id="{{dado.id}}" class="card-img-top">
+         <div class="card" style="width: 13rem; height: 26rem;">
+           <img id="{{dado.id}}" style="transform: scale(0.8)" class="card-img-top">
            <div class="card-body text-justify">
                <h5 class="card-title">{{dado.nombre}}</h5>
                <p class="card-text">{{dado.descripcion}}</p>
