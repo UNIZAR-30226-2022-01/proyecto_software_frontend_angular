@@ -30,7 +30,6 @@ import { ConfigPerfilComponent } from './config-perfil/config-perfil.component';
 import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
 import { MapaInfoComponent } from './mapa-info/mapa-info.component';
 import { JuegoComponent } from './juego/juego.component';
-import { FinPartidaComponent } from './fin-partida/fin-partida.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SolicitarTokenComponent } from './solicitar-token/solicitar-token.component';
 import { CartasComponent } from './cartas/cartas.component';
@@ -57,7 +56,6 @@ const appRoutes: Routes = [
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
   {path: 'juego', component: JuegoComponent},
-  {path: 'finPartida', component: FinPartidaComponent},
   {path: 'resetPassword', component: ResetPasswordComponent},
   {path: 'solicitarToken', component: SolicitarTokenComponent},
   {path: 'cartas', component: CartasComponent}
@@ -90,7 +88,6 @@ const appRoutes: Routes = [
     MiPerfilComponent,
     MapaInfoComponent,
     JuegoComponent,
-    FinPartidaComponent,
     ResetPasswordComponent,
     SolicitarTokenComponent,
     CartasComponent
