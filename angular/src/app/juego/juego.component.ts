@@ -45,7 +45,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   changeImage() {
     if (!this.isShow) {this.source = "assets/bar-chart.png";}
-    else {this.source = "assets/world.png";}
+    else {this.source = "assets/cross.png";}
   }
 
   cambiarFase() {
@@ -68,7 +68,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   setMapaInfo() {this.info = 1;}
 
   irCartas(){
-    console.log('fase', this.logica.fase, 'turno',this.turno)
     if (this.logica.fase == 1 && this.logica.jugadorTurno  == this.logica.yo) {
       this.router.navigate(['/cartas'])
       Swal.close()
@@ -254,7 +253,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             data => {
               //clearInterval(this.intervaloConsultaEstado) // Para debugging
               //console.log(this.jsonData);
-
+              this.jsonData = JSON.parse(data);
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
                 console.log(obj.IDAccion)
@@ -974,9 +973,21 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
   tratarAccionCambioCartas(obj : any) {
-    var alerta : Alerta = this.logica.cambioCartas(obj)
+    if (obj.Jugador === this.logica.yo) {
+      Swal.fire({
+        title: 'Cambio de cartas',
+        text: 'Has obtenido ' + obj.NumTropasObtenidas + ' tropas.',
+        icon: 'info',
+      });
+    } else {
+      Swal.fire({
+        title: 'Cambio de cartas',
+        text: 'El jugador ' + obj.Jugador + " ha recibido " + obj.NumTropasObtenidas + ' tropas.',
+        icon: 'info',
+      });
+    }
     this.aumentarCartasCajaJugadores(this.logica.jugadorTurno, -3)
-    this.mostrarAlerta(alerta.titulo, alerta.texto)
+    
   }
 
 

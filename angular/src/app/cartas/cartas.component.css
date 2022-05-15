@@ -1,7 +1,11 @@
 *{
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-
 }
+
+html, body{
+    margin:0;
+    background-color: #FFFFFF;
+  }
 
 .barra{
     background-color: #333;
@@ -101,7 +105,7 @@
     background-color: #c0c7c8;
     padding: .5em;
     cursor: pointer;
-    transition: width 0.5s, height 0.5s, transform 0.5s;
+    transform: scale(1.05);
   }
 
  

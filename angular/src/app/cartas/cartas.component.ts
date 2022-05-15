@@ -20,7 +20,7 @@ export class CartasComponent implements OnInit {
                   "Africa\nOriental", "Congo", "Sudafrica", "Brasil", "Argentina", "Este_de\nlos\nEstados_Unidos", "Estados\nUnidos\nOccidental", "Quebec",
                   "America\nCentral", "Peru", "Australia_Occidental", "Alberta"];
 
-  imagenCartas=["https://img.icons8.com/ios-filled/100/000000/soldier.png","https://img.icons8.com/ios-filled/100/000000/horseback-riding.png","https://img.icons8.com/ios-filled/100/000000/cannon.png"]
+  imagenCartas=["assets/soldadoGrande.png","assets/caballoGrande.png","assets/canionGrande.png"]
   
   constructor(private http : HttpClient,private router:Router) {}
 
@@ -56,6 +56,7 @@ export class CartasComponent implements OnInit {
   }
 
   ngOnInit() {
+    document.body.style.backgroundColor = "#FFFFFF"
     this.obtenerCartas();
   }
 
