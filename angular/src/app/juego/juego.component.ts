@@ -36,7 +36,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   "America_Central", "Peru", "Australia_Occidental", "Alberta"];
 
   colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
-                  info: number = 0;
+  info: number = 0;
   isShow = false;
   source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";
 
@@ -65,6 +65,14 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   setMapa() {this.info = 0; this.resumirPartida();}
   setMapaInfo() {this.info = 1;}
+
+  irCartas(){
+    console.log('fase', this.logica.fase, 'turno',this.turno)
+    if (this.logica.fase == 1 && this.logica.jugadorTurno  == this.logica.yo) {
+      this.router.navigate(['/cartas'])
+      Swal.close()
+    }  
+  }
 
   delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
@@ -156,6 +164,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                 eliminado: estadoJSON.Eliminado,
                 expulsado: estadoJSON.Expulsado,
               }
+              document.getElementById('jugador'+(i+1))!.style.background = this.colores[i];
 
               // Si somos nosotros, se comprueba que no estemos eliminados y guardan las cartas
               if (jugador == this.logica.yo) {
@@ -242,6 +251,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
               console.log(this.jsonData);
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
+                console.log(obj.IDAccion)
                 switch(obj.IDAccion) {
                   case 0: { // IDAccionRecibirRegion
                     this.logica.recibirRegion(obj, document);

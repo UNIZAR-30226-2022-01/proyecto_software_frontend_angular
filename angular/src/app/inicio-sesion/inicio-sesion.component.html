@@ -5,10 +5,10 @@
 
     <p style="font-size: small; "><a [routerLink]="['/registroUsuario']" style="text-decoration: none;">¿Nuevo aquí? Regístrate</a></p>
     <br>
-    <p style="font-size: small; "><a [routerLink]="['/solicitarToken']" style="text-decoration: none;">¿Has olvidado tu contraseña?</a></p>
-    <br>
+    
     <p style="font-size: small; "><a [routerLink]="['/resetPassword']" style="text-decoration: none;">¿Tienes un token de resetear tu contraseña?</a></p>
     <br>
+    
     <input id="nombre" type="text" formControlName="nombre" size="30" placeholder="Nombre de usuario">
     <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
       style="color:red;">
@@ -18,8 +18,8 @@
       </div>
     </div>
 
+    <div *ngIf="!nombre.dirty|| (!nombre.errors) "> <br> </div>
 
-    <br><br>
     <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
         <div *ngIf="password.invalid && (password.dirty || password.touched)"
           style="color:red;">
@@ -29,11 +29,12 @@
             </div>
       </div>
 
-    <br><br>
+    <div *ngIf="!password.dirty|| (!password.errors)"> <br> </div>
+    <p style="font-size: small; "><a [routerLink]="['/solicitarToken']" style="text-decoration: none;">¿Has olvidado tu contraseña?</a></p>
+    
 </form>
 
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-    <p>Pulse el botón para iniciar sesión</p>
-    <button type="submit"[disabled]="!profileForm.valid" >Submit</button>
+  <button class="btn btn-outline-primary" type="submit"[disabled]="!profileForm.valid" >Iniciar sesión</button>
 </form>
 </div>

@@ -7,7 +7,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ranking.component.css']
 })
 export class RankingComponent implements OnInit {
-  //api/ranking Tipo: GET
   yo:any;
   miPosicion:any;
   noSoyTop:any;
@@ -42,8 +41,6 @@ export class RankingComponent implements OnInit {
           }
           this.jugadores = todosJugadores.slice(0,10);
         }})
-    
-    
   }
 
 }

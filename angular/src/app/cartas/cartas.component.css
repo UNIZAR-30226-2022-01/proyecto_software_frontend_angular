@@ -3,8 +3,6 @@
 
 }
 
-
-
 .barra{
     background-color: #333;
     overflow: hidden;
@@ -25,14 +23,15 @@
 .downnav {
     bottom: 0;
     padding: 100px 40px;
+    z-index: -2;
 }
 
 .botonCentro{
-    top: 50%;
-    left:44%;
+    top:52%;
+    left: 48.5%;
+    position: fixed;
     font-size: 20px; 
     text-decoration: none;
-    position: fixed;
     font-weight: 450;
     border-radius: 15px;
     padding: 0.5%;
@@ -41,36 +40,43 @@
 .carta  { 
     width: 155px;
     height: 230px;
-    background-color: #fafafa;
     border-radius: 18px;
     box-shadow:  rgba(0, 0, 0, 0.2) 0px 5px 10px;
     font-size: 20px;  
     font-weight: 550;
-    color:#000000;
     cursor: pointer;
-    
+    margin-left: 30px;
+    border: 3px solid #000000;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    overflow: hidden;
+    background-color: #fafafa;
+    display: inline-block;
+    color: #000000;
  }
 
-
-.contenedorCartas1 {
-    position: fixed;
-    top:15%;
-    right: 62%;
-    width: 20px;
+ .contenedorCartas {
+    margin-top:10%;
 }
 
-.cartasJugador {
-    position: fixed;
-    top: 65%;
-    right: 50%;
-    z-index: 1;
-    justify-content: center;
-    float: right;
-}
 
 .cartaNoSeleccionada{
+    width: 155px;
+    height: 230px;
+    border-radius: 18px;
+    box-shadow:  rgba(0, 0, 0, 0.2) 0px 5px 10px;
+    font-size: 20px;  
+    font-weight: 550;
+    margin-left: 30px;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    overflow: hidden;
+    background-color: #fafafa;
+    display: inline-block;
+    color: #000000;
     border: 4px solid #000000;
-    border-style: dashed ;
+    border-style: dashed;
+    
 }
 
 .fotoCarta{
@@ -88,54 +94,6 @@
     position:fixed;
 }
 
-.containerBonus{
-    width:3%;
-    height: 95px;
-    margin-top: 10%;
-    margin-right: 8%;
-    float:right;
-    clear:right;
-}
-
-.bonus{
-    width: 400%;
-    height: 200%;
-    margin-top: 95%;
-    float:right;
-    clear:right;
-    border-radius: 30px;
-    border: 1px solid #fafafa;
-    box-shadow:  rgba(0, 0, 0, 0.25) 0px 5px 10px;
-    background: #c3195d;
-    font-size: 50px;
-}
-
-.bonus:hover {
-    opacity: 0.9;
-    transition: 0.1s;
-}
-
-.datosBonus{
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color:hsl(0, 0%, 0%, 0);
-    font-size: 20px;
-    font-weight: 550;
-    padding: 9px 0;
-    color: #fafafa;
-    text-align: center;
-}
-
-tr{
-    padding: 5px; 
-}
- th {
-    vertical-align: top;
-    padding-left: 20px; 
- }
-  
- .mith{
-    padding-left: 100px;
- }
 
  .boton {
     border: 1.5px solid white;

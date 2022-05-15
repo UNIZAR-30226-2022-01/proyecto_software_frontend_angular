@@ -1,4 +1,8 @@
+import { HttpClient } from '@angular/common/http';
+import { conditionallyCreateMapObjectLiteral } from '@angular/compiler/src/render3/view/util';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-cartas',
@@ -6,14 +10,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cartas.component.css']
 })
 export class CartasComponent implements OnInit {
-  misCartas = [{IdCarta:1, Tipo:1, Region:4,EsComodin:false},
-    {IdCarta:2, Tipo:2, Region:9,EsComodin:false},
-    {IdCarta:9, Tipo:0, Region:0,EsComodin:true},
-    {IdCarta:7, Tipo:0, Region:0,EsComodin:true}
-  ];
-  cosa:string="hola"
+  misCartas = new Array<any>();
   cartasSeleccionadas = new Array<any>();
-  cartasSeleccionadasVacias:any;
+  cartasSeleccionadasVacias = new Array<any>();
 
   territorios = ["Australia\nOriental", "Indonesia", "Nueva\nGuinea", "Alaska", "Ontario", "Territorio\ndel\nNoroeste", "Venezuela", "Madagascar", "Africa\ndel\nNorte", "Groenlandia",
                   "Islandia", "Reino\nUnido", "Escandinavia", "Japon", "Yakutsk", "Kamchatka", "Siberia", "Ural", "Afganistan", "Oriente\nMedio",
@@ -22,30 +21,28 @@ export class CartasComponent implements OnInit {
                   "America\nCentral", "Peru", "Australia_Occidental", "Alberta"];
 
   imagenCartas=["https://img.icons8.com/ios-filled/100/000000/soldier.png","https://img.icons8.com/ios-filled/100/000000/horseback-riding.png","https://img.icons8.com/ios-filled/100/000000/cannon.png"]
-  constructor() { 
-    console.log(this.misCartas)
-    console.log(this.cartasSeleccionadas)
-    this.cartasSeleccionadasVacias = Array(3-this.cartasSeleccionadas.length).fill(0).map((x,i)=>i);
+  
+  constructor(private http : HttpClient,private router:Router) {}
+
+  obtenerCartas(){
+    this.http.get('http://localhost:8090/api/consultarCartas', {observe:'body', responseType:'text', withCredentials: true})
+      .subscribe(
+        data => {
+          console.log(data);
+          this.misCartas = JSON.parse(data);
+          console.log(this.misCartas);
+          this.cartasSeleccionadas = [];
+          this.cartasSeleccionadasVacias = Array(3-this.cartasSeleccionadas.length).fill(0).map((x,i)=>i);
+        })
   }
-
-  escribir(algo:any){
-    console.log(algo)
-    console.log(algo.Tipo)
-    console.log(algo.Region)
-    console.log(algo.EsComodin)
-  }
-
-  deseleccionar(carta:Carta){
-
-  }
-
+ 
   seleccionar(carta:any){
       // Comprobamos si carta esta en las cartas seleccionadas
       if (this.cartasSeleccionadas.find((element: any) => element.IdCarta == carta.IdCarta)){
         document.getElementById(carta.IdCarta)!.style.backgroundColor = "#fafafa";  // Le devolvemos el color original
         //La borramos de cartas seleccionadas
         this.cartasSeleccionadas.forEach((element:any, index:number)=>{
-          if(element.IdCarta == carta.IdCarta) {this.cartasSeleccionadas.splice(index,1);console.log('borro')}
+          if(element.IdCarta == carta.IdCarta) {this.cartasSeleccionadas.splice(index,1);}
         });
        this.cartasSeleccionadasVacias = Array(this.cartasSeleccionadasVacias.length+1).fill(0).map((x,i)=>i);
       }
@@ -58,10 +55,35 @@ export class CartasComponent implements OnInit {
       } 
   }
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.obtenerCartas();
+  }
 
-  
+  submit() {
+    this.http.post('http://localhost:8090/api/cambiarCartas/'+this.cartasSeleccionadas[0].IdCarta+'/'+this.cartasSeleccionadas[1].IdCarta+'/'+this.cartasSeleccionadas[2].IdCarta, null, {withCredentials: true})
+    .subscribe({
+      next : (response) => {
+        document.getElementById(this.cartasSeleccionadas[0].IdCarta)!.style.backgroundColor = "#fafafa";  // Le devolvemos el color original
+        document.getElementById(this.cartasSeleccionadas[1].IdCarta)!.style.backgroundColor = "#fafafa";  // Le devolvemos el color original
+        document.getElementById(this.cartasSeleccionadas[2].IdCarta)!.style.backgroundColor = "#fafafa";  // Le devolvemos el color original
+        this.obtenerCartas();  
+        
+      },
+      error: (error) => {
+        Swal.fire({
+          title: 'Se ha producido un error al cambiar las cartas seleccionadas',          
+          text: error.error,
+          icon: 'error',
+          timer: 2000,
+        })
+      }
+      });
+  }
 
+  salir(){
+    localStorage.setItem('volviendo', "true");
+    this.router.navigate(['/juego'])
+  }
 
 }
 

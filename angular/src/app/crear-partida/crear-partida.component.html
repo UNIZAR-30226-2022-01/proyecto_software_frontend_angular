@@ -4,7 +4,7 @@
   
     <br>
     <form [formGroup]="profileForm">
-        <label for="maxJugadores" >Número máximo de jugadores</label>
+        <label for="maxJugadores" >Número de jugadores</label>
         <select id="maxJugadores" name="maxJugadores" formControlName="maxJugadores">
             <option value="3">3</option>
             <option value="4">4</option>
@@ -24,17 +24,14 @@
         <form [formGroup]="profileForm">
             <label for="password" >Contraseña</label>
             <input type="text" id="password" name="password" formControlName="password" ><br><br>
-            <div *ngIf="esPrivada&&password.errors?.['required']" style="color:red;">
-                Si la sala es privada tienes que crear una contraseña.
-            </div>
-        
+                   
         </form> 
 
     </div>
        
     
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-        <button type="submit" [disabled]="(!esPublica&&!esPrivada)||(esPrivada&&password.errors?.['required'])||(maxJugadores.errors?.['required'])">Crear partida</button>
+        <button class="btn btn-outline-primary" type="submit" [disabled]="(!esPublica&&!esPrivada)||(esPrivada&&password.errors?.['required'])||(maxJugadores.errors?.['required'])">Crear partida</button>
     </form>
     
 </div>

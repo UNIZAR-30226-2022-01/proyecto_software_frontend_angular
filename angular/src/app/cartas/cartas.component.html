@@ -1,35 +1,31 @@
-<div style="text-align: center;">
+<div style="text-align: center;overflow: hidden">
     <div class="barra topnav">
         <a class="text-white">Tarjetas</a>   
     </div>
     
-    <div class="contenedorCartas1">
-        <tr>
-            <th *ngFor="let miCarta of cartasSeleccionadas" >
-                <div (click)="deseleccionar(miCarta)" class="carta cartaNoSeleccionada " >
-                    <a *ngIf="!miCarta.EsComodin">
-                        <div class="fotoCarta"><img src={{imagenCartas[miCarta.Tipo]}}/></div>
-                        <div class="textoCarta">{{territorios[miCarta.Region]}}</div>
-                    </a>
-                    <a *ngIf="miCarta.EsComodin">
-                        <div class="fotoCartaMini"><img src="https://img.icons8.com/ios-filled/64/000000/soldier.png"/></div>
-                        <div class="fotoCartaMini"><img src="https://img.icons8.com/ios-filled/64/000000/horseback-riding.png"/></div>
-                        <div class="fotoCartaMini"><img src="https://img.icons8.com/ios-filled/64/000000/cannon.png"/></div>
-                    </a>  
+    <div class="contenedorCartas">
+        <div *ngFor="let miCarta of cartasSeleccionadas" style="display: inline-block;">
+            <div class="cartaNoSeleccionada" >
+                <div *ngIf="!miCarta.EsComodin">
+                    <div class="fotoCarta"><img src={{imagenCartas[miCarta.Tipo]}}/></div>
+                    <div class="textoCarta">{{territorios[miCarta.Region]}}</div>
                 </div>
-            </th>
-            <th *ngFor="let p of cartasSeleccionadasVacias">
-                <div (click)="seleccionar(p)" class="carta cartaNoSeleccionada " ></div>
-            </th>
-        </tr>
+                <div *ngIf="miCarta.EsComodin">
+                    <div class="fotoCartaMini"><img src="https://img.icons8.com/ios-filled/64/000000/soldier.png"/></div>
+                    <div class="fotoCartaMini"><img src="https://img.icons8.com/ios-filled/64/000000/horseback-riding.png"/></div>
+                    <div class="fotoCartaMini"><img src="https://img.icons8.com/ios-filled/64/000000/cannon.png"/></div>
+                </div>  
+            </div>
+        </div>
+        <div *ngFor="let p of cartasSeleccionadasVacias" style="display: inline-block;">
+            <div (click)="seleccionar(p)" class="cartaNoSeleccionada" ></div>
+        </div>
     </div>
     
+    <button [disabled]="cartasSeleccionadas.length != 3" (click)="submit()" class="botonCentro">Canjear</button>
     
-    <button class="botonCentro">No hay tarjetas coincidentes</button>
-
-    <div class="cartasJugador">
-        <tr>
-            <th  *ngFor="let miCarta of misCartas" >
+    <div class="contenedorCartas">
+            <div  *ngFor="let miCarta of misCartas" style="display: inline-block;">
                 <div (click)="seleccionar(miCarta)" id={{miCarta.IdCarta}} class="carta" >
                     <div *ngIf="!miCarta.EsComodin">
                         <div class="fotoCarta"><img src={{imagenCartas[miCarta.Tipo]}}/></div>
@@ -41,47 +37,18 @@
                         <div class="fotoCartaMini"><img src="https://img.icons8.com/ios-filled/64/000000/horseback-riding.png"/></div>
                         <div class="fotoCartaMini"><img src="https://img.icons8.com/ios-filled/64/000000/cannon.png"/></div>
                     </div>
-                     
     
                 </div>
-            </th>
-        </tr>
+            </div>
+   
     </div>
     
-    <div class="containerBonus">
-        <div class="bonus">
-            <div class="datosBonus">
-                BONUS
-                <hr style="border: 1px solid #fafafa;margin-top:5px;margin-bottom: 10px;">
-                 <table style="margin-left: auto; margin-right: auto;">
-                    <tr>
-                        <th>4&nbsp;&nbsp;&nbsp;</th>
-                        <th>Infanteria</th>
-                    </tr>
-                    <tr>
-                        <th>6&nbsp;&nbsp;&nbsp;</th>
-                        <th>Caballeria</th>
-                    </tr>
-                    <tr>
-                        <th>8&nbsp;&nbsp;&nbsp;</th>
-                        <th>Artilleria</th>
-                    </tr>
-                    <tr>
-                        <th>10&nbsp;&nbsp;&nbsp;</th>
-                        <th>Los tres</th>
-                    </tr>
-                </table>
-                
-            </div>
-        </div>
-    </div>
-        
     <div class="containerCruz">
-        <div class="boton">
+        <div (click)="salir()" class="boton">
             <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-cross-100-most-used-icons-flaticons-lineal-color-flat-icons.png"/>
         </div>
     </div>
-
+  
     <div class="barra downnav"> </div>
 </div>
     

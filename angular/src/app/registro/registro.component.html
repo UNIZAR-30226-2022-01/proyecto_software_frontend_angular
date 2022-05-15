@@ -14,15 +14,18 @@
       <div *ngIf="nombre.errors?.['required']">
         El nombre de usuario es obligatorio.
       </div>
-      <div *ngIf="nombre.errors?.['minlength']">
+      <div *ngIf="nombre.errors?.['minlength']&&!nombre.errors?.['pattern']">
         El nombre de usuario debe tener mínimo 5 caracteres.
       </div>
-      <div *ngIf="nombre.errors?.['pattern']">
+      <div *ngIf="nombre.errors?.['pattern']&&!nombre.errors?.['minlength']">
         El nombre de usuario solo puede contener los carácteres alfanuméricos y los carácteres '-' '_'
       </div>
+      <div *ngIf="nombre.errors?.['pattern']&&nombre.errors?.['minlength']">
+        El nombre de usuario debe tener un tener mínimo 5 caracteres, alfanuméricos y los carácteres '-' '_'
+      </div>
     </div>
-    
-    <br><br>
+    <div *ngIf="!nombre.dirty|| (!nombre.errors) "> <br> </div>
+
     <input id="email" type="text" formControlName="email" size="30" placeholder="Correo electrónico">
     
       <div *ngIf="email.invalid && (email.dirty || email.touched)"
@@ -37,29 +40,27 @@
         </div>
 
       </div>
+      <div *ngIf="!email.dirty|| (!email.errors)"> <br> </div>
 
-    <br><br>
     <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
         <div *ngIf="password.invalid && (password.dirty || password.touched)"
           style="color:red;">
 
             <div *ngIf="password.errors?.['required']">
-                La contraseña es un campo obligatorio.
+              La contraseña es un campo obligatorio.
             </div>
 
-            <div *ngIf="password.errors?.['minlength']">
+            <div *ngIf="password.errors?.['minlength']&&!password.errors?.['required']">
               La contraseña debe tener mínimo 8 caracteres.
             </div>
+            
       </div>
-
-    <br><br>
+      <div *ngIf="!password.dirty|| (!password.errors)"> <br> </div>
+    
     <input id="password2" type="password" formControlName="password2" size="30" placeholder="Confirmar contraseña">
     <div *ngIf="password2.invalid && (password2.dirty || password2.touched)"
           style="color:red;">
 
-            <div *ngIf="password2.errors?.['required']">
-            La confirmación de contraseña es un campo obligatorio.
-            </div>
     </div>
     <div *ngIf="profileForm.value.password!=profileForm.value.password2" style="color:red;">
       Las contraseñas tienen que coincidir.
@@ -68,10 +69,9 @@
 </form>
 
 
-
+<br>
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" >
-    <p>Pulse el botón para crear su cuenta</p>
-    <button type="submit" [disabled]="!profileForm.valid || (profileForm.value.password!=profileForm.value.password2)" >Submit</button>
+    <button class="btn btn-outline-primary" type="submit" [disabled]="!profileForm.valid || (profileForm.value.password!=profileForm.value.password2)" >REGISTRAR</button>
 </form>
 </div>
 

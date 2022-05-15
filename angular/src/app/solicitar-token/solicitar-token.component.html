@@ -1,5 +1,5 @@
 <div style="text-align: center;">
-    <h1>Inicio de sesión en tú cuenta de World Domination</h1>
+    <h1>Cambio de contraseña</h1>
 
 <form [formGroup]="profileForm">
 
@@ -15,11 +15,11 @@
         El nombre de usuario es obligatorio.
       </div>
     </div>
-    <br><br>
+    <div *ngIf="!usuario.dirty|| (!usuario.errors)"> <br> </div>
+    
 </form>
 
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-    <p>Pulse el botón para iniciar sesión</p>
-    <button type="submit"[disabled]="!profileForm.valid" >Submit</button>
+    <button class="btn btn-outline-primary" type="submit"[disabled]="!profileForm.valid" >Solicitar token</button>
 </form>
 </div>
