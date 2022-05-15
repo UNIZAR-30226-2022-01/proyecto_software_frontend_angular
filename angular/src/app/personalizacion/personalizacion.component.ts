@@ -198,7 +198,7 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
 
       // Reemplaza la imagen
       var imagen = document.getElementById("imagenActual")! as HTMLImageElement
-      imagen.src = (document.getElementById(String(this.dados[this.indiceAvatarActual].id))! as HTMLImageElement).src
+      imagen.src = (document.getElementById(String(this.dados[this.indiceDadoActual].id))! as HTMLImageElement).src
     } else {
       this.avatarCambiado = false
 

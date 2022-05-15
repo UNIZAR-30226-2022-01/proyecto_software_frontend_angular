@@ -8,6 +8,7 @@ import { interval, take } from 'rxjs';
 import {MapaComponent} from "../mapa/mapa.component";
 import { SelectMultipleControlValueAccessor } from '@angular/forms';
 import {LlamadasAPI} from "../llamadas-api";
+//import * as QueryString from "Querystring";
 
 @Component({
   selector: 'juego',
@@ -23,7 +24,7 @@ import {LlamadasAPI} from "../llamadas-api";
         animate('200ms ease-in', style({transform: 'translateY(100%)', opacity: '0'})),
       ])
     ]),
-  ]
+  ],
 })
 
 export class JuegoComponent implements OnInit, AfterViewInit {
@@ -38,13 +39,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
   info: number = 0;
   isShow = false;
-  source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";
+  source = "assets/bar-chart.png";
 
   toggleDisplay() { this.isShow = !this.isShow;}
 
   changeImage() {
-    if (!this.isShow) {this.source = "https://img.icons8.com/material-rounded/48/000000/bar-chart.png";}
-    else {this.source = "https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-cross-100-most-used-icons-flaticons-lineal-color-flat-icons.png";}
+    if (!this.isShow) {this.source = "assets/bar-chart.png";}
+    else {this.source = "assets/world.png";}
   }
 
   cambiarFase() {
@@ -81,6 +82,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   constructor(private http: HttpClient, private router:Router){}
 
   ngOnInit(): void {
+    // Fuerza el background-color en el body en el constructor, Angular no lo aplica si no.
+    document.body.style.backgroundColor = "#20BCE7";
+
     var volviendo = localStorage.getItem("volviendo")
 
     console.log("volviendo es", volviendo)
@@ -141,6 +145,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   tropasAMover : number = 0;
   tropasRecibidas:number = 0;
+
+  jugadorChat : string = "";
+  mensajeChat : string ="";
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
   resumirPartida()  {
@@ -242,13 +249,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   ejecutarAutomata() {
     this.intervaloConsultaEstado = setInterval(() => {
-      this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true}) // TODO: Sustituir por obtenerEstadoPartida, sin completo
+      this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
           .subscribe(
             data => {
-             // clearInterval(this.intervaloConsultaEstado) // TODO: DEBUG
+              //clearInterval(this.intervaloConsultaEstado) // Para debugging
+              //console.log(this.jsonData);
 
-              this.jsonData = JSON.parse(data);
-              console.log(this.jsonData);
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
                 console.log(obj.IDAccion)
@@ -322,8 +328,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   case 4: { // IDAccionReforzar
                     //this.logica.reforzar(obj) // No se necesita lógica adicional, solo cambiar tropas en el mapa
                     if (obj.Jugador != this.logica.yo) this.tratarAccionReforzar(obj)
-
-
                     break;
                   }
                   case 5: { // IDAccionAtaque
@@ -362,6 +366,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   case 11: { // IDAccionPartidaFinalizada
                       this.tratarAccionPartidaFinalizada(obj)
                       break;
+                  }
+
+                  case 12: { // IDAccionMensaje
+                    this.tratarAccionMensaje(obj)
+                    break;
                   }
                 }
               }
@@ -410,13 +419,14 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         break;
       }
     }
-
   }
+
 
   // Funciones auxiliares sobre el HTML
   obtenerTropasRegion(id : number) {
     return document.getElementById("t"+this.territorios[id])!.innerHTML
   }
+
 
   aumentarTropasRegion(id : number, aumento : number) {
     var tropas = Number.parseInt(document.getElementById("t"+this.territorios[id])!.innerHTML.toString()) + Number(aumento)
@@ -424,9 +434,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.sobreescribirTropasRegion(id, tropas)
   }
 
+
   sobreescribirTropasRegion(id : number, tropas : number) {
     document.getElementById("t"+this.territorios[id])!.innerHTML = String(tropas);
   }
+
 
   // Inicializa las cajas de jugadores
   rellenarCajasJugadores() {
@@ -453,6 +465,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     }
   }
 
+
   aumentarTropasCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
 
@@ -461,6 +474,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     document.getElementById("tropasJugador"+i)!.innerHTML = String(tropas+aumento)
   }
 
+
   aumentarTerritoriosCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
 
@@ -468,6 +482,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     document.getElementById("territoriosJugador"+i)!.innerHTML = String(territorios+aumento)
   }
+
 
   aumentarCartasCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
@@ -478,6 +493,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     document.getElementById("cartasJugador"+i)!.innerHTML = String(cartas+aumento)
   }
+
 
   // Obtiene el índice de caja dado un jugador. El jugador debe existir.
   obtenerIndiceCajaJugadores(jugador : string) {
@@ -490,6 +506,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     return -1
   }
+
 
   // Funciones de alertas
 
@@ -509,6 +526,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
+
   mostrarAlertaRefuerzo(tituloAlerta: string, textoAlerta: string, obj : any) {
     var timerInterval : any
     Swal.fire({
@@ -523,19 +541,19 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         clearInterval(timerInterval)
       }
     }).then((result) => {
-        
+
       if (obj.Jugador == this.logica.yo) this.tratarFaseReforzar();
   });
   }
 
 
-    //var timerInterval : any
   mostrarAlertaDerrotaPropia(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
       position: 'center',
       width: '45%',
       backdrop: true,
+      icon: 'error',
       html: textoAlerta,
       willClose: () => {
         this.terminarAutomataJuego()
@@ -544,35 +562,20 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
+
   mostrarAlertaDerrotaAjena(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
       position: 'center',
       width: '45%',
       backdrop: true,//"#0000000",
+      icon: 'success',
       html: textoAlerta,
       timer: 5000,
       timerProgressBar: true,
     })
   }
 
-  mostrarAlertaPrueba(tituloAlerta: string, textoAlerta: string) {
-    Swal.fire({
-      title: tituloAlerta,
-      position: 'center',
-      width: '45%',
-      backdrop: true,//"#0000000",
-      background: "#ffff0000",
-      color : "#ffffff",
-      html: textoAlerta,
-      timer: 5000,
-      timerProgressBar: true,
-      // Ejemplo de imagen
-      //imageUrl : "https://s3.getstickerpack.com/storage/uploads/sticker-pack/hide-the-pain-harold/sticker_5.png?35bc9a5413d14b83fb1eabdb6fe2523d&d=200x200",
-      //imageWidth : 300,
-      //imageHeight : 300,
-    })
-  }
 
   mostrarAlertaPermanente(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
@@ -584,6 +587,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       showConfirmButton: false,
     })
   }
+
 
   cerrarAlertaPermanente() {
     Swal.close()
@@ -619,6 +623,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     });
   }
 
+
   mostrarAlertaRangoRefuerzo(tituloAlerta: string, min: string, max: string) {
     var atributos : Record<string, string> = {
       icon: 'info',
@@ -640,9 +645,56 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     });
   }
 
+
+  mostrarAlertaChat() {
+    var atributos : Record<string, any> = {
+      autocapitalize: 'off',
+      maxlength: 32
+    };
+
+    Swal.fire({
+      title: 'Escribe en el chat',
+      input: 'text',
+      inputAttributes: atributos,
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Enviar',
+      reverseButtons: true,
+      showLoaderOnConfirm: true,
+      preConfirm: (mensaje) => {
+        this.llamadasAPI.enviarMensaje(mensaje)
+      }
+    })
+  }
+
+
+  mostrarAlertaInformativaAvatar(titulo : string, texto : string, usuario : string) {
+    var imagen : any;
+
+    // Busca al jugador en las cajas, y obtiene la URL de su avatar
+    for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
+      if (document.getElementById("nombreJugador" + (i + 1))!.innerHTML == usuario) {
+        imagen = document.getElementById("avatarJugador" + (i + 1))! as HTMLImageElement;
+        break
+      }
+    }
+
+    Swal.fire({
+      title: titulo,
+      text: texto,
+      imageUrl: imagen.src,
+      imageWidth: 200,
+      imageHeight: 200,
+      imageAlt: 'Avatar usuario',
+      customClass: {image: "imagenJugador"},
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3085d6',
+      allowOutsideClick: false
+    })
+  }
+
+
   // Funciones de tratamiento del juego
-
-
 
   mostrarAlertaDados(obj : any) {
     var resultadoDadosAtacante = 0;
@@ -658,6 +710,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
 
   tratarFaseAtacar() {
     console.log("Estamos en fase de ataque!")
@@ -699,6 +752,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       200);
 
   }
+
+
   tratarFaseFortificar() {
     console.log("Estamos en fase de fortificación!")
     this.territorio1 = "";
@@ -738,6 +793,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       200);
   }
 
+
   tratarAccionAtacar(obj : any) {
     var tropasAntesDestino = this.obtenerTropasRegion(obj.Destino);
     var tropasPerdidasDestino = obj.TropasPerdidasDefensor;
@@ -751,7 +807,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     console.log("Antes atacante: " + tropasAntesOrigen);
     console.log("Tropas perdidas en el ataque: " + tropasPerdidasOrigen);
 
-    
+
 
     // Comprobamos si se pasa a ocupar el territorio atacado
     console.log("Tropas restantes Destino" + restantesDestino);
@@ -770,6 +826,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   }
 
+
   tratarOcupar(obj : any) {
     this.territorioDestino = obj.Destino;
     var tropasAntesOrigen = this.obtenerTropasRegion(obj.Origen);
@@ -777,6 +834,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     var restantesOrigen = Number(tropasAntesOrigen) - tropasPerdidasOrigen;
     this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas de ataque", "1", String(restantesOrigen - 1), "ocupar");
   }
+
 
   tratarAccionOcupar(obj : any) {
     var idTerritorioOrigen = obj.Origen;
@@ -789,7 +847,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     document.getElementById("c"+this.territorios[idTerritorioDestino])!.style.fill=this.logica.colorJugador.get(jugadorAtacante);
     this.sobreescribirTropasRegion(idTerritorioOrigen, nTropasOrigen);
     this.sobreescribirTropasRegion(idTerritorioDestino, nTropasOcupar);
-    
+
 
 
     // TODO: alert
@@ -800,6 +858,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.tratarFaseAtacar();
 
   }
+
 
   tratarAccionFortificar(obj : any) {
     var tropasAntes = this.obtenerTropasRegion(obj.Destino)
@@ -817,6 +876,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       "El jugador "+obj.Jugador+" ha fortificado " + nombreTerritorio2 + " con " + tropasFortificacion + " tropas desde " + nombreTerritorio1)
   }
 
+
   tratarInicioTurno(obj:any){
     //console.log('INICIO DE TURNO', obj.TropasObtenidas)
     var tropasObtenidas = obj.TropasObtenidas;
@@ -833,15 +893,26 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
 
-
   tratarAccionJugadorEliminado(obj : any) {
     if (obj.JugadorEliminado == this.logica.yo) { // Somos el jugador eliminado
       // Oscurece la pantalla, indica que se ha sido derrotado, y permite únicamente volver al menú principal
-      this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
+      this.mostrarAlertaDerrotaPropia("Fin de la partida", "El jugador " + obj.JugadorEliminador + " te ha eliminado.")
+    } else if (obj.JugadorEliminador == this.logica.yo) {
+      this.mostrarAlertaDerrotaAjena("Has eliminado a un jugador",
+        "Has obtenido " + obj.CartasRecibidas + " cartas de " + obj.JugadorEliminado + ".");
     } else {
-      this.mostrarAlertaDerrotaAjena("Jugador eliminado", "¡" + obj.JugadorEliminado + " ha sido eliminado por " + obj.JugadorEliminador + "!")
+      this.mostrarAlertaDerrotaAjena("Jugador eliminado", "El jugador " + obj.JugadorEliminador + " ha eliminado a " + obj.JugadorEliminado + ".")
     }
+
+    // Busca la caja de jugador, y sobreescribe su color por uno gris
+    /*for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
+      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == obj.JugadorEliminado) {
+        document.getElementById("jugador" + (i+1))!.style.backgroundColor = "#808080"
+        return
+      }
+    }*/
   }
+
 
   tratarFaseReforzar() {
     console.log('tropas:', this.tropasRecibidas, "todoOk:", this.todoOk)
@@ -875,9 +946,21 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       200);
   }
 
+
   tratarAccionJugadorExpulsado(obj : any) {
-    this.mostrarAlertaDerrotaAjena("Jugador expulsado", "¡" + obj.JugadorEliminado + " ha sido expulsado de la partida por inactividad!")
+    this.mostrarAlertaDerrotaAjena("Jugador eliminado",
+      "El jugador " + obj.JugadorEliminado + " ha sido desconectado de la partida por inactividad." +
+      "Sus territorios pueden ser conquistados sin restricciones.");
+
+    // Busca la caja de jugador, y sobreescribe su color por uno gris
+    /*for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
+      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == obj.JugadorEliminado) {
+        document.getElementById("jugador" + (i+1))!.style.backgroundColor = "#808080"
+        return
+      }
+    }*/
   }
+
 
   tratarAccionReforzar(obj : any) {
     var jugador = obj.Jugador;
@@ -890,46 +973,47 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
 
-
   tratarAccionCambioCartas(obj : any) {
     var alerta : Alerta = this.logica.cambioCartas(obj)
     this.aumentarCartasCajaJugadores(this.logica.jugadorTurno, -3)
     this.mostrarAlerta(alerta.titulo, alerta.texto)
   }
 
+
   tratarAccionPartidaFinalizada(obj : any) {
-    // Información a tratar por la pantalla de fin de partida
-    localStorage.setItem("ganador", obj.JugadorGanador)
-    if (this.logica.yo == obj.JugadorGanador) {
-      localStorage.setItem("esGanador", "1")
+    if (obj.JugadorGanador === this.logica.yo) {
+      Swal.fire({
+        title: "Fin de la partida",
+        text: "Enhorabuena. Has ganado al resto de jugadores.",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3085d6',
+        willClose: () => {
+          this.terminarAutomataJuego()
+          this.router.navigate(['/identificacion'])
+        }
+      })
     } else {
-      localStorage.setItem("esGanador", "0")
+      Swal.fire({
+        title: "Fin de la partida",
+        text: "El jugador " + obj.JugadorGanador + " es el ganador.",
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3085d6',
+        willClose: () => {
+          this.terminarAutomataJuego()
+          this.router.navigate(['/identificacion'])
+        }
+      })
     }
-
-    localStorage.setItem("yo", this.logica.yo)
-    // Borra la entrada para el jugador actual
-    //this.logica.mapaJugadores.delete(this.logica.yo)
-
-    var listaJugadores = new Array<jugadorFinPartida>();
-
-    this.logica.mapaJugadores.forEach((jugador: Estado, i: string) => {
-      var jugadorFin : jugadorFinPartida = {
-        nombre: i,
-        eliminado : jugador.eliminado,
-        expulsado : jugador.expulsado,
-      };
-
-      listaJugadores.push(jugadorFin);
-    });
-
-    localStorage.setItem("jugadores", JSON.stringify(listaJugadores))
-    // Se borra el almacen de lógica del juego y pasa a la pantalla de fin de partida
-    //delete this.logica
-
-    //clearInterval(this.intervaloMio)
-
-    //this.router.navigate(['/finPartida']) // Comentar para no redirigir al fin de una partida
   }
+
+
+  tratarAccionMensaje(obj : any) {
+    console.log("cambio caja chat")
+    document.getElementById("cajaChat")!.innerHTML = obj.JugadorEmisor + ": "+obj.Mensaje
+  }
+
 
   // Funciones de terminación
 
@@ -937,6 +1021,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     clearInterval(this.intervarloConsultaTerritorio)
     // TODO: Más funciones de parada
   }
+
 
   // Funciones de carga de assets
 
@@ -959,14 +1044,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     // TODO
   }
 
+
   // Funciones para herencia de mapa<->juego
 
   ngAfterViewInit() {}
-}
-
-export class jugadorFinPartida {
-  nombre : string = "";
-  eliminado : boolean = false;
-  expulsado : boolean = false;
 }
 

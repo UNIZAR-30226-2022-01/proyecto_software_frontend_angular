@@ -4,9 +4,9 @@
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 3; /* Se pone encima de cualquier otro elemento */
   }
-  
-  /* Style the links inside the navigation bar */
+
   .downnav a {
     float: left;
     display: block;
@@ -34,7 +34,7 @@
  .downnav-right {
     float: right;
   }
-  
+
   .downnav-right {
     float: right;
   }

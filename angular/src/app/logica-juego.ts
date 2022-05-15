@@ -22,7 +22,7 @@ export class LogicaJuego {
 
     llamadasAPI : LlamadasAPI;
 
-    constructor(http: HttpClient, consultar : boolean) {
+  constructor(http: HttpClient, consultar : boolean) {
       this.http = http
       this.llamadasAPI = new LlamadasAPI(this.http)
 
