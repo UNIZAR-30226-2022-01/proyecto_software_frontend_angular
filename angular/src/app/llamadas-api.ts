@@ -51,7 +51,7 @@ export class LlamadasAPI {
           icon: 'error',
           timer: 2000,
         }).then((result) => {
-          juego.tratarFaseAtacar();
+          juego.reiniciarOcupar();
         });
         }
       });
@@ -110,8 +110,8 @@ export class LlamadasAPI {
       .subscribe({
         next :(response) => {
           console.log("Refuerzo con éxito!")
-          juego.tropasRecibidas -= juego.tropasAMover;
-          juego.aumentarTropasRegion(juego.territorios.indexOf(juego.territorio1), juego.tropasAMover);
+          juego.tropasRecibidas -= juego.tropasAMover
+          juego.aumentarTropasRegion(juego.territorios.indexOf(juego.territorio1), juego.tropasAMover)
           juego.tratarFaseReforzar();
         },
 
