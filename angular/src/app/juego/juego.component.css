@@ -64,6 +64,7 @@ html, body{
   padding: .5em;
   cursor: pointer;
   transition: width 0.5s, height 0.5s, transform 0.5s;
+  transform: scale(0.9);
 }
 
 .boton:hover {
@@ -113,15 +114,17 @@ html, body{
 
 .turno {
   background-color: hsl(0, 0%, 0%, 0);
-  text-align: center;
-  transform: translate(-2.3vw, 1vh);
+  transform: translate(3.7vw, 1vh);
+  color: #373737;
+  font-weight: bold;
 }
 
 .fase{
-position:absolute;
-background-color: hsl(0, 0%, 0%, 0);
-text-align: center;
-transform: translate(5.4vw, 3.9vh);
+  position: absolute;
+  background-color: hsl(0, 0%, 0%, 0);
+  transform: translate(3.7vw, 3.9vh);
+  color: #373737;
+  font-weight: bold;
 }
 
 .round {
@@ -217,4 +220,8 @@ transform: rotate(-225deg);
   overflow: hidden;
   max-height: 5em;
   line-height:2.3em;
+}
+
+#botonR {
+  transform: translateY(2vh);
 }
