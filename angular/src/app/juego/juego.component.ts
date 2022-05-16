@@ -139,6 +139,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   nDadosAtaque : number = 0;
   nTropasOcupar : number = 0;
   turno : string = "-------";
+  dadoUno: string = "";
+  dadoDos: string = "";
+  dadoTres: string = "";
+  hayUno: boolean = false;
+  hayDos: boolean = false;
+  hayTres: boolean = false;
 
   resultadoAlerta : Promise<SweetAlertResult> | undefined ;
 
@@ -331,7 +337,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   }
                   case 5: { // IDAccionAtaque
                       console.log("Mostrando dados");
-                      // this.mostrarAlertaDados(obj);
+                      this.mostrarAlertaDados(obj);
                       console.log("Tratar accion atacar");
                       this.tratarAccionAtacar(obj);
                       break;
@@ -696,16 +702,37 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   // Funciones de tratamiento del juego
 
   mostrarAlertaDados(obj : any) {
-    var resultadoDadosAtacante = 0;
-    var resultadoDadosDefensor = 0;
+    this.dadoUno = "";
+    this.dadoDos = "";
+    this.dadoTres = "";
+    this.hayUno = false;
+    this.hayDos = false;
+    this.hayTres = false;
 
     // Atacante
+    console.log("Numero de dados es igual a " + obj.DadosAtacante.length);
     for (var i = 0; i < obj.DadosAtacante.length; i++) {
-      this.http.get('http://localhost:8090/api/obtenerDados/' + obj.DadosAtacante[i], {observe:'body', responseType:'text', withCredentials: true})
+      this.http.get('http://localhost:8090/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next : (response) => {
             // mostrar los resultados de cada dado
-        }
+            var url = URL.createObjectURL(response);
+            if(i == 0) {
+              this.hayUno = true;
+              this.dadoUno = url;
+            }
+            if(i == 1) {
+              this.hayUno = true;
+              this.hayDos = true;
+              this.dadoDos = url;
+            }
+            if(i == 2) {
+              this.hayUno = true;
+              this.hayDos = true;
+              this.hayTres = true;
+              this.dadoTres = url;
+            }
+          }
       });
     }
   }
