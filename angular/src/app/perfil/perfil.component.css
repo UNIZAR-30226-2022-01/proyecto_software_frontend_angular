@@ -1,0 +1,6 @@
+.contenedorPrincipal {
+  width:38.8vw;
+  height:62vh;
+  border:1.5px solid rgb(54, 51, 51);
+  transform: translate(28vw, 12vh);
+}

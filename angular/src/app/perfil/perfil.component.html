@@ -1,15 +1,15 @@
 <top-bar></top-bar>
 <down-bar></down-bar>
 
-<div style="text-align: center;">
-    <br><br><br>
-    <h1> <img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
+<div class="contenedorPrincipal" style="text-align: center;">
+    <br><br>
+    <h1><img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
         {{nombre}}
-       <a  [routerLink]="['/configuracionPerfil']"><img src="https://img.icons8.com/material-sharp/48/000000/settings.png" /></a>
     </h1>
     <br><br><br>
        <h3>Biografía</h3>
-    <p>{{descripcion}}</p>
+    <p *ngIf="descripcion != null">{{descripcion}}</p>
+    <p *ngIf="descripcion == null">El usuario no tiene ninguna descripcion.</p>
     <br>
     <h3>Puntos: {{puntos}}</h3>
     <h3>Partidas ganadas: {{partidas_ganadas}}</h3>

@@ -14,9 +14,9 @@
       </div>
       <a class="txtJugadores">En sala: {{p.NumeroJugadores}}/{{p.MaxNumeroJugadores}}</a>
       <a class="txtAC">Amigos conectados: {{p.NumAmigosPresentes}}</a>
-      <button *ngIf="p.EsPublica" type="submit" (click)="onSubmit(p.IdPartida, p.EsPublica)" [routerLink]="['/lobby']" class="botonJoin">UNIRSE</button>
+      <button class="btn btn-outline-primary botonJoin" *ngIf="p.EsPublica" type="submit" (click)="onSubmit(p.IdPartida, p.EsPublica)" [routerLink]="['/lobby']">UNIRSE</button>
       <div [formGroup]="profileForm" *ngIf="!p.EsPublica">
-        <button type="submit" (click)="onSubmit(p.IdPartida, p.EsPublica)" class="botonJoin" >UNIRSE</button>
+        <button class="btn btn-outline-primary botonJoin" type="submit" (click)="onSubmit(p.IdPartida, p.EsPublica)" >UNIRSE</button>
         <input placeholder="Contraseña" class="pass" formControlName="password">
       </div>
     </div>

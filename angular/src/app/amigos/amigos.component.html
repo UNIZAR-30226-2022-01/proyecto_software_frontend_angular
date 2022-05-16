@@ -1,12 +1,31 @@
+<top-bar></top-bar>
+<div class='cen' style="text-align: center; transform: translateY(5vh);">
 
-<input type="text" (change)="onChangeEvent($event)" />
+  <h1 style="font-size: 4vw">Social</h1>
+  <br><br><br>
 
-<div class="contenedor">
-    <div *ngFor="let p of busqueda">
-      <div class="partida">
-          <!--<a [routerLink]="['/perfil/',p.Nombre]">{{p.Nombre}}</a>-->
-          <a (click)="consultarPerfil(p.Nombre)">{{p.Nombre}}</a>
-        <br>
+  <div class="listaAmigos">
+    <h2 style="border: 2.5px solid rgb(54, 51, 51);">Lista de amigos</h2>
+    <div *ngIf="vacio">No tienes ningun amigo.</div>
+    <div *ngIf="!vacio">
+      <div *ngFor="let p of amigos"> 
+        <div (click)="consultarPerfil(p)" style="border-bottom: 1.5px solid rgb(54, 51, 51);"><a>{{p}}</a></div>
       </div>
     </div>
-</div>
+  </div>
+  <div class="buscarAmigos">
+    <h2 style="border: 2.5px solid rgb(54, 51, 51);">
+      <input style="width:29.7vw" type="text" id="busqueda" name="busqueda" placeholder="Busca un usuario" (change)="onChangeEvent($event)">
+    </h2> 
+    <div class="contenedor">
+      <div *ngFor="let p of busqueda">
+        <div class="partida">
+            <!--<a [routerLink]="['/perfil/',p.Nombre]">{{p.Nombre}}</a>-->
+            <a (click)="consultarPerfil(p.Nombre)">{{p.Nombre}}</a>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+<down-bar></down-bar>

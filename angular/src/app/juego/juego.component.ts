@@ -49,6 +49,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   cambiarFase() {
+    this.rellenarFase(0);
     console.log("Cambiando de fase");
       this.http.post('http://localhost:8090/api/pasarDeFase', null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
@@ -225,6 +226,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             // Si era nuestro turno, hay que pasar a ejecutar la fase
             if (this.logica.jugadorTurno == this.logica.yo) {
               if (this.logica.fase == 0) { // Inicio
+                this.rellenarFase(1);
                 console.log("Tratando fase de inicio desde resumen")
                 this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                 this.tratarFaseReforzar()
@@ -297,7 +299,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
                     if (this.logica.fase == 0 && obj.Jugador == this.logica.yo) { // Refuerzo
                       // Rellenar primer rectangulito
-                      //this.rellenarFase(1);
+                      this.rellenarFase(1);
                       this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                       this.tratarFaseReforzar()
                     } else if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
@@ -409,6 +411,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     document.getElementById("rFortificar")!.style.background="white";
     console.log("Antes switch: " + id)
     switch(id) {
+      case 0: {
+        break;
+      }
       case 1: {
         console.log("ID Fase 1 Antes: " + id)
         document.getElementById("rReforzar")!.style.background="black";
@@ -712,21 +717,25 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     // Atacante
     console.log("Numero de dados es igual a " + obj.DadosAtacante.length);
     for (var i = 0; i < obj.DadosAtacante.length; i++) {
+      console.log("La i tiene el valor: " + i)
       this.http.get('http://localhost:8090/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next : (response) => {
             // mostrar los resultados de cada dado
             var url = URL.createObjectURL(response);
-            if(i == 0) {
+            if(i == 0) { 
+              console.log("Mostrando primer dado");
               this.hayUno = true;
               this.dadoUno = url;
             }
             if(i == 1) {
+              console.log("Mostrando segundo dado");
               this.hayUno = true;
               this.hayDos = true;
               this.dadoDos = url;
             }
             if(i == 2) {
+              console.log("Mostrando tercer dado");
               this.hayUno = true;
               this.hayDos = true;
               this.hayTres = true;
@@ -877,8 +886,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
     // TODO: alert
-    console.log("El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[obj.Destino] + " con "
-                + nTropasOcupar + " procedentes de " + this.territorios[obj.origen] + " previamente capturado por "
+    this.mostrarAlerta("Ataque", "El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[idTerritorioDestino] + " con "
+                + nTropasOcupar + " procedentes de " + this.territorios[idTerritorioOrigen] + " previamente capturado por "
                 + obj.JugadorOcupado);
 
     this.tratarFaseAtacar();
