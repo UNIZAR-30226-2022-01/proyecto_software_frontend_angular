@@ -19,6 +19,7 @@ export class BuscarPartidaComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    document.body.style.background = "#f8f9fc";
     this.http.get('http://localhost:8090/api/obtenerPartidas', {withCredentials: true}).subscribe(data => {
       console.log(data);
       this.jsonArray = data;

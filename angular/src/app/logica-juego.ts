@@ -3,7 +3,13 @@ import Swal from "sweetalert2";
 import {LlamadasAPI} from "./llamadas-api";
 
 export class LogicaJuego {
-    colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
+    colores = ["#f94144", // Rojo
+    "#f9c74f",            // Amarillo
+    "#90be6d",            // Verde
+    "#0a9396",            // Azul
+    "#6a4c93",            // Morado
+    "#f9844a",           // Naranja
+    ]
     http: HttpClient
     colorJugador = new Map<string, string>();
     mapaJugadores = new Map<string, Estado>();

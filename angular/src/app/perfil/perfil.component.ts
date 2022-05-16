@@ -22,9 +22,10 @@ export class PerfilComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    document.body.style.background = "#f8f9fc";
     this.nombre = localStorage.getItem('nombre')
 
-    this.http.get<Perfil>('http://localhost:8090/api/obtenerPerfil/'+this.nombre, {observe:'body',withCredentials: true})
+    this.http.get<Perfil>('http://localhost:8090/api/obtenerPerfil/' + this.nombre, {observe:'body',withCredentials: true})
         .subscribe(
           data => {console.log(data);
             //this.nombre = data.NombreUsuario,
@@ -37,7 +38,7 @@ export class PerfilComponent implements OnInit {
   }
 
   enviarSolicitudAmistad(nombre : string) {
-    this.http.post('http://localhost:8090/api/enviarSolicitudAmistad/'+nombre,   null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post('http://localhost:8090/api/enviarSolicitudAmistad/' + nombre, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {Swal.fire({
                                         title: 'Solicitud de amistad enviada con exito',

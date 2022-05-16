@@ -39,6 +39,7 @@ export class TiendaComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    document.body.style.background = "#f8f9fc";
     var nombre_usuario = localStorage.getItem("nombre_usuario")!
     nombre_usuario = nombre_usuario.split('=')[1]
     nombre_usuario = nombre_usuario.split('|')[0]

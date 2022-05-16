@@ -20,6 +20,7 @@ export class SolicitarTokenComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    document.body.style.background = "#f8f9fc";
   }
 
   onSubmit() {

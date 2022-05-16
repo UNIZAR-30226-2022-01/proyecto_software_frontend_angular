@@ -23,6 +23,7 @@ export class MiPerfilComponent implements OnInit {
 
     amigos:any;
     ngOnInit(): void {
+      document.body.style.background = "#f8f9fc";
       this.nombre = this.getNombre_Usuario(document.cookie), 
       this.http.get<Perfil>('http://localhost:8090/api/obtenerPerfil/'+this.nombre, {observe:'body',withCredentials: true})
           .subscribe(

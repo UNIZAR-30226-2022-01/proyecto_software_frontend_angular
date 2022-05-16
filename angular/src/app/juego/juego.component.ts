@@ -35,8 +35,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   "India", "Siam", "China", "Mongolia", "Irkutsk", "Ucrania", "Europa_del_Sur", "Europa_Occidental", "Europa_del_Norte", "Egipto",
                   "Africa_Oriental", "Congo", "Sudafrica", "Brasil", "Argentina", "Este_de_los_Estados_Unidos", "Estados_Unidos_Occidental", "Quebec",
                   "America_Central", "Peru", "Australia_Occidental", "Alberta"];
-
-  colores = ["#f94144","#f8961e","#f9c74f","#90be6d","#4d908e","#577590",]
   info: number = 0;
   isShow = false;
   source = "assets/bar-chart.png";
@@ -177,7 +175,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                 eliminado: estadoJSON.Eliminado,
                 expulsado: estadoJSON.Expulsado,
               }
-              document.getElementById('jugador'+(i+1))!.style.background = this.colores[i];
+              document.getElementById('jugador'+(i+1))!.style.background = this.logica.colores[i];
 
               // Si somos nosotros, se comprueba que no estemos eliminados y guardan las cartas
               if (jugador == this.logica.yo) {
@@ -557,6 +555,42 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
 
+  mostrarAlertaAtaque(tituloAlerta: string, textoAlerta: string) {
+    var timerInterval : any
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'top',
+      width: '30%',
+      backdrop: false,
+      html: textoAlerta,
+      timer: 5000,
+      timerProgressBar: true,
+      willClose: () => {
+        clearInterval(timerInterval)
+      }
+    }).then((result) => {
+      this.tratarFaseAtacar();
+    });
+  }
+
+  /*mostrarAlertaOcupar(tituloAlerta: string, textoAlerta: string) {
+    var timerInterval : any
+    Swal.fire({
+      title: tituloAlerta,
+      position: 'top',
+      width: '30%',
+      backdrop: false,
+      html: textoAlerta,
+      timer: 5000,
+      timerProgressBar: true,
+      willClose: () => {
+        clearInterval(timerInterval)
+      }
+    }).then((result) => {
+      this.tratarFaseAtacar();
+    });
+  }*/
+
   mostrarAlertaDerrotaPropia(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
@@ -717,35 +751,48 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     // Atacante
     console.log("Numero de dados es igual a " + obj.DadosAtacante.length);
     for (var i = 0; i < obj.DadosAtacante.length; i++) {
-      console.log("La i tiene el valor: " + i)
-      this.http.get('http://localhost:8090/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
+      this.obtenerDados(i, obj)
+    }
+  }
+
+  obtenerDados(i : number, obj : any) {
+    this.http.get('http://localhost:8090/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next : (response) => {
             // mostrar los resultados de cada dado
             var url = URL.createObjectURL(response);
+
+              
+            
             if(i == 0) { 
-              console.log("Mostrando primer dado");
+              console.log("Mostrando primer dado: ", url);
               this.hayUno = true;
-              this.dadoUno = url;
+              //this.dadoUno = url;
+
+              var imagen = document.getElementById("dadoUno")! as HTMLImageElement;
+              imagen.src = url;
             }
             if(i == 1) {
-              console.log("Mostrando segundo dado");
+              console.log("Mostrando segundo dado: ", url);
               this.hayUno = true;
               this.hayDos = true;
-              this.dadoDos = url;
+              //this.dadoDos = url;
+              var imagen = document.getElementById("dadoDos")! as HTMLImageElement;
+              imagen.src = url;
             }
             if(i == 2) {
-              console.log("Mostrando tercer dado");
+              console.log("Mostrando tercer dado: ", url);
               this.hayUno = true;
               this.hayDos = true;
               this.hayTres = true;
-              this.dadoTres = url;
+              //this.dadoTres = url;
+              var imagen = document.getElementById("dadoTres")! as HTMLImageElement;
+              imagen.src = url;
             }
           }
       });
-    }
   }
-
+  
 
   tratarFaseAtacar() {
     console.log("Estamos en fase de ataque!")
@@ -854,7 +901,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       this.sobreescribirTropasRegion(obj.Destino, restantesDestino);
       this.sobreescribirTropasRegion(obj.Origen, restantesOrigen);
 
-      this.mostrarAlerta("Resultados del ataque", "El atacante " + obj.JugadorAtacante + " ha perdido " + tropasPerdidasOrigen + " (" + restantesOrigen +
+      this.mostrarAlertaAtaque("Resultados del ataque", "El atacante " + obj.JugadorAtacante + " ha perdido " + tropasPerdidasOrigen + " (" + restantesOrigen +
                         " tropas restantes) " + " y el defensor " + obj.JugadorDefensor + " ha perdido " + tropasPerdidasDestino + " (" + restantesDestino +
                         " tropas restantes)");
     }
@@ -886,11 +933,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
     // TODO: alert
-    this.mostrarAlerta("Ataque", "El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[idTerritorioDestino] + " con "
+    this.mostrarAlertaAtaque("Ataque", "El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[idTerritorioDestino] + " con "
                 + nTropasOcupar + " procedentes de " + this.territorios[idTerritorioOrigen] + " previamente capturado por "
                 + obj.JugadorOcupado);
 
-    this.tratarFaseAtacar();
+                
 
   }
 

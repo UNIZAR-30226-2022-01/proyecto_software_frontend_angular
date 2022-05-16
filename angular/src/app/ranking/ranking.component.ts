@@ -23,6 +23,7 @@ export class RankingComponent implements OnInit {
   jugadores:any;
   
   ngOnInit(): void {
+    document.body.style.background = "#f8f9fc";
     this.yo = this.getNombreUsuario(document.cookie);
 
     this.http.get('http://localhost:8090/api/ranking', {observe:'body', responseType:'text', withCredentials: true})

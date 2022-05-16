@@ -15,6 +15,7 @@ export class CrearPartidaComponent implements OnInit {
   //cookie:any;
 
   ngOnInit() {
+    document.body.style.background = "#f8f9fc";
     //this.nombre_usuario = localStorage.getItem('nombre_usuario'),
     //this.cookie = localStorage.getItem('cookie')
   }

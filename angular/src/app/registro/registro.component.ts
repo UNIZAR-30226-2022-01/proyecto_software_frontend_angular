@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl  } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./registro.component.css']
 })
 
-export class RegistroComponent  {
+export class RegistroComponent implements OnInit {
 
   profileForm = this.fb.group({
     nombre: new FormControl('',[
@@ -33,6 +33,11 @@ export class RegistroComponent  {
   
   cookie:any;
 
+  ngOnInit(): void {
+    document.body.style.background = "#f8f9fc";
+  }
+
+  
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {}
   
   onSubmit() {

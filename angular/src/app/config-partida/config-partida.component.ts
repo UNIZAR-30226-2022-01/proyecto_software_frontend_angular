@@ -10,6 +10,7 @@ export class ConfigPartidaComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    document.body.style.background = "#f8f9fc";
   }
 
 }

@@ -9,6 +9,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 export class ConfigPerfilComponent implements OnInit {
 
   ngOnInit(): void {
+    document.body.style.background = "#f8f9fc";
   }
 
   profileForm = this.fb.group({

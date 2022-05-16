@@ -10,6 +10,7 @@ export class InicioComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    document.body.style.background = "#f8f9fc";
   }
 
 }

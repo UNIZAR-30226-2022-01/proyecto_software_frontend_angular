@@ -15,6 +15,9 @@ export class IdentificacionComponent implements OnInit {
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
 
   ngOnInit(): void {
+    document.body.style.overflow = "hidden";
+    document.body.style.background = "#f8f9fc";
+
     this.http.get('http://localhost:8090/api/jugandoEnPartida', { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {

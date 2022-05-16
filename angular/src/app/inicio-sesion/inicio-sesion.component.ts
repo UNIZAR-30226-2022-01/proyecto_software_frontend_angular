@@ -19,7 +19,9 @@ export class InicioSesionComponent  {
           Validators.required,]),
       });
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) { }
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) { 
+    document.body.style.background = "#f8f9fc";
+  }
 
   cookie:any;
   //nombre_usuario:any;
