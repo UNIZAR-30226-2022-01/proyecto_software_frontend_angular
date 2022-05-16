@@ -1,0 +1,11 @@
+input{
+    padding: 1.5rem 1rem;
+    height: calc(1.5em + .75rem + 2px);
+    border-radius: 10px;
+    border: 1px solid #d1d3e2
+  }
+  
+  p:hover{
+    color: #224abe;
+    text-decoration: underline;
+  }

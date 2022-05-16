@@ -1,40 +1,38 @@
-<div style="text-align: center;">
-    <h1>Inicio de sesión en tú cuenta de World Domination</h1>
-
-<form [formGroup]="profileForm">
-
-    <p style="font-size: small; "><a [routerLink]="['/registroUsuario']" style="text-decoration: none;">¿Nuevo aquí? Regístrate</a></p>
-    <br>
+<div style="text-align: center; overflow: hidden;">
+  <div class="card" style="width: 40rem;padding: 2rem; justify-content: center;margin-right: auto;margin-left: auto;margin-top:2%;margin-bottom: auto;">  
     
-    <p style="font-size: small; "><a [routerLink]="['/resetPassword']" style="text-decoration: none;">¿Tienes un token de resetear tu contraseña?</a></p>
-    <br>
-    
-    <input id="nombre" type="text" formControlName="nombre" size="30" placeholder="Nombre de usuario">
-    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
-      style="color:red;">
+    <h1 style="margin-bottom: 1.5rem;">Iniciar sesión en World Domination</h1>
 
-      <div *ngIf="nombre.errors?.['required']">
-        El nombre de usuario es obligatorio.
-      </div>
-    </div>
-
-    <div *ngIf="!nombre.dirty|| (!nombre.errors) "> <br> </div>
-
-    <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
-        <div *ngIf="password.invalid && (password.dirty || password.touched)"
+    <form [formGroup]="profileForm">
+      <input id="nombre" type="text" formControlName="nombre" size="30" placeholder="Nombre de usuario">
+        <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
           style="color:red;">
 
-            <div *ngIf="password.errors?.['required']">
-            La contraseña es un campo es obligatorio.
-            </div>
-      </div>
+          <div *ngIf="nombre.errors?.['required']">
+            El nombre de usuario es obligatorio.
+          </div>
+        </div>
 
-    <div *ngIf="!password.dirty|| (!password.errors)"> <br> </div>
-    <p style="font-size: small; "><a [routerLink]="['/solicitarToken']" style="text-decoration: none;">¿Has olvidado tu contraseña?</a></p>
-    
-</form>
+        <div *ngIf="!(nombre.invalid && (nombre.dirty || nombre.touched)) "> <br> </div>
 
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-  <button class="btn btn-outline-primary" type="submit" [disabled]="!profileForm.valid" >Iniciar sesión</button>
-</form>
+        <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
+            <div *ngIf="password.invalid && (password.dirty || password.touched)"
+              style="color:red;">
+
+                <div *ngIf="password.errors?.['required']">
+                La contraseña es un campo es obligatorio.
+                </div>
+          </div>
+
+        <div *ngIf="!(password.invalid && (password.dirty || password.touched))"> <br> </div>
+        <hr>
+        <p style="font-size: small; "><a [routerLink]="['/solicitarToken']" style="text-decoration: none;">¿Has olvidado tu contraseña?</a></p>
+        <p style="font-size: small; "><a [routerLink]="['/registroUsuario']" style="text-decoration: none;">¿Nuevo aquí? Regístrate</a></p>
+        
+    </form>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <button class="btn btn-outline-primary" type="submit" [disabled]="!profileForm.valid" >Iniciar sesión</button>
+    </form>
+  </div>
 </div>

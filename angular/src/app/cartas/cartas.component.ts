@@ -48,7 +48,7 @@ export class CartasComponent implements OnInit {
       }
       else{ 
         if(this.cartasSeleccionadas.length != 3){ //La añadimos si no hay 3 cartas seleccionadas
-          document.getElementById(carta.IdCarta)!.style.backgroundColor = "#858686";  // La marcamos como carta seleccionada
+          document.getElementById(carta.IdCarta)!.style.backgroundColor = "#CCCCCC";  // La marcamos como carta seleccionada
           this.cartasSeleccionadas.push(carta);//La añadimosde cartas seleccionadas
           this.cartasSeleccionadasVacias = Array(this.cartasSeleccionadasVacias.length-1).fill(0).map((x,i)=>i);
         }
