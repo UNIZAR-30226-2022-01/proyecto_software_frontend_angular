@@ -20,7 +20,8 @@ export class InicioSesionComponent  {
       });
 
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) { 
-    document.body.style.background = "#f8f9fc";
+    document.body.style.background = "##4e73df;";
+    document.body.style.backgroundImage= "linear-gradient(180deg,#4e73df 10%,#224abe 100%)"
   }
 
   cookie:any;

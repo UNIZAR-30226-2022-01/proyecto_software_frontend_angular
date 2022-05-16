@@ -20,7 +20,8 @@ export class SolicitarTokenComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    document.body.style.background = "#f8f9fc";
+    document.body.style.background = "#4e73df;";
+    document.body.style.backgroundImage= "linear-gradient(180deg,#4e73df 10%,#224abe 100%)"
   }
 
   onSubmit() {
@@ -34,13 +35,11 @@ export class SolicitarTokenComponent implements OnInit {
           icon: 'success',
           timer: 2000,
           timerProgressBar: true,}),
-          //this.cookie = response.body,
-          //localStorage.setItem('cookie', this.cookie),
-          this.router.navigate(['/'])
+          this.router.navigate(['/resetPassword'])
         },
 
         error: (error) => {Swal.fire({
-          title: 'Se ha producido un error al iniciar sesión',
+          title: 'Se ha producido un error al solicitar el token',
           text: error.error,
           icon: 'error',
         });

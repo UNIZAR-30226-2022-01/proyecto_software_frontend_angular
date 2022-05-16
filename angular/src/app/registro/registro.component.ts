@@ -17,7 +17,7 @@ export class RegistroComponent implements OnInit {
     nombre: new FormControl('',[
       Validators.required,
       Validators.minLength(5),
-      Validators.pattern('[A-Za-z0-9-_]+'),
+      Validators.pattern('[A-Za-z0-9]+'),
     ]),
     email: new FormControl('',[
       Validators.required,
@@ -34,7 +34,8 @@ export class RegistroComponent implements OnInit {
   cookie:any;
 
   ngOnInit(): void {
-    document.body.style.background = "#f8f9fc";
+    document.body.style.background = "#4e73df;";
+    document.body.style.backgroundImage= "linear-gradient(180deg,#4e73df 10%,#224abe 100%)"
   }
 
   

@@ -1,25 +1,27 @@
-<div style="text-align: center;">
-    <h1>Cambio de contraseña</h1>
-
-<form [formGroup]="profileForm">
-
-    <p style="font-size: small; "><a [routerLink]="['/registroUsuario']" style="text-decoration: none;">¿Nuevo aquí? Regístrate</a></p>
-    <br>
-    <p style="font-size: small; "><a [routerLink]="['/resetPassword']" style="text-decoration: none;">¿Tienes un token de resetear tu contraseña?</a></p>
-    <br>
-    <input id="usuario" type="text" formControlName="usuario" size="30" placeholder="Nombre de usuario">
-    <div *ngIf="usuario.invalid && (usuario.dirty || usuario.touched)"
-      style="color:red;">
-
-      <div *ngIf="usuario.errors?.['required']">
-        El nombre de usuario es obligatorio.
-      </div>
-    </div>
-    <div *ngIf="!usuario.dirty|| (!usuario.errors)"> <br> </div>
+<div style="text-align: center;overflow: hidden;">
+  <div class="card" style="width: 40rem;padding: 2rem; justify-content: center;margin-right: auto;margin-left: auto;margin-top: 2%;margin-bottom: auto;">  
     
-</form>
+    <h1 style="margin-bottom: 1.5rem;">Cambio de contraseña</h1>
 
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-    <button class="btn btn-outline-primary" type="submit"[disabled]="!profileForm.valid" >Solicitar token</button>
-</form>
+    <form [formGroup]="profileForm">
+      <input id="usuario" type="text" formControlName="usuario" size="30" placeholder="Nombre de usuario">
+        <div *ngIf="usuario.invalid && (usuario.dirty || usuario.touched)"
+          style="color:red;">
+
+          <div *ngIf="usuario.errors?.['required']">
+            El nombre de usuario es obligatorio.
+          </div>
+        </div>
+        <div *ngIf="!(usuario.invalid && (usuario.dirty || usuario.touched))"> <br> </div>
+        
+    </form>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <button class="btn btn-outline-primary" type="submit"[disabled]="!profileForm.valid" >Solicitar token</button>
+    </form>
+    <hr>
+    <p style="font-size: small; "><a [routerLink]="['/registroUsuario']" style="text-decoration: none;">¿Nuevo aquí? Regístrate</a></p>
+    <p style="font-size: small;"><a [routerLink]="['/inicioSesion']" style="text-decoration: none;">¿Tienes cuenta ya? Inicia sesión</a></p>
+    
+  </div>
 </div>

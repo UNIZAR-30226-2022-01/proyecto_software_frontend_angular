@@ -36,9 +36,9 @@ import { CartasComponent } from './cartas/cartas.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
-  {path: '', component: InicioComponent},
+  {path: 'i', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
-  {path: 'inicioSesion', component: InicioSesionComponent},
+  {path: 'inicioSesion', component: InicioSesionComponent},//inicioSesion
   {path: 'tienda', component: TiendaComponent},
   {path: 'top-bar', component: TopBarComponent},
   {path: 'configuracionPartida', component: ConfigPartidaComponent},
@@ -56,7 +56,7 @@ const appRoutes: Routes = [
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
   {path: 'juego', component: JuegoComponent},
-  {path: 'resetPassword', component: ResetPasswordComponent},
+  {path: '', component: ResetPasswordComponent},//resetPassword
   {path: 'solicitarToken', component: SolicitarTokenComponent},
   {path: 'cartas', component: CartasComponent}
 ]

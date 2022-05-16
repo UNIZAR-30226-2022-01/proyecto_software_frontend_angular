@@ -1,78 +1,64 @@
-<div style="text-align: center;">
-  <h1>Crear cuenta en World Domination</h1>
+<div style="text-align: center;overflow: hidden;">
+  <div class="card" style="width: 40rem;padding: 2rem; justify-content: center;margin-right: auto;margin-left: auto;margin-top: 2%;margin-bottom: auto;">  
+    <h1 style="margin-bottom: 1.5rem;">Crear cuenta en World Domination</h1>
 
-<form [formGroup]="profileForm">
-    <div class="from-group">
+    <form [formGroup]="profileForm">
+        <div class="from-group">
 
-    </div>
+        </div>
+        
+        <input id="nombre" type="text" formControlName="nombre" size="30" placeholder="Nombre de usuario">
+        <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
+          style="color:red;">
+
+          <div *ngIf="nombre.errors?.['required']">
+            El nombre de usuario es obligatorio.
+          </div>
+          <div *ngIf="nombre.errors?.['minlength']&&!nombre.errors?.['pattern']">
+            El nombre de usuario debe tener mínimo 5 caracteres.
+          </div>
+        </div>
+        <div *ngIf="!(nombre.invalid && (nombre.dirty || nombre.touched))"> <br> </div>
+
+        <input id="email" type="text" formControlName="email" size="30" placeholder="Correo electrónico">
+        
+          <div *ngIf="email.invalid && (email.dirty || email.touched)"
+              style="color:red;">
+
+            <div *ngIf="email.errors?.['required']">El correo electrónico de usuario es obligatorio.</div>
+            <div *ngIf="email.errors?.['email']">El correo electrónico no es valido.</div>
+
+          </div>
+          <div *ngIf="!(email.invalid && (email.dirty || email.touched))"> <br> </div>
+
+        <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
+            <div *ngIf="password.invalid && (password.dirty || password.touched)"
+              style="color:red;">
+                <div *ngIf="password.errors?.['required']">La contraseña es un campo obligatorio.</div>
+                <div *ngIf="password.errors?.['minlength']&&!password.errors?.['required']">La contraseña debe tener mínimo 8 caracteres.</div>
+          </div>
+          <div *ngIf="!(password.invalid && (password.dirty || password.touched))"> <br> </div>
+        
+        <input id="password2" type="password" formControlName="password2" size="30" placeholder="Confirmar contraseña">
+        <div *ngIf="password2.invalid && (password2.dirty || password2.touched)"
+              style="color:red;">
+
+        </div>
+        <div *ngIf="profileForm.value.password!=profileForm.value.password2" style="color:red;">
+          Las contraseñas tienen que coincidir.
+        </div>
+        <div *ngIf="profileForm.value.password==profileForm.value.password2"> <br> </div>
+
+    </form>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" >
+        <button class="btn btn-outline-primary" type="submit" [disabled]="!profileForm.valid || (profileForm.value.password!=profileForm.value.password2)" >REGISTRAR</button>
+    </form>
+
+    <hr>
     <p style="font-size: small;"><a [routerLink]="['/inicioSesion']" style="text-decoration: none;">¿Tienes cuenta ya? Inicia sesión</a></p>
-    
-    <input id="nombre" type="text" formControlName="nombre" size="30" placeholder="Nombre de usuario">
-    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
-      style="color:red;">
-
-      <div *ngIf="nombre.errors?.['required']">
-        El nombre de usuario es obligatorio.
-      </div>
-      <div *ngIf="nombre.errors?.['minlength']&&!nombre.errors?.['pattern']">
-        El nombre de usuario debe tener mínimo 5 caracteres.
-      </div>
-      <div *ngIf="nombre.errors?.['pattern']&&!nombre.errors?.['minlength']">
-        El nombre de usuario solo puede contener los carácteres alfanuméricos y los carácteres '-' '_'
-      </div>
-      <div *ngIf="nombre.errors?.['pattern']&&nombre.errors?.['minlength']">
-        El nombre de usuario debe tener un tener mínimo 5 caracteres, alfanuméricos y los carácteres '-' '_'
-      </div>
-    </div>
-    <div *ngIf="!nombre.dirty|| (!nombre.errors) "> <br> </div>
-
-    <input id="email" type="text" formControlName="email" size="30" placeholder="Correo electrónico">
-    
-      <div *ngIf="email.invalid && (email.dirty || email.touched)"
-          style="color:red;">
-
-        <div *ngIf="email.errors?.['required']">
-          El correo electrónico de usuario es obligatorio.
-        </div>
-
-        <div *ngIf="email.errors?.['email']">
-          El correo electrónico no es valido.
-        </div>
-
-      </div>
-      <div *ngIf="!email.dirty|| (!email.errors)"> <br> </div>
-
-    <input id="password" type="password" formControlName="password" size="30" placeholder="Contraseña">
-        <div *ngIf="password.invalid && (password.dirty || password.touched)"
-          style="color:red;">
-
-            <div *ngIf="password.errors?.['required']">
-              La contraseña es un campo obligatorio.
-            </div>
-
-            <div *ngIf="password.errors?.['minlength']&&!password.errors?.['required']">
-              La contraseña debe tener mínimo 8 caracteres.
-            </div>
-            
-      </div>
-      <div *ngIf="!password.dirty|| (!password.errors)"> <br> </div>
-    
-    <input id="password2" type="password" formControlName="password2" size="30" placeholder="Confirmar contraseña">
-    <div *ngIf="password2.invalid && (password2.dirty || password2.touched)"
-          style="color:red;">
-
-    </div>
-    <div *ngIf="profileForm.value.password!=profileForm.value.password2" style="color:red;">
-      Las contraseñas tienen que coincidir.
-    </div>
-
-</form>
-
-
-<br>
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" >
-    <button class="btn btn-outline-primary" type="submit" [disabled]="!profileForm.valid || (profileForm.value.password!=profileForm.value.password2)" >REGISTRAR</button>
-</form>
+    <p style="font-size: small; "><a [routerLink]="['/solicitarToken']" style="text-decoration: none;">¿Has olvidado tu contraseña?</a></p>
+  </div>
 </div>
 
 
