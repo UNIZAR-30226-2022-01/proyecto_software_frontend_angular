@@ -702,8 +702,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   // Funciones de tratamiento del juego
 
   mostrarAlertaDados(obj : any) {
-    var resultadoDadosAtacante = 0;
-    var resultadoDadosDefensor = 0;
     this.dadoUno = "";
     this.dadoDos = "";
     this.dadoTres = "";
@@ -712,29 +710,29 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.hayTres = false;
 
     // Atacante
+    console.log("Numero de dados es igual a " + obj.DadosAtacante.length);
     for (var i = 0; i < obj.DadosAtacante.length; i++) {
-      this.http.get('http://localhost:8090/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'text', withCredentials: true})
+      this.http.get('http://localhost:8090/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next : (response) => {
             // mostrar los resultados de cada dado
-            var jsonData = JSON.parse(response);
+            var url = URL.createObjectURL(response);
             if(i == 0) {
               this.hayUno = true;
-              this.dadoUno = jsonData.blob;
+              this.dadoUno = url;
             }
             if(i == 1) {
               this.hayUno = true;
               this.hayDos = true;
-              this.dadoDos = jsonData.blob;
+              this.dadoDos = url;
             }
             if(i == 2) {
               this.hayUno = true;
               this.hayDos = true;
               this.hayTres = true;
-              this.dadoTres = jsonData.blob;
+              this.dadoTres = url;
             }
-
-        }
+          }
       });
     }
   }

@@ -51,6 +51,7 @@ export class LlamadasAPI {
           icon: 'error',
           timer: 2000,
         }).then((result) => {
+          juego.tratarFaseAtacar();
         });
         }
       });
