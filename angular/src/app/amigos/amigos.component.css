@@ -3,3 +3,8 @@
   flex-direction: column;
   align-items: center;
 }
+
+.cardScrolabble {
+  max-height: 30vh;
+  overflow-y: auto;
+}
