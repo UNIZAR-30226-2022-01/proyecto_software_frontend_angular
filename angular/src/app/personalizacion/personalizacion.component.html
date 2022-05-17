@@ -1,7 +1,7 @@
 <top-bar></top-bar>
 <down-bar></down-bar>
 
-<div class="contenedor-superior">
+<div class="contenedor-superior" >
   <div class="flex-container">
     <div class="btn-group" role="group" ngbRadioGroup>
       <!-- Si no se ponen values, no funcionan -->
@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div class="contenedor-mitad">
+<div class="contenedor-mitad" style="display:none;">
   <div class="card" style="width: 15rem;">
     <img id="imagenActual" class="card-img-top">
     <div class="card-body">
@@ -32,7 +32,7 @@ Tienes {{puntos}} puntos
 <div class="contenedor-bottom">
   <div class="flex-container">
        <div class="dado flex-items" id ="dado{{i}}" *ngFor="let dado of dados; let i = index" style="display:none;"> <!-- Por defecto ocultos -->
-         <div class="card" style="width: 13rem; height: 24rem;">
+         <div class="card" style="width: 15rem; height: 27rem;">
            <img id="{{dado.id}}" class="card-img-top">
            <div class="card-body text-justify">
                <h5 class="card-title">{{dado.nombre}}</h5>
