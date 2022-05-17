@@ -960,6 +960,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     document.getElementById("c"+this.territorios[idTerritorioDestino])!.style.fill=this.logica.colorJugador.get(jugadorAtacante);
     this.sobreescribirTropasRegion(idTerritorioOrigen, nTropasOrigen);
     this.sobreescribirTropasRegion(idTerritorioDestino, nTropasOcupar);
+    this.aumentarTerritoriosCajaJugadores(obj.JugadorOcupante, 1)
+    this.aumentarTerritoriosCajaJugadores(obj.JugadorOcupado, -1)
 
     this.mostrarAlertaAtaque("Ataque", "El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[idTerritorioDestino] + " con "
                 + nTropasOcupar + " procedentes de " + this.territorios[idTerritorioOrigen] + " previamente capturado por "
