@@ -1,16 +1,5 @@
-.listaAmigos {
-    text-align: center;
-    transform: translate(10vw, 0);
-    border:1.5px solid rgb(54, 51, 51);
-    width:30vw;
-    height: 55vh;
-}
-
-.buscarAmigos {
-    position: absolute;
-    text-align: center;
-    transform: translate(58vw, -55vh);
-    border:1.5px solid rgb(54, 51, 51);
-    width:30vw;
-    height: 55vh;
+.contenedorCajas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

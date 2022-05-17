@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {Router} from "@angular/router";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-amigos',
@@ -14,12 +15,15 @@ export class AmigosComponent implements OnInit {
 
   ngOnInit(): void {
     document.body.style.background = "#f8f9fc";
+    this.vacio.next(false);
     this.listarAmigos();
   }
 
   busqueda:any;
   amigos: any;
-  vacio: boolean = true;
+
+  vacio: Subject<boolean> = new Subject();
+
   onChangeEvent(event: any){
     this.http.get('http://localhost:8090/api/obtenerUsuariosSimilares/'+event.target.value, {withCredentials: true})
     .subscribe(
@@ -38,11 +42,11 @@ export class AmigosComponent implements OnInit {
     .subscribe({
     next : (response) => {
       this.amigos = JSON.parse(response);
-      if (Object.keys(response).length == 0) {
-        this.vacio = true;
+      if (this.amigos == null) {
+        this.vacio.next(true)
       }
       else {
-        this.vacio = false;
+        this.vacio.next(false)
         this.amigos = JSON.parse(response);
       }
     }
