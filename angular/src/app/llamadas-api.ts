@@ -113,8 +113,7 @@ export class LlamadasAPI {
     this.http.post(LlamadasAPI.URLApi+'/api/reforzarTerritorio/'+idTerritorio1+'/'+juego.tropasAMover, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
-          console.log("Refuerzo con éxito!")
-          juego.tropasRecibidas -= juego.tropasAMover
+          juego.refuerzoConExito()
           juego.aumentarTropasRegion(juego.territorios.indexOf(juego.territorio1), juego.tropasAMover)
           juego.tratarFaseReforzar();
         },
@@ -127,7 +126,7 @@ export class LlamadasAPI {
         }
         ).then((result) => {
           // Reintenta de nuevo todo el proceso de fortificación
-
+          console.log("Se ha fallado el refuerzo, volviendo a tratar la fase..,")
           juego.tratarFaseReforzar();
         });
         }

@@ -149,7 +149,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   resultadoAlerta : Promise<SweetAlertResult> | undefined ;
 
   tropasAMover : number = 0;
-  tropasRecibidas:number = 0;
 
   jugadorChat : string = "";
   mensajeChat : string ="";
@@ -238,12 +237,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
               if (this.logica.fase == 0) { // Inicio
                 this.rellenarFase(1);
                 console.log("Tratando fase de inicio desde resumen")
-                this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                 this.tratarFaseReforzar()
               } else if (this.logica.fase == 1) { // Refuerzo
                 console.log("Tratando fase de refuerzo desde resumen")
                 this.rellenarFase(1);
-                this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas;
                 this.tratarFaseReforzar()
               } else if (this.logica.fase == 2) { // Ataque
                 this.rellenarFase(2);
@@ -291,6 +288,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     this.index.push(obj.Region);
                     this.jugador.push(obj.Jugador);
 
+                    // Actualiza las tropas
+                    this.logica.mapaJugadores.get(obj.Jugador)!.tropas = obj.TropasRestantes
+
+                    if (this.obtenerTropasCajaJugadores(obj.Jugador) == 0 ) {
+                      this.sobreescribirTropasCajaJugadores(obj.Jugador, obj.TropasRestantes)
+                    }
+
+                    this.aumentarTerritoriosCajaJugadores(obj.Jugador, 1)
+
+                    // Muestra cada 200ms un cambio de territorio
                     this.tiempo = this.tiempo + 200;
                     if (this.vez < 42){
                       this.vez = this.vez + 1;
@@ -320,11 +327,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     if (this.logica.fase == 0 && obj.Jugador == this.logica.yo) { // Refuerzo
                       // Rellenar primer rectangulito
                       this.rellenarFase(1);
-                      this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                       this.tratarFaseReforzar()
                     } else if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
                       // Rellenar primer rectangulito
-                      this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                       this.rellenarFase(1);
                       this.tratarFaseReforzar()
                     } else if (this.logica.fase == 2 && obj.Jugador == this.logica.yo) { // Ataque
@@ -341,11 +346,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 2: { // IDAccionInicioTurno
-                    this.logica.jugadorTurno = obj.Jugador // Puesto temporalmente para que las otras funciones vayan
+                    this.logica.jugadorTurno = obj.Jugador
                     this.logica.inicioTurno(obj);
                     this.tratarInicioTurno(obj);
-
-                    // TODO
                     break;
                   }
                   case 3: { // IDAccionCambioCartas
@@ -490,7 +493,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       document.getElementById("tropasJugador"+contador)!.innerHTML = String(tropasActuales)
       document.getElementById("territoriosJugador"+contador)!.innerHTML = String(estado.territorios.length)
       document.getElementById("cartasJugador"+contador)!.innerHTML = String(estado.numCartas)
-      document.getElementById('jugador'+(contador))!.style.background = this.logica.colores[contador];
+      document.getElementById('jugador'+(contador))!.style.background = this.logica.colores[contador-1];
       contador++
     });
 
@@ -503,6 +506,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     }
   }
 
+  obtenerTropasCajaJugadores(jugador : string) : number {
+    var i = this.obtenerIndiceCajaJugadores(jugador);
+    return Number.parseInt(document.getElementById("tropasJugador"+i)!.innerHTML)
+  }
+
+  sobreescribirTropasCajaJugadores(jugador : string, valor : number) {
+    var i = this.obtenerIndiceCajaJugadores(jugador);
+
+    document.getElementById("tropasJugador"+i)!.innerHTML = String(valor)
+  }
 
   aumentarTropasCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
@@ -599,7 +612,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         clearInterval(timerInterval)
       }
     }).then((result) => {
-      this.tratarFaseAtacar();
+      if (this.logica.jugadorTurno == this.logica.yo) {
+        this.tratarFaseAtacar();
+      }
     });
   }
 
@@ -904,9 +919,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     // Comprobamos si se pasa a ocupar el territorio atacado
     console.log("Tropas restantes Destino" + restantesDestino);
-    if (restantesDestino < 1) {
+    if (restantesDestino < 1 && (obj.JugadorAtacante == this.logica.yo)) {
       this.tratarOcupar(obj);
-
     }
     else {
       this.sobreescribirTropasRegion(obj.Destino, restantesDestino);
@@ -965,7 +979,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.aumentarTerritoriosCajaJugadores(obj.JugadorOcupante, 1)
     this.aumentarTerritoriosCajaJugadores(obj.JugadorOcupado, -1)
 
-    this.mostrarAlertaAtaque("Ataque", "El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[idTerritorioDestino] + " con "
+    this.mostrarAlertaAtaque("Ocupación", "El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[idTerritorioDestino] + " con "
                 + nTropasOcupar + " procedentes de " + this.territorios[idTerritorioOrigen] + " previamente capturado por "
                 + obj.JugadorOcupado);
   }
@@ -989,15 +1003,22 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
   tratarInicioTurno(obj:any){
-    //console.log('INICIO DE TURNO', obj.TropasObtenidas)
+    console.log("Inicio de turno de "+obj.Jugador)
+
     var tropasObtenidas = obj.TropasObtenidas;
-    this.tropasRecibidas = tropasObtenidas;
+    if (this.logica.fase != 0) {
+      this.logica.mapaJugadores.get(obj.Jugador)!.tropas = tropasObtenidas;
+    } else {
+      console.log("inicio turno en fase inicial, no se modifican las tropas")
+    }
+
+    this.aumentarTropasCajaJugadores(obj.Jugador, tropasObtenidas)
     var numTerritorios = obj.RazonNumeroTerritorios
     var numContinentes = obj.RazonContinentesOcupados
 
     var mensaje = (numContinentes>0)? "y " + numContinentes + " continentes " : "";
-    if(this.logica.fase != 0) {
-        this.mostrarAlertaRefuerzo("Refuerzo",
+    if (this.logica.fase != 0) {
+        this.mostrarAlertaRefuerzo("Inicio de turno de "+obj.Jugador,
         "El jugador "+obj.Jugador+" ha recibido " + tropasObtenidas + " tropas por ocupar " + numTerritorios + " territorios " + mensaje, obj)
     }
 
@@ -1026,10 +1047,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
   tratarFaseReforzar() {
-    console.log('tropas:', this.tropasRecibidas, "todoOk:", this.todoOk)
+    console.log("mapa en tratarFaseReforzar: "+this.logica.mapaJugadores)
+    var tropasRecibidas : number = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
 
-    if (this.tropasRecibidas == 0) return
-    console.log("Estamos en fase de refuerzo!", this.tropasRecibidas)
+    console.log('tropas:', tropasRecibidas, "todoOk:", this.todoOk)
+
+    if (tropasRecibidas == 0) return
+    console.log("Estamos en fase de refuerzo!", tropasRecibidas)
     this.territorio1 = "";
     this.tropasAMover = 0;
 
@@ -1049,13 +1073,19 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           this.mapa.limitarSeleccionTerritorios();
 
           // Una vez hecho, se llama por callback a la selección de tropas
-          this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", this.tropasRecibidas.toString());
-
+          this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", tropasRecibidas.toString());
         }
       },
       200);
   }
 
+  refuerzoConExito() {
+    console.log("mapa en refuerzoConExito: "+this.logica.mapaJugadores)
+
+    console.log("Refuerzo con éxito! antes de refuerzo: "+this.logica.mapaJugadores.get(this.logica.yo)!.tropas+" tropas")
+    this.logica.mapaJugadores.get(this.logica.yo)!.tropas -= this.tropasAMover
+    console.log("despues refuerzo: "+this.logica.mapaJugadores.get(this.logica.yo)!.tropas+" tropas")
+  }
 
   tratarAccionJugadorExpulsado(obj : any) {
     this.mostrarAlertaDerrotaAjena("Jugador eliminado",
@@ -1078,7 +1108,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     var tropasRefuerzo = obj.TropasRefuerzo;
 
     this.aumentarTropasRegion(territorio, tropasRefuerzo)
-    this.aumentarTropasCajaJugadores(jugador, tropasRefuerzo)
     this.mostrarAlerta("Refuerzo", jugador + " ha reforzado " + this.territorios[territorio] + " con " + tropasRefuerzo + " tropas de refuerzo")
   }
 
