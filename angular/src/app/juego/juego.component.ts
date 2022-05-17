@@ -486,9 +486,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         tropasActuales += Number.parseInt(this.obtenerTropasRegion(territorio))
       })
 
+      // Rellena los indicadores, y configura el color
       document.getElementById("tropasJugador"+contador)!.innerHTML = String(tropasActuales)
       document.getElementById("territoriosJugador"+contador)!.innerHTML = String(estado.territorios.length)
       document.getElementById("cartasJugador"+contador)!.innerHTML = String(estado.numCartas)
+      document.getElementById('jugador'+(contador))!.style.background = this.logica.colores[contador];
       contador++
     });
 
