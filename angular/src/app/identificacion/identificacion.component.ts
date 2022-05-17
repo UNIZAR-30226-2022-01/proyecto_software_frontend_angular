@@ -18,7 +18,7 @@ export class IdentificacionComponent implements OnInit {
     document.body.style.overflow = "hidden";
     document.body.style.background = "#f8f9fc";
 
-    this.http.get('http://localhost:8090/api/jugandoEnPartida', { observe:'response', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/jugandoEnPartida', { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           var enPartida = JSON.parse(response.body!);

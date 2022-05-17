@@ -49,7 +49,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   cambiarFase() {
     this.rellenarFase(0);
     console.log("Cambiando de fase");
-      this.http.post('http://localhost:8090/api/pasarDeFase', null, { observe:'response', responseType:'text', withCredentials: true})
+      this.http.post(LlamadasAPI.URLApi+'/api/pasarDeFase', null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           console.log("Exito en el cambio de fase");
@@ -70,7 +70,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     if (this.logica.fase == 1 && this.logica.jugadorTurno  == this.logica.yo) {
       this.router.navigate(['/cartas'])
       Swal.close()
-    }  
+    }
   }
 
   delay(ms: number) {
@@ -134,6 +134,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   territorio1 : string = "";
   territorio2 : string = "";
   territorioDestino : string = "";
+  territorioOrigen : string = "";
   nTropasOrigen : number = 0;
   nDadosAtaque : number = 0;
   nTropasOcupar : number = 0;
@@ -148,14 +149,15 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   resultadoAlerta : Promise<SweetAlertResult> | undefined ;
 
   tropasAMover : number = 0;
-  tropasRecibidas:number = 0;
 
   jugadorChat : string = "";
   mensajeChat : string ="";
+  objetoOcuparGuardado : any;
+  tropasOrigenFalloOcuparResumir : string = "";
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
   resumirPartida()  {
-    this.http.get('http://localhost:8090/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           var jsonData = JSON.parse(response);
@@ -163,10 +165,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           if (!jsonData.Terminada) {
             // Recuperar el estado de cada jugador
             for (let i = 0; i < jsonData.Jugadores.length; i++) {
-
               var jugador = jsonData.Jugadores[i]
 
               var estadoJSON = jsonData.EstadosJugadores[jugador]
+
+              console.log("estadoJSON:", estadoJSON)
 
               var estado : Estado = {
                 tropas: estadoJSON.Tropas,
@@ -199,9 +202,17 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
             var estadoMapa = jsonData.Mapa
 
+            var territoriosPorOcupar = false
+
             // Recuperar estado de todas las regiones
             for (let i = 0; i < 42; i++) {
               var estadoJugador = this.logica.mapaJugadores.get(estadoMapa[i].Ocupante)
+
+              if (estadoJugador == null) { // Es un territorio por ocupar
+                territoriosPorOcupar = true
+                continue
+              }
+
               estadoJugador.territorios.push(i)
               this.logica.mapaJugadores.set(estadoMapa[i].Ocupante, estadoJugador)
 
@@ -226,17 +237,25 @@ export class JuegoComponent implements OnInit, AfterViewInit {
               if (this.logica.fase == 0) { // Inicio
                 this.rellenarFase(1);
                 console.log("Tratando fase de inicio desde resumen")
-                this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                 this.tratarFaseReforzar()
               } else if (this.logica.fase == 1) { // Refuerzo
                 console.log("Tratando fase de refuerzo desde resumen")
                 this.rellenarFase(1);
-                this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas;
                 this.tratarFaseReforzar()
               } else if (this.logica.fase == 2) { // Ataque
                 this.rellenarFase(2);
                 console.log("Tratando fase de ataque desde resumen")
-                this.tratarFaseAtacar()
+                if (territoriosPorOcupar) {
+                  console.log("Hay territorios por ocupar")
+                  this.territorioDestino = jsonData.TerritorioOcupacionDestino
+                  this.territorioOrigen = jsonData.TerritorioOcupacionOrigen
+                  var tropasOrigen : string = this.obtenerTropasRegion(jsonData.TerritorioOcupacionOrigen)
+                  this.tropasOrigenFalloOcuparResumir = tropasOrigen // Se guarda en caso de error
+                  this.reiniciarOcuparResumen(Number.parseInt(tropasOrigen))
+                } else {
+                  this.tratarFaseAtacar()
+                }
+
               } else if (this.logica.fase == 3) { // Fortificar
                 this.rellenarFase(3);
                 console.log("Tratando fase de fortificar desde resumen")
@@ -254,7 +273,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   ejecutarAutomata() {
     this.intervaloConsultaEstado = setInterval(() => {
-      this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
+      this.http.get(LlamadasAPI.URLApi+'/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
           .subscribe(
             data => {
               //clearInterval(this.intervaloConsultaEstado) // Para debugging
@@ -269,6 +288,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     this.index.push(obj.Region);
                     this.jugador.push(obj.Jugador);
 
+                    // Actualiza las tropas
+                    this.logica.mapaJugadores.get(obj.Jugador)!.tropas = obj.TropasRestantes
+
+                    if (this.obtenerTropasCajaJugadores(obj.Jugador) == 0 ) {
+                      this.sobreescribirTropasCajaJugadores(obj.Jugador, obj.TropasRestantes)
+                    }
+
+                    this.aumentarTerritoriosCajaJugadores(obj.Jugador, 1)
+
+                    // Muestra cada 200ms un cambio de territorio
                     this.tiempo = this.tiempo + 200;
                     if (this.vez < 42){
                       this.vez = this.vez + 1;
@@ -298,11 +327,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     if (this.logica.fase == 0 && obj.Jugador == this.logica.yo) { // Refuerzo
                       // Rellenar primer rectangulito
                       this.rellenarFase(1);
-                      this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                       this.tratarFaseReforzar()
                     } else if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
                       // Rellenar primer rectangulito
-                      this.tropasRecibidas = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                       this.rellenarFase(1);
                       this.tratarFaseReforzar()
                     } else if (this.logica.fase == 2 && obj.Jugador == this.logica.yo) { // Ataque
@@ -319,11 +346,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 2: { // IDAccionInicioTurno
-                    this.logica.jugadorTurno = obj.Jugador // Puesto temporalmente para que las otras funciones vayan
+                    this.logica.jugadorTurno = obj.Jugador
                     this.logica.inicioTurno(obj);
                     this.tratarInicioTurno(obj);
-
-                    // TODO
                     break;
                   }
                   case 3: { // IDAccionCambioCartas
@@ -458,9 +483,17 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     this.logica.mapaJugadores.forEach((estado: Estado, jugador: string) => {
       document.getElementById("nombreJugador"+contador)!.innerHTML = String(jugador)
-      document.getElementById("tropasJugador"+contador)!.innerHTML = String(estado.tropas)
+
+      var tropasActuales : number = 0
+      estado.territorios.forEach((territorio : number) => {
+        tropasActuales += Number.parseInt(this.obtenerTropasRegion(territorio))
+      })
+
+      // Rellena los indicadores, y configura el color
+      document.getElementById("tropasJugador"+contador)!.innerHTML = String(tropasActuales)
       document.getElementById("territoriosJugador"+contador)!.innerHTML = String(estado.territorios.length)
       document.getElementById("cartasJugador"+contador)!.innerHTML = String(estado.numCartas)
+      document.getElementById('jugador'+(contador))!.style.background = this.logica.colores[contador-1];
       contador++
     });
 
@@ -473,6 +506,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     }
   }
 
+  obtenerTropasCajaJugadores(jugador : string) : number {
+    var i = this.obtenerIndiceCajaJugadores(jugador);
+    return Number.parseInt(document.getElementById("tropasJugador"+i)!.innerHTML)
+  }
+
+  sobreescribirTropasCajaJugadores(jugador : string, valor : number) {
+    var i = this.obtenerIndiceCajaJugadores(jugador);
+
+    document.getElementById("tropasJugador"+i)!.innerHTML = String(valor)
+  }
 
   aumentarTropasCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
@@ -569,27 +612,11 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         clearInterval(timerInterval)
       }
     }).then((result) => {
-      this.tratarFaseAtacar();
+      if (this.logica.jugadorTurno == this.logica.yo) {
+        this.tratarFaseAtacar();
+      }
     });
   }
-
-  /*mostrarAlertaOcupar(tituloAlerta: string, textoAlerta: string) {
-    var timerInterval : any
-    Swal.fire({
-      title: tituloAlerta,
-      position: 'top',
-      width: '30%',
-      backdrop: false,
-      html: textoAlerta,
-      timer: 5000,
-      timerProgressBar: true,
-      willClose: () => {
-        clearInterval(timerInterval)
-      }
-    }).then((result) => {
-      this.tratarFaseAtacar();
-    });
-  }*/
 
   mostrarAlertaDerrotaPropia(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
@@ -756,15 +783,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   obtenerDados(i : number, obj : any) {
-    this.http.get('http://localhost:8090/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next : (response) => {
             // mostrar los resultados de cada dado
             var url = URL.createObjectURL(response);
 
-              
-            
-            if(i == 0) { 
+            if(i == 0) {
               console.log("Mostrando primer dado: ", url);
               this.hayUno = true;
               //this.dadoUno = url;
@@ -792,7 +817,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           }
       });
   }
-  
+
 
   tratarFaseAtacar() {
     console.log("Estamos en fase de ataque!")
@@ -825,7 +850,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             clearInterval(this.intervarloConsultaTerritorio)
             this.mapa.limitarSeleccionTerritorios();
 
-            // TODO: pedir numero de dados
             // Una vez hecho, se llama por callback a la selección de tropas
             this.mostrarAlertaRangoAsincrona("Selecciona el número de dados", "1", "3", "atacar");
           }
@@ -844,6 +868,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     this.mostrarAlertaPermanente("Selecciona el territorio origen", "")
     this.mapa.permitirSeleccionTerritorios();
+    clearInterval(this.intervarloConsultaTerritorio) // Limpia el intervalo de la fase de ataque, si existe
+
     this.intervarloConsultaTerritorio = setInterval(() =>
       {
         if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
@@ -893,16 +919,17 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     // Comprobamos si se pasa a ocupar el territorio atacado
     console.log("Tropas restantes Destino" + restantesDestino);
-    if (restantesDestino < 1) {
+    if (restantesDestino < 1 && (obj.JugadorAtacante == this.logica.yo)) {
       this.tratarOcupar(obj);
-
     }
     else {
       this.sobreescribirTropasRegion(obj.Destino, restantesDestino);
       this.sobreescribirTropasRegion(obj.Origen, restantesOrigen);
+      this.aumentarTropasCajaJugadores(obj.JugadorAtacante, -obj.TropasPerdidasAtacante)
+      this.aumentarTropasCajaJugadores(obj.JugadorDefensor, -obj.TropasPerdidasDefensor)
 
-      this.mostrarAlertaAtaque("Resultados del ataque", "El atacante " + obj.JugadorAtacante + " ha perdido " + tropasPerdidasOrigen + " (" + restantesOrigen +
-                        " tropas restantes) " + " y el defensor " + obj.JugadorDefensor + " ha perdido " + tropasPerdidasDestino + " (" + restantesDestino +
+      this.mostrarAlertaAtaque("Resultados del ataque", "El atacante " + obj.JugadorAtacante + " ha perdido " + tropasPerdidasOrigen + " tropas (" + restantesOrigen +
+                        " tropas restantes) " + " y el defensor " + obj.JugadorDefensor + " ha perdido " + tropasPerdidasDestino + " tropas (" + restantesDestino +
                         " tropas restantes)");
     }
 
@@ -910,11 +937,31 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
   tratarOcupar(obj : any) {
+    this.objetoOcuparGuardado = obj // Guarda el objeto JSON usado para ocupar, en caso de fallo
+
     this.territorioDestino = obj.Destino;
     var tropasAntesOrigen = this.obtenerTropasRegion(obj.Origen);
     var tropasPerdidasOrigen = obj.TropasPerdidasAtacante;
     var restantesOrigen = Number(tropasAntesOrigen) - tropasPerdidasOrigen;
-    this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas de ataque", "1", String(restantesOrigen - 1), "ocupar");
+    this.mostrarAlertaRangoAsincrona("¡Has ocupado el territorio! Selecciona el número de tropas de ocupación", "1", String(restantesOrigen - 1), "ocupar");
+  }
+
+  reiniciarOcuparResumen(tropasOrigen : number) {
+    console.log("Reiniciando ocupar por resumen...")
+
+    var nombreTerritorioOrigen : string = this.territorios[Number.parseInt(this.territorioOrigen)]
+
+    this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas de ocupación desde "+nombreTerritorioOrigen, "1", String(tropasOrigen), "ocupar");
+  }
+
+  reiniciarOcupar() {
+    console.log("reiniciando ocupar por fallo...")
+    if (this.objetoOcuparGuardado == null) { // Ha habido un fallo tras resumir
+      this.reiniciarOcuparResumen(Number.parseInt(this.tropasOrigenFalloOcuparResumir))
+    } else {
+      this.tratarOcupar(this.objetoOcuparGuardado)
+    }
+
   }
 
 
@@ -929,16 +976,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     document.getElementById("c"+this.territorios[idTerritorioDestino])!.style.fill=this.logica.colorJugador.get(jugadorAtacante);
     this.sobreescribirTropasRegion(idTerritorioOrigen, nTropasOrigen);
     this.sobreescribirTropasRegion(idTerritorioDestino, nTropasOcupar);
+    this.aumentarTerritoriosCajaJugadores(obj.JugadorOcupante, 1)
+    this.aumentarTerritoriosCajaJugadores(obj.JugadorOcupado, -1)
 
-
-
-    // TODO: alert
-    this.mostrarAlertaAtaque("Ataque", "El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[idTerritorioDestino] + " con "
+    this.mostrarAlertaAtaque("Ocupación", "El jugador " + obj.JugadorOcupante + " ha ocupado " + this.territorios[idTerritorioDestino] + " con "
                 + nTropasOcupar + " procedentes de " + this.territorios[idTerritorioOrigen] + " previamente capturado por "
                 + obj.JugadorOcupado);
-
-                
-
   }
 
 
@@ -960,16 +1003,23 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
   tratarInicioTurno(obj:any){
-    //console.log('INICIO DE TURNO', obj.TropasObtenidas)
+    console.log("Inicio de turno de "+obj.Jugador)
+
     var tropasObtenidas = obj.TropasObtenidas;
-    this.tropasRecibidas = tropasObtenidas;
+    if (this.logica.fase != 0) {
+      this.logica.mapaJugadores.get(obj.Jugador)!.tropas = tropasObtenidas;
+    } else {
+      console.log("inicio turno en fase inicial, no se modifican las tropas")
+    }
+
+    this.aumentarTropasCajaJugadores(obj.Jugador, tropasObtenidas)
     var numTerritorios = obj.RazonNumeroTerritorios
     var numContinentes = obj.RazonContinentesOcupados
 
     var mensaje = (numContinentes>0)? "y " + numContinentes + " continentes " : "";
-    if(this.logica.fase != 0) {
-        this.mostrarAlertaRefuerzo("Refuerzo",
-        "El jugador "+obj.Jugador+" ha recibido " + tropasObtenidas + " por ocupar " + numTerritorios + " territorios " + mensaje, obj)
+    if (this.logica.fase != 0) {
+        this.mostrarAlertaRefuerzo("Inicio de turno de "+obj.Jugador,
+        "El jugador "+obj.Jugador+" ha recibido " + tropasObtenidas + " tropas por ocupar " + numTerritorios + " territorios " + mensaje, obj)
     }
 
   }
@@ -997,11 +1047,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
   tratarFaseReforzar() {
-    console.log('tropas:', this.tropasRecibidas, "todoOk:", this.todoOk)
+    console.log("mapa en tratarFaseReforzar: "+this.logica.mapaJugadores)
+    var tropasRecibidas : number = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
 
+    console.log('tropas:', tropasRecibidas, "todoOk:", this.todoOk)
 
-    if (this.tropasRecibidas == 0) return
-    console.log("Estamos en fase de refuerzo!", this.tropasRecibidas)
+    if (tropasRecibidas == 0) return
+    console.log("Estamos en fase de refuerzo!", tropasRecibidas)
     this.territorio1 = "";
     this.tropasAMover = 0;
 
@@ -1021,13 +1073,19 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           this.mapa.limitarSeleccionTerritorios();
 
           // Una vez hecho, se llama por callback a la selección de tropas
-          this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", this.tropasRecibidas.toString());
-
+          this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", tropasRecibidas.toString());
         }
       },
       200);
   }
 
+  refuerzoConExito() {
+    console.log("mapa en refuerzoConExito: "+this.logica.mapaJugadores)
+
+    console.log("Refuerzo con éxito! antes de refuerzo: "+this.logica.mapaJugadores.get(this.logica.yo)!.tropas+" tropas")
+    this.logica.mapaJugadores.get(this.logica.yo)!.tropas -= this.tropasAMover
+    console.log("despues refuerzo: "+this.logica.mapaJugadores.get(this.logica.yo)!.tropas+" tropas")
+  }
 
   tratarAccionJugadorExpulsado(obj : any) {
     this.mostrarAlertaDerrotaAjena("Jugador eliminado",
@@ -1050,7 +1108,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     var tropasRefuerzo = obj.TropasRefuerzo;
 
     this.aumentarTropasRegion(territorio, tropasRefuerzo)
-
     this.mostrarAlerta("Refuerzo", jugador + " ha reforzado " + this.territorios[territorio] + " con " + tropasRefuerzo + " tropas de refuerzo")
   }
 
@@ -1070,7 +1127,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       });
     }
     this.aumentarCartasCajaJugadores(this.logica.jugadorTurno, -3)
-    
+
   }
 
 
@@ -1104,7 +1161,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
 
   tratarAccionMensaje(obj : any) {
-    console.log("cambio caja chat")
     document.getElementById("cajaChat")!.innerHTML = obj.JugadorEmisor + ": "+obj.Mensaje
   }
 
@@ -1113,7 +1169,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   terminarAutomataJuego() {
     clearInterval(this.intervarloConsultaTerritorio)
-    // TODO: Más funciones de parada
   }
 
 
@@ -1132,12 +1187,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       }
     }
   }
-
-  // Carga de dados
-  devolverDados(blob : any, jugador : string) {
-    // TODO
-  }
-
 
   // Funciones para herencia de mapa<->juego
 

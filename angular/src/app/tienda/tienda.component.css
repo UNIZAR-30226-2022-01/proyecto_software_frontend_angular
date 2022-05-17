@@ -48,7 +48,8 @@
   top: 20%;
   left: 50%;
   right: 50%;
-  height: 100vh;
+  height: 125vh;
+  transform: translate(50%, 0%);
 }
 
 .contenedor-superior {

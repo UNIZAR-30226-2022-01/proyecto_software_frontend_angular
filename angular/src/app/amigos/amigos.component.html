@@ -1,31 +1,52 @@
 <top-bar></top-bar>
-<div class='cen' style="text-align: center; transform: translateY(5vh);">
+<down-bar></down-bar>
 
+<div style="text-align: center; transform: translateY(5vh);">
   <h1 style="font-size: 4vw">Social</h1>
   <br><br><br>
+</div>
 
-  <div class="listaAmigos">
-    <h2 style="border: 2.5px solid rgb(54, 51, 51);">Lista de amigos</h2>
-    <div *ngIf="vacio">No tienes ningun amigo.</div>
-    <div *ngIf="!vacio">
-      <div *ngFor="let p of amigos"> 
-        <div (click)="consultarPerfil(p)" style="border-bottom: 1.5px solid rgb(54, 51, 51);"><a>{{p}}</a></div>
-      </div>
-    </div>
-  </div>
-  <div class="buscarAmigos">
-    <h2 style="border: 2.5px solid rgb(54, 51, 51);">
-      <input style="width:29.7vw" type="text" id="busqueda" name="busqueda" placeholder="Busca un usuario" (change)="onChangeEvent($event)">
-    </h2> 
-    <div class="contenedor">
-      <div *ngFor="let p of busqueda">
-        <div class="partida">
-            <!--<a [routerLink]="['/perfil/',p.Nombre]">{{p.Nombre}}</a>-->
-            <a (click)="consultarPerfil(p.Nombre)">{{p.Nombre}}</a>
-          <br>
+  <div class="contenedorCajas">
+      <div class="card cardScrolabble" style="width: 35vh;">
+          <div class="card-body text-center">
+            <h5 class="card-title">Lista de amigos</h5>
+
+            <div *ngIf="(vacio | async) == true">
+              <p class="card-text">No tienes ningún amigo.</p>
+            </div>
+
+            <div *ngIf="(vacio | async) == false">
+              <div *ngFor="let p of amigos">
+                <button class="btn btn-success btn-lg col-12" (click)="consultarPerfil(p)" style="margin-top: 1em;">{{p}}</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      <div>
+
+      <br>
+
+      <div class="card cardScrolabble" style="width: 35vh;">
+          <div class="card-body text-center justify-content-center">
+            <h5 class="card-title">Buscar amigos</h5>
+            <div class="input-group rounded">
+              <span class="input-group-addon">
+                  <i class="fa fa-search"></i>
+              </span>
+              <input id="busqueda" name="busqueda" type="search" class="form-control rounded" placeholder="Busca un usuario" aria-label="Search" aria-describedby="search-addon" (change)="onChangeEvent($event)" />
+            </div>
+
+            <div *ngFor="let p of busqueda">
+              <div class="partida">
+                  <!--<a [routerLink]="['/perfil/',p.Nombre]">{{p.Nombre}}</a>-->
+                  <button style="width:100%" class="btn btn-primary btn-lg col-12" (click)="consultarPerfil(p.Nombre)" style="margin-top: 1em;">{{p.Nombre}}</button>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div>
+
   </div>
- </div>
-<down-bar></down-bar>
+</div>
+

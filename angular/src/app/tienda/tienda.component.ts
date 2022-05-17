@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import Swal from "sweetalert2";
 import {item} from "../personalizacion/personalizacion.component";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'tienda',
@@ -30,6 +31,7 @@ export class TiendaComponent implements OnInit {
 
   // Callback de llamadasAPI.obtenerImagenItem, que indica que se debe cambiar la imagen con id indicado por el blob
   introducirImagen(blob : any, id : string) {
+    console.log("Introduciendo imagen para ítem", id)
     const img = URL.createObjectURL(blob);
     //this.prueba = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
     //this.avatar = window.URL.createObjectURL(blob);
@@ -47,99 +49,101 @@ export class TiendaComponent implements OnInit {
     this.yo = nombre_usuario
 
     // Consulta la colección de items
-    this.http.get('http://localhost:8090/api/consultarTienda', {
+    var observableConsulta = this.http.get(LlamadasAPI.URLApi+'/api/consultarTienda', {
+      observe: 'body',
+      responseType: 'json',
+      withCredentials: true
+    })
+
+    var jsonData : any = await lastValueFrom(observableConsulta);
+
+
+    //console.log("Datos obtenidos...", response)
+    //var jsonData = JSON.parse(response);
+    console.log("Datos obtenidos...", jsonData)
+    for (var i = 0; i < jsonData.length; i++) {
+      var item: item = {
+        id: jsonData[i].Id,
+        nombre: jsonData[i].Nombre,
+        descripcion: jsonData[i].Descripcion,
+        precio: jsonData[i].Precio,
+        blob: jsonData[i].Imagen,
+        comprado: false
+      }
+
+      if (jsonData[i].Tipo == "dado") {
+        this.dados.push(item)
+      } else { // Avatar
+        this.avatares.push(item)
+      }
+    }
+
+    console.log("Consultando colección...")
+    // Obtiene los ítems que tiene comprados
+    var observableConsulta2 = this.http.get(LlamadasAPI.URLApi+'/api/consultarColeccion/' + this.yo, {
+      observe: 'body',
+      responseType: 'json',
+      withCredentials: true
+    })
+
+    jsonData = await lastValueFrom(observableConsulta2);
+
+    console.log("Colección obtenida:", jsonData)
+    // Para cada ítem devuelto, lo marca como comprado en las colecciones de la clase
+    for (var i = 0; i < jsonData.length; i++) {
+      if (jsonData[i].Tipo == "dado") {
+        this.dados.forEach((dado, index) => {
+          if (jsonData[i].Id == dado.id) {
+            this.dados[index].comprado = true
+          }
+        })
+      } else { // Avatar
+        this.avatares.forEach((avatar, index) => {
+          if (jsonData[i].Id == avatar.id) {
+            this.avatares[index].comprado = true
+          }
+        })
+      }
+    }
+
+    this.cargarImagenes()
+
+    console.log("Consultando puntos...")
+    // Obtiene los puntos que tiene el usuario
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.yo, {
       observe: 'body',
       responseType: 'text',
       withCredentials: true
-    }).subscribe({
-      next: (response) => {
-        var jsonData = JSON.parse(response);
-
-        for (var i = 0; i < jsonData.length; i++) {
-          var item: item = {
-            id: jsonData[i].Id,
-            nombre: jsonData[i].Nombre,
-            descripcion: jsonData[i].Descripcion,
-            precio: jsonData[i].Precio,
-            blob: jsonData[i].Imagen,
-            comprado: false
-          }
-
-          if (jsonData[i].Tipo == "dado") {
-            this.dados.push(item)
-          } else { // Avatar
-            this.avatares.push(item)
-          }
-        }
-
-        // Obtiene los ítems que tiene comprados
-        this.http.get('http://localhost:8090/api/consultarColeccion/' + this.yo, {
-          observe: 'body',
-          responseType: 'text',
-          withCredentials: true
-        })
-          .subscribe({
-            next: (response) => {
-              var jsonData = JSON.parse(response);
-
-
-
-              // Para cada ítem devuelto, lo marca como comprado en las colecciones de la clase
-              for (var i = 0; i < jsonData.length; i++) {
-                if (jsonData[i].Tipo == "dado") {
-                  this.dados.forEach((dado, index) => {
-                    if (jsonData[i].Id == dado.id) {
-                      this.dados[index].comprado = true
-                    }
-                  })
-                } else { // Avatar
-                  this.avatares.forEach((avatar, index) => {
-                    if (jsonData[i].Id == avatar.id) {
-                      this.avatares[index].comprado = true
-                    }
-                  })
-                }
-              }
-            }
-
-          })
-
-        // Obtiene los puntos que tiene el usuario
-        this.http.get('http://localhost:8090/api/obtenerPerfil/' + this.yo, {
-          observe: 'body',
-          responseType: 'text',
-          withCredentials: true
-        })
-          .subscribe({
-            next: (response) => {
-              var jsonData = JSON.parse(response);
-
-              this.puntos = jsonData.Puntos
-            }})
-      }
     })
+      .subscribe({
+        next: (response) => {
+          var jsonData = JSON.parse(response);
+
+          this.puntos = jsonData.Puntos
+        }})
   }
 
   // Una vez cargados los datos en la template de HTML, introduce las imagenes
-  ngAfterViewInit() {
-    // Por algún motivo, solo funciona ejecutándolo asíncronamente
-    setTimeout(() => {
+  cargarImagenes() {
       for (let i = 0; i < this.dados.length; i++) {
+        console.log("Obteniendo dado",this.dados[i])
         this.llamadasAPI.obtenerImagenItem(this, String(this.dados[i].id))
 
         // Indicar que está comprado con una alerta y en el botón
         if (this.dados[i].comprado) {
+          console.log("Dado comprado!")
           document.getElementById("botonEquiparDado"+i)!.className = "btn btn-success"
           document.getElementById("botonEquiparDado"+i)!.innerHTML = "Comprado"
           document.getElementById("botonEquiparDado"+i)!.setAttribute('disabled',"");
         }
-
       }
 
       for (let i = 0; i < this.avatares.length; i++) {
+        console.log("Obteniendo avatar",this.avatares[i])
         this.llamadasAPI.obtenerImagenItem(this, String(this.avatares[i].id))
 
         if (this.avatares[i].comprado) {
+          console.log("Avatar comprado!")
           document.getElementById("botonEquiparAvatar"+i)!.className = "btn btn-success"
           document.getElementById("botonEquiparAvatar"+i)!.innerHTML = "Comprado"
           document.getElementById("botonEquiparAvatar"+i)!.setAttribute('disabled',"");
@@ -147,7 +151,6 @@ export class TiendaComponent implements OnInit {
       }
 
       this.mostrarDados()
-    }, 100);
   }
 
   // Cambia la vista de ítems a los dados
@@ -156,12 +159,26 @@ export class TiendaComponent implements OnInit {
     var avatares = Array.from(document.getElementsByClassName("avatar") as HTMLCollectionOf<HTMLElement>)
     for (let i = 0; i < avatares.length; i++) {
       avatares[i].style.display = "none";
+
+      if (this.avatares[i].comprado) {
+        console.log("Avatar comprado!")
+        document.getElementById("botonEquiparAvatar"+i)!.className = "btn btn-success"
+        document.getElementById("botonEquiparAvatar"+i)!.innerHTML = "Comprado"
+        document.getElementById("botonEquiparAvatar"+i)!.setAttribute('disabled',"");
+      }
     }
 
     // Mostrar dados
     var dados = Array.from(document.getElementsByClassName("dado") as HTMLCollectionOf<HTMLElement>)
     for (let i = 0; i < dados.length; i++) {
       dados[i].style.display = "block";
+
+      if (this.dados[i].comprado) {
+        console.log("Dado comprado!")
+        document.getElementById("botonEquiparDado"+i)!.className = "btn btn-success"
+        document.getElementById("botonEquiparDado"+i)!.innerHTML = "Comprado"
+        document.getElementById("botonEquiparDado"+i)!.setAttribute('disabled',"");
+      }
     }
   }
 

@@ -173,7 +173,7 @@ export class LogicaJuego {
 
     // Auxiliares
     private consultarCartas() {
-      this.http.get('http://localhost:8090/api/consultarCartas', {observe:'body', responseType:'text', withCredentials: true})
+      this.http.get(LlamadasAPI.URLApi+'/api/consultarCartas', {observe:'body', responseType:'text', withCredentials: true})
         .subscribe(
           data => {
             var jsonData = JSON.parse(data);

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {  FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { LlamadasAPI } from '../llamadas-api';
 
 @Component({
   selector: 'crear-partida',
@@ -62,15 +63,15 @@ export class CrearPartidaComponent implements OnInit {
   }
 
   console.log('hola, max jugadores antes de post:', this.profileForm.get('maxJugadores')!.value);
-  
-  this.http.post('http://localhost:8090/api/crearPartida', formData, { observe:'response', responseType:'text', withCredentials: true})
+
+  this.http.post(LlamadasAPI.URLApi+'/api/crearPartida', formData, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {Swal.fire({
                                         title: 'Partida creada con éxito',
                                         text: "Espera a que el resto de jugadores se unan a la partida",
                                         icon: 'success',
                                       });
- 
+
                               this.router.navigate(['/lobby'])
                             },
         error: (error) => {Swal.fire({
@@ -81,10 +82,10 @@ export class CrearPartidaComponent implements OnInit {
                           }
       });
   }
-  
+
   get maxJugadores() { return this.profileForm.get('maxJugadores')!; }
   get esPrivada() { return this.privada; }
   get esPublica() { return this.publica; }
   get password() { return this.profileForm.get('password')!; }
-  
+
 }
