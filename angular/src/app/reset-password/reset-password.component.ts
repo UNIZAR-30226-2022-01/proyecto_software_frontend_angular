@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
+import {LlamadasAPI} from "../llamadas-api";
 
 @Component({
   selector: 'app-reset-password',
@@ -31,7 +32,7 @@ export class ResetPasswordComponent implements OnInit {
     formData.append('token', this.profileForm.get('token')!.value);
     formData.append('password', this.profileForm.get('password')!.value);
 
-    this.http.post('http://localhost:8090/resetearPassword', formData, {observe:'response', responseType:'text'})
+    this.http.post(LlamadasAPI.URLApi+'/resetearPassword', formData, {observe:'response', responseType:'text'})
       .subscribe({
         next :(response) => {Swal.fire({
           title: 'Reseteo de contraseña completado con éxito',

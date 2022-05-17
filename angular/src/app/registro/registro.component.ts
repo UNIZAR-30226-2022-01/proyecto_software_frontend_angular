@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormControl  } from '@angular/forms
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import {LlamadasAPI} from "../llamadas-api";
 
 
 @Component({
@@ -30,7 +31,7 @@ export class RegistroComponent implements OnInit {
     password2: new FormControl('',[
       Validators.required,]),
   });
-  
+
   cookie:any;
 
   ngOnInit(): void {
@@ -38,16 +39,16 @@ export class RegistroComponent implements OnInit {
     document.body.style.backgroundImage= "linear-gradient(180deg,#4e73df 10%,#224abe 100%)"
   }
 
-  
+
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {}
-  
+
   onSubmit() {
     var formData: any = new FormData();
     formData.append('nombre', this.profileForm.get('nombre')!.value);
     formData.append('email', this.profileForm.get('email')!.value);
     formData.append('password', this.profileForm.get('password')!.value);
-    
-    this.http.post('http://localhost:8090/registro', formData, {observe:'response', responseType:'text'})
+
+    this.http.post(LlamadasAPI.URLApi+'/registro', formData, {observe:'response', responseType:'text'})
         .subscribe({
           next :(response) => {Swal.fire({
                                           title: 'Registro completado con éxito',
@@ -61,13 +62,13 @@ export class RegistroComponent implements OnInit {
                               localStorage.setItem('nombre_usuario', response.body! );
                               this.router.navigate(['/identificacion'])
                               },
-                              
+
           error: (error) => {Swal.fire({
                                       title: 'Se ha producido un error al registrarse',
                                       text: error.error,
                                       icon: 'error',
                                       });}
-        });  
+        });
   }
 
 
@@ -78,4 +79,3 @@ export class RegistroComponent implements OnInit {
 
 }
 
- 

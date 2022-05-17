@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import {LlamadasAPI} from "../llamadas-api";
 
 @Component({
   selector: 'inicio-sesion',
@@ -19,7 +20,7 @@ export class InicioSesionComponent  {
           Validators.required,]),
       });
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) { 
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
     document.body.style.background = "##4e73df;";
     document.body.style.backgroundImage= "linear-gradient(180deg,#4e73df 10%,#224abe 100%)"
   }
@@ -46,7 +47,7 @@ export class InicioSesionComponent  {
     formData.append('nombre', this.profileForm.get('nombre')!.value);
     formData.append('password', this.profileForm.get('password')!.value);
 
-    this.http.post('http://localhost:8090/login', formData, {observe:'response', responseType:'text'})
+    this.http.post(LlamadasAPI.URLApi+'/login', formData, {observe:'response', responseType:'text'})
         .subscribe({
           next :(response) => {Swal.fire({
                                           title: 'Inicio de sesión completado con éxito',

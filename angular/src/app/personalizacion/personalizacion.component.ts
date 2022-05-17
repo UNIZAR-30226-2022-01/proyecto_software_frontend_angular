@@ -50,7 +50,7 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
     this.yo = nombre_usuario
 
     // Consulta la colección de items
-    this.http.get('http://localhost:8090/api/consultarColeccion/' + this.yo, {
+    this.http.get(LlamadasAPI.URLApi+'/api/consultarColeccion/' + this.yo, {
       observe: 'body',
       responseType: 'text',
       withCredentials: true
@@ -76,7 +76,7 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
           }
 
           // Obtiene los ítems que tiene equipados
-          this.http.get('http://localhost:8090/api/obtenerPerfil/' + this.yo, {
+          this.http.get(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.yo, {
             observe: 'body',
             responseType: 'text',
             withCredentials: true

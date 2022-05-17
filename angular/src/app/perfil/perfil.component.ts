@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import {LlamadasAPI} from "../llamadas-api";
 
 @Component({
   selector: 'perfil',
@@ -25,7 +26,7 @@ export class PerfilComponent implements OnInit {
     document.body.style.background = "#f8f9fc";
     this.nombre = localStorage.getItem('nombre')
 
-    this.http.get<Perfil>('http://localhost:8090/api/obtenerPerfil/' + this.nombre, {observe:'body',withCredentials: true})
+    this.http.get<Perfil>(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.nombre, {observe:'body',withCredentials: true})
         .subscribe(
           data => {console.log(data);
             //this.nombre = data.NombreUsuario,
@@ -38,7 +39,7 @@ export class PerfilComponent implements OnInit {
   }
 
   enviarSolicitudAmistad(nombre : string) {
-    this.http.post('http://localhost:8090/api/enviarSolicitudAmistad/' + nombre, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/enviarSolicitudAmistad/' + nombre, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {Swal.fire({
                                         title: 'Solicitud de amistad enviada con exito',
@@ -56,7 +57,7 @@ export class PerfilComponent implements OnInit {
   }
 
   eliminarAmigo(nombre : string) {
-    this.http.get('http://localhost:8090/api/eliminarAmigo/'+nombre, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/eliminarAmigo/'+nombre, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {Swal.fire({
           title: 'Amigo eliminado con éxito',

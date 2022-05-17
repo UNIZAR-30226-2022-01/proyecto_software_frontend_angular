@@ -49,7 +49,7 @@ export class TiendaComponent implements OnInit {
     this.yo = nombre_usuario
 
     // Consulta la colección de items
-    var observableConsulta = this.http.get('http://localhost:8090/api/consultarTienda', {
+    var observableConsulta = this.http.get(LlamadasAPI.URLApi+'/api/consultarTienda', {
       observe: 'body',
       responseType: 'json',
       withCredentials: true
@@ -80,7 +80,7 @@ export class TiendaComponent implements OnInit {
 
     console.log("Consultando colección...")
     // Obtiene los ítems que tiene comprados
-    var observableConsulta2 = this.http.get('http://localhost:8090/api/consultarColeccion/' + this.yo, {
+    var observableConsulta2 = this.http.get(LlamadasAPI.URLApi+'/api/consultarColeccion/' + this.yo, {
       observe: 'body',
       responseType: 'json',
       withCredentials: true
@@ -110,7 +110,7 @@ export class TiendaComponent implements OnInit {
 
     console.log("Consultando puntos...")
     // Obtiene los puntos que tiene el usuario
-    this.http.get('http://localhost:8090/api/obtenerPerfil/' + this.yo, {
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.yo, {
       observe: 'body',
       responseType: 'text',
       withCredentials: true

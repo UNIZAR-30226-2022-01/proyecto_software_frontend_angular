@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import {LlamadasAPI} from "../llamadas-api";
 
 @Component({
   selector: 'ranking',
@@ -11,7 +12,7 @@ export class RankingComponent implements OnInit {
   miPosicion:any;
   noSoyTop:any;
   misPartidasGanadas:any;
-  misPartidasTotales:any; 
+  misPartidasTotales:any;
 
   getNombreUsuario(nombre:string) {
     nombre = nombre.split('=')[1];
@@ -21,19 +22,19 @@ export class RankingComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
   jugadores:any;
-  
+
   ngOnInit(): void {
     document.body.style.background = "#f8f9fc";
     this.yo = this.getNombreUsuario(document.cookie);
 
-    this.http.get('http://localhost:8090/api/ranking', {observe:'body', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/ranking', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           var todosJugadores = JSON.parse(response);
           var misDatos = todosJugadores.find((element: any) => element.NombreUsuario == this.yo);
           this.misPartidasGanadas = misDatos!.PartidasGanadas;
           this.miPosicion = todosJugadores.findIndex((element: any) => element.NombreUsuario == this.yo);
-          
+
           if (this.miPosicion > 10){
             this.noSoyTop = true;
           }

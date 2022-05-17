@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
+import {LlamadasAPI} from "../llamadas-api";
 
 @Component({
   selector: 'app-amigos',
@@ -25,7 +26,7 @@ export class AmigosComponent implements OnInit {
   vacio: Subject<boolean> = new Subject();
 
   onChangeEvent(event: any){
-    this.http.get('http://localhost:8090/api/obtenerUsuariosSimilares/'+event.target.value, {withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerUsuariosSimilares/'+event.target.value, {withCredentials: true})
     .subscribe(
       data => { this.busqueda = data })
 

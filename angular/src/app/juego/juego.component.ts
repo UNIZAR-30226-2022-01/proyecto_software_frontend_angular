@@ -49,7 +49,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   cambiarFase() {
     this.rellenarFase(0);
     console.log("Cambiando de fase");
-      this.http.post('http://localhost:8090/api/pasarDeFase', null, { observe:'response', responseType:'text', withCredentials: true})
+      this.http.post(LlamadasAPI.URLApi+'/api/pasarDeFase', null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           console.log("Exito en el cambio de fase");
@@ -158,7 +158,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
   resumirPartida()  {
-    this.http.get('http://localhost:8090/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           var jsonData = JSON.parse(response);
@@ -276,7 +276,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   ejecutarAutomata() {
     this.intervaloConsultaEstado = setInterval(() => {
-      this.http.get('http://localhost:8090/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
+      this.http.get(LlamadasAPI.URLApi+'/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
           .subscribe(
             data => {
               //clearInterval(this.intervaloConsultaEstado) // Para debugging
@@ -766,7 +766,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   obtenerDados(i : number, obj : any) {
-    this.http.get('http://localhost:8090/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next : (response) => {
             // mostrar los resultados de cada dado

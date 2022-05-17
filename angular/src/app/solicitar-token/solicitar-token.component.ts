@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import {LlamadasAPI} from "../llamadas-api";
 
 @Component({
   selector: 'app-solicitar-token',
@@ -28,7 +29,7 @@ export class SolicitarTokenComponent implements OnInit {
     var formData: any = new FormData();
     formData.append('usuario', this.profileForm.get('usuario')!.value);
 
-    this.http.post('http://localhost:8090/obtenerTokenResetPassword', formData, {observe:'response', responseType:'text'})
+    this.http.post(LlamadasAPI.URLApi+'/obtenerTokenResetPassword', formData, {observe:'response', responseType:'text'})
       .subscribe({
         next :(response) => {Swal.fire({
           title: 'Token solicitado con éxito. Por favor, consulta tu bandeja de correo electrónico.',

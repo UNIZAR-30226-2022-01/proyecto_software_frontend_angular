@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { max } from 'rxjs';
+import {LlamadasAPI} from "../llamadas-api";
 
 
 @Component({
@@ -12,12 +13,12 @@ import { max } from 'rxjs';
   styleUrls: ['./lobby.component.css']
 })
 export class LobbyComponent implements OnInit {
-  
+
   constructor(private http: HttpClient, private router:Router){}
   ngOnInit(): void {
     document.body.style.background = "#f8f9fc";
     this.fnCall();
-    
+
   }
 
   maxJugadores:any;
@@ -30,14 +31,14 @@ export class LobbyComponent implements OnInit {
 
   colores = ['red', 'purple','green', 'blue', 'orange']
   fnCall() {
- 
+
     this.intervaloMio = setInterval(() => {
-      this.http.get('http://localhost:8090/api/obtenerEstadoLobby', {observe:'body', responseType:'text' as 'json', withCredentials: true})
+      this.http.get(LlamadasAPI.URLApi+'/api/obtenerEstadoLobby', {observe:'body', responseType:'text' as 'json', withCredentials: true})
           .subscribe(
             data => {
               console.log(data)
               this.cosaJSON = JSON.parse(data.toString());
-              
+
 
 
               console.log(this.cosaJSON)
@@ -56,7 +57,7 @@ export class LobbyComponent implements OnInit {
 
               this.jugadoresEsperando = Array(this.cosaJSON.MaxJugadores-this.cosaJSON.Jugadores).fill(0).map((x,i)=>i);
             })
-      
+
     }, 1000);
 
 /*
@@ -76,18 +77,18 @@ export class LobbyComponent implements OnInit {
     //}
     ///api/obtenerEstadoLobby/{id}
   }
-  
+
   salir(){
     clearInterval(this.intervaloMio)
     const httpPostOptions =
-    {   
+    {
       headers:
           new HttpHeaders (
             {observe:'response', responseType:'text'}),
       withCredentials: true,
     }
 
-    this.http.post('http://localhost:8090/api/abandonarLobby',  null, httpPostOptions)
+    this.http.post(LlamadasAPI.URLApi+'/api/abandonarLobby',  null, httpPostOptions)
     .subscribe({
       next :(response) => {Swal.fire({
                                       title: 'Has abandonado el lobby con éxito',
@@ -96,7 +97,7 @@ export class LobbyComponent implements OnInit {
                                       timerProgressBar: true,}),
                           this.router.navigate(['/identificacion'])
                           },
-        
+
       error: (error) => {Swal.fire({
                                     title: 'Se ha producido un error al abandonar el lobby',
                                     text: error.error,

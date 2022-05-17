@@ -3,6 +3,7 @@ import { conditionallyCreateMapObjectLiteral } from '@angular/compiler/src/rende
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from "sweetalert2";
+import {LlamadasAPI} from "../llamadas-api";
 
 @Component({
   selector: 'app-cartas',
@@ -21,11 +22,11 @@ export class CartasComponent implements OnInit {
                   "America\nCentral", "Peru", "Australia_Occidental", "Alberta"];
 
   imagenCartas=["assets/soldadoGrande.png","assets/caballoGrande.png","assets/canionGrande.png"]
-  
+
   constructor(private http : HttpClient,private router:Router) {}
 
   obtenerCartas(){
-    this.http.get('http://localhost:8090/api/consultarCartas', {observe:'body', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/consultarCartas', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe(
         data => {
           console.log(data);
@@ -35,7 +36,7 @@ export class CartasComponent implements OnInit {
           this.cartasSeleccionadasVacias = Array(3-this.cartasSeleccionadas.length).fill(0).map((x,i)=>i);
         })
   }
- 
+
   seleccionar(carta:any){
       // Comprobamos si carta esta en las cartas seleccionadas
       if (this.cartasSeleccionadas.find((element: any) => element.IdCarta == carta.IdCarta)){
@@ -46,13 +47,13 @@ export class CartasComponent implements OnInit {
         });
        this.cartasSeleccionadasVacias = Array(this.cartasSeleccionadasVacias.length+1).fill(0).map((x,i)=>i);
       }
-      else{ 
+      else{
         if(this.cartasSeleccionadas.length != 3){ //La añadimos si no hay 3 cartas seleccionadas
           document.getElementById(carta.IdCarta)!.style.backgroundColor = "#CCCCCC";  // La marcamos como carta seleccionada
           this.cartasSeleccionadas.push(carta);//La añadimosde cartas seleccionadas
           this.cartasSeleccionadasVacias = Array(this.cartasSeleccionadasVacias.length-1).fill(0).map((x,i)=>i);
         }
-      } 
+      }
   }
 
   ngOnInit() {
@@ -61,18 +62,18 @@ export class CartasComponent implements OnInit {
   }
 
   submit() {
-    this.http.post('http://localhost:8090/api/cambiarCartas/'+this.cartasSeleccionadas[0].IdCarta+'/'+this.cartasSeleccionadas[1].IdCarta+'/'+this.cartasSeleccionadas[2].IdCarta, null, {withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/cambiarCartas/'+this.cartasSeleccionadas[0].IdCarta+'/'+this.cartasSeleccionadas[1].IdCarta+'/'+this.cartasSeleccionadas[2].IdCarta, null, {withCredentials: true})
     .subscribe({
       next : (response) => {
         document.getElementById(this.cartasSeleccionadas[0].IdCarta)!.style.backgroundColor = "#fafafa";  // Le devolvemos el color original
         document.getElementById(this.cartasSeleccionadas[1].IdCarta)!.style.backgroundColor = "#fafafa";  // Le devolvemos el color original
         document.getElementById(this.cartasSeleccionadas[2].IdCarta)!.style.backgroundColor = "#fafafa";  // Le devolvemos el color original
-        this.obtenerCartas();  
-        
+        this.obtenerCartas();
+
       },
       error: (error) => {
         Swal.fire({
-          title: 'Se ha producido un error al cambiar las cartas seleccionadas',          
+          title: 'Se ha producido un error al cambiar las cartas seleccionadas',
           text: error.error,
           icon: 'error',
           timer: 2000,
@@ -89,8 +90,8 @@ export class CartasComponent implements OnInit {
 }
 
 export interface Carta{
-  IdCarta:number, 
-  Tipo:number, 
+  IdCarta:number,
+  Tipo:number,
   Region:number,
   EsComodin:boolean
 }

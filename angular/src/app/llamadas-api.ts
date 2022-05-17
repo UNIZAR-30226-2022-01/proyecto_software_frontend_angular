@@ -5,6 +5,10 @@ import {Estado, LogicaJuego} from "./logica-juego";
 import {NotificacionesComponent} from "./notificaciones/notificaciones.component";
 
 export class LlamadasAPI {
+
+  //public static URLApi: string = "http://api.unizzard.tk";
+  public static URLApi: string = "http://localhost:8090";
+
   constructor(private http : HttpClient){}
 
 
@@ -12,7 +16,7 @@ export class LlamadasAPI {
     var idTerritorio1 = juego.territorios.indexOf(juego.territorio1);
     var idTerritorio2 = juego.territorios.indexOf(juego.territorio2);
     var nDados = juego.nDadosAtaque;
-    this.http.post('http://localhost:8090/api/atacar/'+idTerritorio1+'/'+idTerritorio2+'/'+ nDados, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/atacar/'+idTerritorio1+'/'+idTerritorio2+'/'+ nDados, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           console.log("atacar con éxito!")
@@ -39,7 +43,7 @@ export class LlamadasAPI {
   ocupar(juego : JuegoComponent) {
     var idTerritorio = juego.territorioDestino;
     var nTropas = juego.nTropasOcupar;
-    this.http.post('http://localhost:8090/api/ocupar/'+idTerritorio+'/'+ nTropas, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/ocupar/'+idTerritorio+'/'+ nTropas, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           console.log(response)
@@ -62,7 +66,7 @@ export class LlamadasAPI {
     var idTerritorio1 = juego.territorios.indexOf(juego.territorio1)
     var idTerritorio2 = juego.territorios.indexOf(juego.territorio2)
 
-    this.http.post('http://localhost:8090/api/fortificar/'+idTerritorio1+'/'+idTerritorio2+'/'+juego.tropasAMover, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/fortificar/'+idTerritorio1+'/'+idTerritorio2+'/'+juego.tropasAMover, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           console.log("fortificar con éxito!")
@@ -82,7 +86,7 @@ export class LlamadasAPI {
 
   // Obtiene los jugadores de la partida y llama por callback a logica para almacenarlos
   obtenerJugadoresPartida(logica : LogicaJuego) {
-    this.http.get('http://localhost:8090/api/obtenerJugadoresPartida', {observe:'body', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerJugadoresPartida', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe(
         data => {
           var jsonData = JSON.parse(data);
@@ -106,7 +110,7 @@ export class LlamadasAPI {
     console.log('reforzando')
     var idTerritorio1 = juego.territorios.indexOf(juego.territorio1)
 
-    this.http.post('http://localhost:8090/api/reforzarTerritorio/'+idTerritorio1+'/'+juego.tropasAMover, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/reforzarTerritorio/'+idTerritorio1+'/'+juego.tropasAMover, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           console.log("Refuerzo con éxito!")
@@ -131,7 +135,7 @@ export class LlamadasAPI {
   }
   // Obtiene la lista de notificaciones pendientes y las almacena en pantallaNotificaciones
   obtenerNotificaciones(pantallaNotificaciones : NotificacionesComponent) : any {
-    this.http.get('http://localhost:8090/api/obtenerNotificaciones', {observe:'body', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerNotificaciones', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           var jsonData = JSON.parse(response);
@@ -149,7 +153,7 @@ export class LlamadasAPI {
 
   // Acepta una solicitud de amistad. Devuelve "" en caso de éxito, o la respuesta de error si ocurre
   aceptarAmistad(jugador : string) : string {
-    this.http.post('http://localhost:8090/api/aceptarSolicitudAmistad/'+jugador, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/aceptarSolicitudAmistad/'+jugador, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           return ""
@@ -164,7 +168,7 @@ export class LlamadasAPI {
 
   // Rechaza una solicitud de amistad. Devuelve "" en caso de éxito, o la respuesta de error si ocurre
   rechazarAmistad(jugador : string) : string {
-    this.http.post('http://localhost:8090/api/rechazarSolicitudAmistad/'+jugador, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/rechazarSolicitudAmistad/'+jugador, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           return ""
@@ -181,7 +185,7 @@ export class LlamadasAPI {
   // y llama por callback para mostrar el item si se ha cambiado, o para indicar que ha
   // habido fallo y no se ha cambiado el item
   cambiarAspecto(item : number, llamador : any) {
-    this.http.post('http://localhost:8090/api/modificarAspecto/'+item, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/modificarAspecto/'+item, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           Swal.fire({
@@ -207,7 +211,7 @@ export class LlamadasAPI {
   }
 
   obtenerAvatar(llamador : any, usuario : string) : any {
-    this.http.get('http://localhost:8090/api/obtenerFotoPerfil/'+usuario, {observe:'body', responseType:'blob', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerFotoPerfil/'+usuario, {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next :(response) => {
           llamador.introducirAvatar(response, usuario)
@@ -219,7 +223,7 @@ export class LlamadasAPI {
   }
 
   obtenerDados(llamador : any, usuario : string) : any {
-    this.http.get('http://localhost:8090/api/obtenerDados/'+usuario+'/5', {observe:'body', responseType:'blob', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerDados/'+usuario+'/5', {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next :(response) => {
           llamador.devolverDados(response, usuario)
@@ -232,7 +236,7 @@ export class LlamadasAPI {
 
   // Obtiene el blob de imagen dado su id, y llama por callback para devolverlo
   obtenerImagenItem(llamador : any, id : string) : any {
-    this.http.get('http://localhost:8090/api/obtenerImagenItem/'+id, {observe:'body', responseType:'blob', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerImagenItem/'+id, {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next :(response) => {
           llamador.introducirImagen(response, id)
@@ -245,7 +249,7 @@ export class LlamadasAPI {
 
 
   comprarAspecto(item : number, llamador : any) {
-    this.http.post('http://localhost:8090/api/comprarObjeto/'+item, null, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/comprarObjeto/'+item, null, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           Swal.fire({
@@ -276,7 +280,7 @@ export class LlamadasAPI {
 
     console.log("enviando ", mensaje)
 
-    this.http.post('http://localhost:8090/api/enviarMensaje', formData, { observe:'response', responseType:'text', withCredentials: true})
+    this.http.post(LlamadasAPI.URLApi+'/api/enviarMensaje', formData, { observe:'response', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
           return ""
