@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -8,19 +9,33 @@ import { Router } from '@angular/router';
 })
 export class TopBarComponent implements OnInit {
 
-  constructor(private router: Router) {
-    
+  constructor(private router: Router, private http : HttpClient) {
+      //display block, none
    }
 
   cookie:any;       
   nombre_usuario:any; 
   ancho:any;
+  variableMostrar:boolean=false;
+  puntos:any;
+  notificaciones:any;
 
   ngOnInit(): void {
-    this.cookie = localStorage.getItem('cookie'),
-    this.nombre_usuario = this.getNombre_Usuario(localStorage.getItem('nombre_usuario')!), 
+    this.nombre_usuario = this.getNombre_Usuario(document.cookie), 
     this.ancho = this.nombre_usuario.length > 100 ? this.nombre_usuario.length: 100;
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.nombre_usuario, {observe: 'body',responseType: 'text',withCredentials: true})
+      .subscribe({
+        next: (response) => {
+          var jsonData = JSON.parse(response);
+
+          this.puntos = jsonData.Puntos
+
+          // Marca el dado en uso como tal, e inicializa la vista de dados por defecto
+        }
+          
+      })
   }
+
   
 
   getNombre_Usuario(nombre:string) {
@@ -32,5 +47,16 @@ export class TopBarComponent implements OnInit {
   cerrarSesion(){
     document.cookie = '';
     this.router.navigate(['/'])
+  }
+
+  mostrar(){
+    if(this.variableMostrar){
+      this.variableMostrar = false;
+      document.getElementById("menu")!.style.display = "none";
+    }
+    else{
+      this.variableMostrar = true;
+      document.getElementById("menu")!.style.display = "block";
+    }
   }
 }

@@ -38,9 +38,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 const appRoutes: Routes = [
   {path: 'i', component: InicioComponent},
   {path: 'registroUsuario', component: RegistroComponent},
-  {path: 'inicioSesion', component: InicioSesionComponent},//inicioSesion
+  {path: 'inicioSesion', component: InicioSesionComponent},
   {path: 'tienda', component: TiendaComponent},
-  {path: 'top-bar', component: TopBarComponent},
+  {path: '', component: TopBarComponent},
   {path: 'configuracionPartida', component: ConfigPartidaComponent},
   {path: 'buscarPartida', component: BuscarPartidaComponent},
   {path: 'perfil/:nombre', component: PerfilComponent},
@@ -56,7 +56,7 @@ const appRoutes: Routes = [
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
   {path: 'juego', component: JuegoComponent},
-  {path: '', component: ResetPasswordComponent},//resetPassword
+  {path: 'resetPassword', component: ResetPasswordComponent},
   {path: 'solicitarToken', component: SolicitarTokenComponent},
   {path: 'cartas', component: CartasComponent}
 ]
