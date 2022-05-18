@@ -16,7 +16,6 @@ export class TopBarComponent implements OnInit {
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
   nombre_usuario:any; 
-  ancho:any;
   variableMostrar:boolean=false;
   puntos:any;
   amigos:any;
@@ -24,38 +23,30 @@ export class TopBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.nombre_usuario = this.getNombre_Usuario(document.cookie), 
-    this.ancho = this.nombre_usuario.length > 100 ? this.nombre_usuario.length: 100;
     this.http.get(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.nombre_usuario, {observe: 'body',responseType: 'text',withCredentials: true})
       .subscribe({
         next: (response) => {
           var jsonData = JSON.parse(response);
-
           this.puntos = jsonData.Puntos
-
-          // Marca el dado en uso como tal, e inicializa la vista de dados por defecto
         }
-          
       })
 
       this.http.get(LlamadasAPI.URLApi+'/api/obtenerSolicitudesPendientes', {observe: 'body',responseType: 'text',withCredentials: true})
       .subscribe({
         next: (response) => {
-          console.log(response)
-          console.log(response.length)
-          if (response){
-            //var jsonData = JSON.parse(response);
-            //this.amigos = jsonData.length
-            this.amigos = 0;
-          } else{
-            this.amigos = 0;
-          }
-          
+          if (JSON.parse(response)){
+            this.amigos = JSON.parse(response).length;
+          } else this.amigos = 0;
         }
-          
+      })
+
+      this.http.get(LlamadasAPI.URLApi+'/api/obtenerNumeroNotificaciones', {observe: 'body',responseType: 'text',withCredentials: true})
+      .subscribe({
+        next: (response) => {
+          this.notificaciones = response;
+        }
       })
   }
-
-  
 
   getNombre_Usuario(nombre:string) {
     nombre = nombre.split('=')[1];
@@ -68,7 +59,6 @@ export class TopBarComponent implements OnInit {
     var eqPos = cookie.indexOf("=");
     var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    console.log('xao pescao')
     this.router.navigate(['/'])
   }
 
