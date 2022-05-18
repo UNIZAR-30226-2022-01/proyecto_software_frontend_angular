@@ -7,19 +7,9 @@ html, body{
   background-color: #20BCE7;
 }
 
-.country{
-  cursor: pointer;
-}
 
 .special-country{
 opacity: 0.8;
-}
-
-.country:hover {
-  fill:#FFFFFF;
-  opacity: 0.8;
-  transition: 0.3s;
-  transform: scale(1.003);
 }
 
 #Lines {
@@ -35,63 +25,63 @@ opacity: 0.8;
 }
 
 .Africa_c .circuloI {
-  stroke: rgb(179, 113, 0);
-  fill:#e2bc75;
+  stroke: #9B1212;
+  fill: #F87C7D;
 }
 
 .Africa_c .rectanguloInfo {
-  stroke: rgb(179, 113, 0);
-  fill:#e2bc75;
+  stroke: #B72323;
+  fill: #F87C7D;
 }
 
 .Oceania_c .circuloI {
-  stroke: #800f1e;
-  fill: #f7aab1;
+  stroke: #12535D;
+  fill: #67b4c0;
 }
 
 .Oceania_c .rectanguloInfo {
-  stroke: #800f1e;
-  fill: #f7aab1;
+  stroke: #12535D;
+  fill: #67b4c0;
 }
 
 .AmericaSur_c .circuloI {
-  stroke: #ba4c20;
-  fill: #ebad97;
+  stroke: #2D0F4F;
+  fill: #916DB9;
 }
 
 .AmericaSur_c .rectanguloInfo {
-  stroke: #ba4c20;
-  fill: #ebad97;
+  stroke: #2D0F4F;
+  fill: #916DB9;
 }
 
 .AmericaNorte_c .circuloI {
-  stroke: #956e14;
-  fill: #f8e0a2;
+  stroke: #874F1A;
+  fill: #F1B275;
 }
 
 .AmericaNorte_c .rectanguloInfo {
-  stroke: #956e14;
-  fill: #f8e0a2;
+  stroke: #874F1A;
+  fill: #F1B275;
 }
 
 .Europa_c .circuloI {
-  stroke: #7f52be;
-  fill: #e5dcec;
+  stroke: #25910A;
+  fill: #bdf3af;
 }
 
 .Europa_c .rectanguloInfo {
-  stroke: #7f52be;
-  fill: #e5dcec;
+  stroke: #25910A;
+  fill: #bdf3af;
 }
 
 .Asia_c .circuloI {
-  stroke: #638626;
-  fill: #e0f0c6;
+  stroke: #B5A31A;
+  fill: #e7de95;
 }
 
 .Asia_c .rectanguloInfo {
-  stroke: #638626;
-  fill: #e0f0c6;
+  stroke: #B5A31A;
+  fill: #EDE496;
 }
 
 .circulosI text{
