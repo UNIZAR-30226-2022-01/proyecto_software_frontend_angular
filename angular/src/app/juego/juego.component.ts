@@ -397,7 +397,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                 }
               }
             })
-    }, 5000);
+    }, 500);
   }
 
   mostrarFase() {
