@@ -5,20 +5,20 @@
 
     <li class="nav-item ">
       <a class="nav-link" style="left: 0; color: #6c757d;"> {{puntos}}
-        <img style="  filter: invert(100%)" src="https://img.icons8.com/ios-glyphs/30/000000/average-2.png"/>
+        <img style="  filter: invert(100%)" src="assets/puntos.png"/>
           
       </a>
     </li>
       <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link " style="left: 0;"> 
-          <img style="cursor: pointer;filter: invert(100%)" src="https://img.icons8.com/material/30/000000/mail.png"/>
+        <a class="nav-link " style="left: 0;" [routerLink]="['/notificaciones']"> 
+          <img style="cursor: pointer;filter: invert(100%)" src="assets/notificaciones.png"/>
             <!-- Counter - Alerts -->
-            <span class="badge badge-danger badge-counter">3+</span>
+            <span class="badge badge-danger badge-counter">{{notificaciones}}</span>
         </a>
       </li>
       <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link " style> 
-          <img style="cursor: pointer;filter:invert(100%)" src="https://img.icons8.com/material-rounded/30/000000/conference-call.png"/>
+        <a class="nav-link" [routerLink]="['/amigos']"> 
+          <img style="cursor: pointer;filter:invert(100%)" src="assets/amigos.png"/>
     
             <span class="badge badge-danger badge-counter">{{amigos}}</span>
         </a>
