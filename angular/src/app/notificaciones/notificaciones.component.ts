@@ -12,24 +12,12 @@ import Swal from "sweetalert2";
 export class NotificacionesComponent implements OnInit {
 
   constructor(private http: HttpClient, private router:Router){}
-
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
-
-  notificaciones = [{"IDNotificacion":2,"PartidaGanada":true,"Jugador":"","Puntos":220},
-                    {"IDNotificacion":2,"PartidaGanada":false,"Jugador":"","Puntos":10},
-
-                    {"IDNotificacion":3,"PartidaGanada":true,"Jugador":"","Puntos":0},
-                    {"IDNotificacion":1,"PartidaGanada":true,"Jugador":"","Puntos":0},
-                    {"IDNotificacion":0,"PartidaGanada":true,"Jugador":"juanito","Puntos":0},
-                    {"IDNotificacion":0,"PartidaGanada":true,"Jugador":"pepito","Puntos":0},
-                    {"IDNotificacion":0,"PartidaGanada":true,"Jugador":"zesane","Puntos":0},
-                    {"IDNotificacion":0,"PartidaGanada":true,"Jugador":"jamon","Puntos":0},
-                    {"IDNotificacion":0,"PartidaGanada":true,"Jugador":"lolito","Puntos":0},
-];
+  notificaciones:any;
 
   ngOnInit(): void {
     document.body.style.background = "#f8f9fc";
-    //this.llamadasAPI.obtenerNotificaciones(this)
+    this.llamadasAPI.obtenerNotificaciones(this)
   }
 
   rechazarAmistad(jugador : string, id : number) {
