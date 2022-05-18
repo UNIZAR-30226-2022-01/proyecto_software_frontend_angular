@@ -6,7 +6,7 @@ import {NotificacionesComponent} from "./notificaciones/notificaciones.component
 
 export class LlamadasAPI {
 
-  //public static URLApi: string = "http://api.unizzard.tk";
+  //public static URLApi: string = "https://api.pruebecita.tk";
   public static URLApi: string = "http://localhost:8090";
 
   constructor(private http : HttpClient){}
