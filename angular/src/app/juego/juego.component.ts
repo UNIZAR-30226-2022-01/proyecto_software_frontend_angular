@@ -1185,6 +1185,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   terminarAutomataJuego() {
     clearInterval(this.intervarloConsultaTerritorio)
+    clearInterval(this.intervaloConsultaEstado)
   }
 
 
