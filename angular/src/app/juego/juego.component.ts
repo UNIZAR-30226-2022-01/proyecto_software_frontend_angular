@@ -263,7 +263,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
               }
             }
           } else { // Sabemos que hemos perdido si hemos vuelto, y ya estaba terminada
-            // TODO alerta de perder
+            this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
           }
       }
     });
