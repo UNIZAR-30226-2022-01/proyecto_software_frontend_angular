@@ -100,7 +100,7 @@ html, body{
   clear:right;
   border: 1px solid #fafafa;
   box-shadow:  rgba(0, 0, 0, 0.25) 0px 5px 10px;
-  background: #b5bbbd;
+  background: #CCF4FF;
 }
 
 .rectangulito {
@@ -117,7 +117,15 @@ html, body{
   background-color: hsl(0, 0%, 0%, 0);
   transform: translate(3.7vw, 1vh);
   color: #373737;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.turnoT{
+  background-color: hsl(0, 0%, 0%, 0);
   font-weight: bold;
+  text-decoration:none;
+  color: #373737;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .fase{
@@ -126,6 +134,7 @@ html, body{
   transform: translate(5vw, 3.9vh);
   color: #373737;
   font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .round {
@@ -230,12 +239,17 @@ transform: rotate(-225deg);
 .imagenDado {
   width: 75px;
   height: 75px;
-  border-radius: 100%;
-  float:left;
+  float:center;
   margin: auto;
   position: relative;
+  background-color:hsl(0, 0%, 0%, 0);
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+  pointer-events: none;
+}
 
-  border-style: solid;
-  border-width: 3px 3px 3px 3px;
-  border-color: #7f0033;
+.Resultado {
+  font-size: 2vw;
+  text-decoration: none;
+  background-color:hsl(0, 0%, 0%, 0);
 }

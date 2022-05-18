@@ -139,12 +139,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   nDadosAtaque : number = 0;
   nTropasOcupar : number = 0;
   turno : string = "-------";
-  dadoUno: string = "";
-  dadoDos: string = "";
-  dadoTres: string = "";
-  hayUno: boolean = false;
-  hayDos: boolean = false;
-  hayTres: boolean = false;
 
   resultadoAlerta : Promise<SweetAlertResult> | undefined ;
 
@@ -363,8 +357,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   case 5: { // IDAccionAtaque
                       console.log("Mostrando dados");
                       this.mostrarAlertaDados(obj);
-                      console.log("Tratar accion atacar");
-                      this.tratarAccionAtacar(obj);
                       break;
                   }
                   case 6: { // IDAccionOcupar
@@ -439,16 +431,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       }
       case 1: {
         console.log("ID Fase 1 Antes: " + id)
-        document.getElementById("rReforzar")!.style.background="black";
+        document.getElementById("rReforzar")!.style.background="#373737";
         console.log("ID Fase 1 Despues: " + id)
         break;
       }
       case 2: {
-        document.getElementById("rAtacar")!.style.background="black";
+        document.getElementById("rAtacar")!.style.background="#373737";
         break;
       }
       case 3: {
-        document.getElementById("rFortificar")!.style.background="black";
+        document.getElementById("rFortificar")!.style.background="#373737";
         break;
       }
     }
@@ -768,21 +760,27 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   // Funciones de tratamiento del juego
 
   mostrarAlertaDados(obj : any) {
-    this.dadoUno = "";
-    this.dadoDos = "";
-    this.dadoTres = "";
-    this.hayUno = false;
-    this.hayDos = false;
-    this.hayTres = false;
-
     // Atacante
     console.log("Numero de dados es igual a " + obj.DadosAtacante.length);
     for (var i = 0; i < obj.DadosAtacante.length; i++) {
-      this.obtenerDados(i, obj)
+      this.obtenerDadosAtacante(i, obj)
     }
+    console.log("Numero de dados del defensor es igual a " + obj.DadosDefensor.length);
+    for (var i = 0; i < obj.DadosDefensor.length; i++) {
+      this.obtenerDadosDefensor(i, obj)
+    }
+    window.setTimeout(() =>{
+      document.getElementById("dadoUno")!.style.visibility="hidden";
+      document.getElementById("dadoDos")!.style.visibility="hidden";
+      document.getElementById("dadoTres")!.style.visibility="hidden";
+      document.getElementById("dadoUnoD")!.style.visibility="hidden";
+      document.getElementById("dadoDosD")!.style.visibility="hidden";
+      console.log("Tratar accion atacar");
+      this.tratarAccionAtacar(obj);
+    }, 5000);
   }
 
-  obtenerDados(i : number, obj : any) {
+  obtenerDadosAtacante(i : number, obj : any) {
     this.http.get(LlamadasAPI.URLApi+'/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next : (response) => {
@@ -790,28 +788,46 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             var url = URL.createObjectURL(response);
 
             if(i == 0) {
+              document.getElementById("dadoUno")!.style.visibility="visible";
               console.log("Mostrando primer dado: ", url);
-              this.hayUno = true;
-              //this.dadoUno = url;
-
               var imagen = document.getElementById("dadoUno")! as HTMLImageElement;
               imagen.src = url;
             }
             if(i == 1) {
+              document.getElementById("dadoDos")!.style.visibility="visible";
               console.log("Mostrando segundo dado: ", url);
-              this.hayUno = true;
-              this.hayDos = true;
               //this.dadoDos = url;
               var imagen = document.getElementById("dadoDos")! as HTMLImageElement;
               imagen.src = url;
             }
             if(i == 2) {
+              document.getElementById("dadoTres")!.style.visibility="visible";
               console.log("Mostrando tercer dado: ", url);
-              this.hayUno = true;
-              this.hayDos = true;
-              this.hayTres = true;
-              //this.dadoTres = url;
               var imagen = document.getElementById("dadoTres")! as HTMLImageElement;
+              imagen.src = url;
+            }
+          }
+      });
+  }
+
+  obtenerDadosDefensor(i : number, obj : any) {
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerDados/' + obj.JugadorDefensor + '/' + obj.DadosDefensor[i], {observe:'body', responseType:'blob', withCredentials: true})
+      .subscribe({
+        next : (response) => {
+            // mostrar los resultados de cada dado
+            var url = URL.createObjectURL(response);
+
+            if(i == 0) {
+              document.getElementById("dadoUnoD")!.style.visibility="visible";
+              console.log("Mostrando primer dado del defensor: ", url);
+              var imagen = document.getElementById("dadoUnoD")! as HTMLImageElement;
+              imagen.src = url;
+            }
+            if(i == 1) {
+              document.getElementById("dadoDosD")!.style.visibility="visible";
+              console.log("Mostrando segundo dado del defensor: ", url);
+              //this.dadoDos = url;
+              var imagen = document.getElementById("dadoDosD")! as HTMLImageElement;
               imagen.src = url;
             }
           }
