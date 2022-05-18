@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import {HttpClient} from "@angular/common/http";
 import {Estado, LogicaJuego} from "./logica-juego";
 import {NotificacionesComponent} from "./notificaciones/notificaciones.component";
+import {lastValueFrom} from "rxjs";
 
 export class LlamadasAPI {
 
@@ -232,20 +233,6 @@ export class LlamadasAPI {
         }
       });
   }
-
-  // Obtiene el blob de imagen dado su id, y llama por callback para devolverlo
-  obtenerImagenItem(llamador : any, id : string) : any {
-    this.http.get(LlamadasAPI.URLApi+'/api/obtenerImagenItem/'+id, {observe:'body', responseType:'blob', withCredentials: true})
-      .subscribe({
-        next :(response) => {
-          llamador.introducirImagen(response, id)
-        },
-        error: (error) => {
-          console.log("Error:", error)
-        }
-      });
-  }
-
 
   comprarAspecto(item : number, llamador : any) {
     this.http.post(LlamadasAPI.URLApi+'/api/comprarObjeto/'+item, null, { observe:'response', responseType:'text', withCredentials: true})

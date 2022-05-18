@@ -127,8 +127,6 @@ export class LogicaJuego {
 
         // Almacena la nueva carta, consultándolas de nuevo para conocer su ID
         this.consultarCartas()
-        // TODO: Mostrar cartas o indicar que hay una carta nueva?
-
         return carta
       } else {
         // Contabiliza una carta más para el receptor

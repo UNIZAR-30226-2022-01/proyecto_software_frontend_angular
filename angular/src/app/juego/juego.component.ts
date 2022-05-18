@@ -318,24 +318,31 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
                     this.turno = obj.Jugador;
 
+                    // Fuerza incondicionalmente cualquier alerta activa y el intervalo de consulta de territorio,
+                    // para evitar condiciones de carrera entre una fase y otra
+                    if (obj.Jugador == this.logica.yo) {
+                      clearInterval(this.intervarloConsultaTerritorio)
+                      this.delay(50) // Hace una espera del mismo tiempo que tarda un intervalo de consulta de territorios
+                      Swal.close()
+                    }
+
                     if (this.logica.fase == 0 && obj.Jugador == this.logica.yo) { // Refuerzo
-                      // Rellenar primer rectangulito
+                      // Rellenar primer indicador de fase
                       this.rellenarFase(1);
                       this.tratarFaseReforzar()
                     } else if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
-                      // Rellenar primer rectangulito
+                      // Rellenar primer indicador de fase
                       this.rellenarFase(1);
                       this.tratarFaseReforzar()
                     } else if (this.logica.fase == 2 && obj.Jugador == this.logica.yo) { // Ataque
-                      // Rellenar segundo rectangulito
+                      // Rellenar segundo indicador de fase
                       this.rellenarFase(2);
                       this.tratarFaseAtacar()
                     } else if (this.logica.fase == 3 && obj.Jugador == this.logica.yo) { // Fortificar
-                      // Rellenar tercer rectangulito
+                      // Rellenar tercer indicador de fase
                       this.rellenarFase(3);
                       this.tratarFaseFortificar()
                     }
-
 
                     break;
                   }
@@ -370,6 +377,15 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   }
                   case 8: { // IDAccionObtenerCarta
                       this.logica.obtenerCarta(obj)
+
+                      if (obj.Jugador == this.logica.yo) {
+                        this.mostrarAlerta("Robo de carta",
+                          "Has obtenido una nueva carta")
+                      } else {
+                        this.mostrarAlerta("Robo de carta",
+                          "El jugador "+obj.Jugador+" ha robado una carta")
+                      }
+
                       this.aumentarCartasCajaJugadores(obj.Jugador, 1)
                       break;
                   }
@@ -614,7 +630,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     Swal.fire({
       title: tituloAlerta,
       position: 'center',
-      width: '45%',
+      width: '35%',
       backdrop: true,
       icon: 'error',
       html: textoAlerta,
@@ -630,12 +646,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     Swal.fire({
       title: tituloAlerta,
       position: 'center',
-      width: '45%',
+      width: '35%',
       backdrop: true,//"#0000000",
       icon: 'success',
       html: textoAlerta,
       timer: 5000,
       timerProgressBar: true,
+    }).then((result) => {
+      if (this.logica.jugadorTurno == this.logica.yo) {
+        this.resumirPartida() // La alerta puede haber cortado la ocupación, por simplicidad se resume la partida
+      }
     })
   }
 
@@ -729,33 +749,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       }
     })
   }
-
-
-  mostrarAlertaInformativaAvatar(titulo : string, texto : string, usuario : string) {
-    var imagen : any;
-
-    // Busca al jugador en las cajas, y obtiene la URL de su avatar
-    for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
-      if (document.getElementById("nombreJugador" + (i + 1))!.innerHTML == usuario) {
-        imagen = document.getElementById("avatarJugador" + (i + 1))! as HTMLImageElement;
-        break
-      }
-    }
-
-    Swal.fire({
-      title: titulo,
-      text: texto,
-      imageUrl: imagen.src,
-      imageWidth: 200,
-      imageHeight: 200,
-      imageAlt: 'Avatar usuario',
-      customClass: {image: "imagenJugador"},
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#3085d6',
-      allowOutsideClick: false
-    })
-  }
-
 
   // Funciones de tratamiento del juego
 
@@ -870,9 +863,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             this.mostrarAlertaRangoAsincrona("Selecciona el número de dados", "1", "3", "atacar");
           }
         }
+        console.log("Fin de intervalo de tratarFaseAtacar")
       },
-      200);
-
+      50);
   }
 
 
@@ -885,7 +878,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.mostrarAlertaPermanente("Selecciona el territorio origen", "")
     this.mapa.permitirSeleccionTerritorios();
     clearInterval(this.intervarloConsultaTerritorio) // Limpia el intervalo de la fase de ataque, si existe
-
     this.intervarloConsultaTerritorio = setInterval(() =>
       {
         if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
@@ -913,8 +905,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", String(Number.parseInt(tropasTerritorio1)-1), "fortificar");
           }
         }
+        console.log("Fin de intervalo de tratarFaseFortificar")
       },
-      200);
+      50);
   }
 
 
@@ -1091,8 +1084,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           // Una vez hecho, se llama por callback a la selección de tropas
           this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", tropasRecibidas.toString());
         }
+        console.log("Fin de intervalo de tratarFaseReforzar")
       },
-      200);
+      50);
   }
 
   refuerzoConExito() {

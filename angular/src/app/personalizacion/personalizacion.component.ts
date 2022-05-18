@@ -11,7 +11,7 @@ import {lastValueFrom} from "rxjs";
   templateUrl: './personalizacion.component.html',
   styleUrls: ['./personalizacion.component.css']
 })
-export class PersonalizacionComponent implements OnInit, AfterViewInit{
+export class PersonalizacionComponent implements OnInit {
 
   constructor(private http : HttpClient, private sanitizer : DomSanitizer){}
 
@@ -76,6 +76,32 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
       }
     }
 
+    for (let dado of this.dados) {
+      console.log("Obteniendo imagen de dado", dado)
+      observableConsulta = this.http.get(LlamadasAPI.URLApi + '/api/obtenerImagenItem/' + String(dado.id), {
+        observe: 'body',
+        responseType: 'blob',
+        withCredentials: true
+      })
+
+      var blob = await lastValueFrom(observableConsulta);
+
+      this.introducirImagen(blob, String(dado.id))
+    }
+
+    for (let avatar of this.avatares) {
+      console.log("Obteniendo imagen de avatar", avatar)
+      observableConsulta = this.http.get(LlamadasAPI.URLApi + '/api/obtenerImagenItem/' + String(avatar.id), {
+        observe: 'body',
+        responseType: 'blob',
+        withCredentials: true
+      })
+
+      var blob = await lastValueFrom(observableConsulta);
+
+      this.introducirImagen(blob, String(avatar.id))
+    }
+
     // Obtiene los ítems que tiene equipados
     observableConsulta = this.http.get(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.yo, {
       observe: 'body',
@@ -116,7 +142,7 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
   }
 
   // Una vez cargados los datos en la template de HTML, introduce las imagenes
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     // Por algún motivo, solo funciona ejecutándolo asíncronamente
     setTimeout(() => {
       for (let dado of this.dados) {
@@ -127,7 +153,7 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
         this.llamadasAPI.obtenerImagenItem(this, String(avatar.id))
       }
     }, 100);
-  }
+  }*/
 
   // Cambia la vista de ítems a los dados
   mostrarDados() {
