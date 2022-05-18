@@ -32,7 +32,7 @@ Tienes {{puntos}} puntos
 <div class="contenedor-bottom">
   <div class="flex-container">
        <div class="dado flex-items" id ="dado{{i}}" *ngFor="let dado of dados; let i = index" style="display:none;"> <!-- Por defecto ocultos -->
-         <div class="card" style="width: 15rem; height: 27rem;">
+         <div class="card" style="width: 13rem; height: 26rem;">
            <img id="{{dado.id}}" class="card-img-top">
            <div class="card-body text-justify">
                <h5 class="card-title">{{dado.nombre}}</h5>
@@ -53,7 +53,7 @@ Tienes {{puntos}} puntos
 
 
        <div class="avatar flex-items" id ="avatar{{i}}" *ngFor="let avatar of avatares; let i = index" style="display:none;"> <!-- Por defecto ocultos -->
-          <div class="card" style="width: 13rem; height: 23rem; ">
+          <div class="card" style="width: 13rem; height: 26rem;">
             <img id="{{avatar.id}}" class="card-img-top">
             <div class="card-body text-justify">
                 <h5 class="card-title">{{avatar.nombre}}</h5>

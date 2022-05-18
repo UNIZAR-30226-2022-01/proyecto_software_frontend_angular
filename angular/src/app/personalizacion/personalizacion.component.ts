@@ -4,6 +4,7 @@ import {Estado} from "../logica-juego";
 import Swal from "sweetalert2";
 import {LlamadasAPI} from "../llamadas-api";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'personalizacion',
@@ -50,71 +51,68 @@ export class PersonalizacionComponent implements OnInit, AfterViewInit{
     this.yo = nombre_usuario
 
     // Consulta la colección de items
-    this.http.get(LlamadasAPI.URLApi+'/api/consultarColeccion/' + this.yo, {
+    var observableConsulta = this.http.get(LlamadasAPI.URLApi+'/api/consultarColeccion/' + this.yo, {
       observe: 'body',
-      responseType: 'text',
+      responseType: 'json',
       withCredentials: true
-    }).subscribe({
-        next: (response) => {
-          var jsonData = JSON.parse(response);
+    })
 
-          for (var i = 0; i < jsonData.length; i++) {
-            var item: item = {
-              id: jsonData[i].Id,
-              nombre: jsonData[i].Nombre,
-              descripcion: jsonData[i].Descripcion,
-              precio: jsonData[i].Precio,
-              blob: jsonData[i].Imagen,
-              comprado: false
-            }
+    var jsonData : any = await lastValueFrom(observableConsulta);
 
-            if (jsonData[i].Tipo == "dado") {
-              this.dados.push(item)
-            } else { // Avatar
-              this.avatares.push(item)
-            }
-          }
+    for (var i = 0; i < jsonData.length; i++) {
+      var item: item = {
+        id: jsonData[i].Id,
+        nombre: jsonData[i].Nombre,
+        descripcion: jsonData[i].Descripcion,
+        precio: jsonData[i].Precio,
+        blob: jsonData[i].Imagen,
+        comprado: false
+      }
 
-          // Obtiene los ítems que tiene equipados
-          this.http.get(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.yo, {
-            observe: 'body',
-            responseType: 'text',
-            withCredentials: true
-          })
-            .subscribe({
-              next: (response) => {
-                var jsonData = JSON.parse(response);
+      if (jsonData[i].Tipo == "dado") {
+        this.dados.push(item)
+      } else { // Avatar
+        this.avatares.push(item)
+      }
+    }
 
-                this.puntos = jsonData.Puntos
+    // Obtiene los ítems que tiene equipados
+    observableConsulta = this.http.get(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.yo, {
+      observe: 'body',
+      responseType: 'json',
+      withCredentials: true
+    })
 
-                // Marca el dado en uso como tal, e inicializa la vista de dados por defecto
-                this.dados.forEach((dado, index) => {
-                  if (dado.id == jsonData.ID_dado) {
-                    this.indiceDadoActual = index
-                    document.getElementById("enUsoDado" + this.indiceDadoActual)!.style.display = "block";
-                  }
+    jsonData = await lastValueFrom(observableConsulta);
 
-                  document.getElementById("nombreItemActual")!.innerHTML = this.dados[this.indiceDadoActual].nombre;
-                  document.getElementById("descripcionItemActual")!.innerHTML = this.dados[this.indiceDadoActual].descripcion;
+    this.puntos = jsonData.Puntos
 
-                  // Espera a obtener las imagenes, y la inserta en el actual
-                  setTimeout(() => {
-                    var imagen = document.getElementById("imagenActual")! as HTMLImageElement
-                    imagen.src = (document.getElementById(String(dado.id))! as HTMLImageElement).src
-                  }, 100);
-                })
+    // Marca el dado en uso como tal, e inicializa la vista de dados por defecto
+    this.dados.forEach((dado, index) => {
+      if (dado.id == jsonData.ID_dado) {
+        this.indiceDadoActual = index
+        document.getElementById("enUsoDado" + this.indiceDadoActual)!.style.display = "block";
+      }
 
-                // Marca el avatar en uso como tal y oculta su botón de equipar
-                this.avatares.forEach((avatar, index) => {
-                  if (avatar.id == jsonData.ID_avatar) {
-                    this.indiceAvatarActual = index
-                    document.getElementById("enUsoAvatar" + this.indiceAvatarActual)!.style.display = "block";
-                  }
-                })
-              }
-            })
-        }
-      })
+      document.getElementById("nombreItemActual")!.innerHTML = this.dados[this.indiceDadoActual].nombre;
+      document.getElementById("descripcionItemActual")!.innerHTML = this.dados[this.indiceDadoActual].descripcion;
+
+      // Espera a obtener las imagenes, y la inserta en el actual
+      setTimeout(() => {
+        var imagen = document.getElementById("imagenActual")! as HTMLImageElement
+        imagen.src = (document.getElementById(String(dado.id))! as HTMLImageElement).src
+      }, 100);
+    })
+
+    // Marca el avatar en uso como tal y oculta su botón de equipar
+    this.avatares.forEach((avatar, index) => {
+      if (avatar.id == jsonData.ID_avatar) {
+        this.indiceAvatarActual = index
+        document.getElementById("enUsoAvatar" + this.indiceAvatarActual)!.style.display = "block";
+      }
+    })
+
+    this.mostrarAvatares()
   }
 
   // Una vez cargados los datos en la template de HTML, introduce las imagenes

@@ -24,11 +24,29 @@ export class IdentificacionComponent implements OnInit {
           var enPartida = JSON.parse(response.body!);
 
           if (enPartida) {
-            localStorage.setItem('volviendo', "true");
+            document.getElementById("botonBuscar")!.style.display = "none"
+            document.getElementById("botonCrear")!.style.display = "none"
 
+            this.http.get(LlamadasAPI.URLApi+'/api/obtenerEstadoLobby', {observe:'body', responseType:'text' as 'json', withCredentials: true})
+              .subscribe(
+                data => {
+                  console.log(data)
+                  var estadoLobby = JSON.parse(data.toString());
+
+                  var enCurso = estadoLobby.EnCurso;
+
+                  if (enCurso) {
+                    localStorage.setItem('volviendo', "true");
+
+                    document.getElementById("botonLobby")!.style.display = "none"
+                    document.getElementById("botonJuego")!.style.display = "block"
+                  }
+                })
+          } else {
             document.getElementById("botonLobby")!.style.display = "none"
-            document.getElementById("botonJuego")!.style.display = "block"
+            document.getElementById("botonJuego")!.style.display = "none"
           }
+
         }
       })
   }
