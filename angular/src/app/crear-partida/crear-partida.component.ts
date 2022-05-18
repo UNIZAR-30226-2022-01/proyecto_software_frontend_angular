@@ -43,8 +43,8 @@ export class CrearPartidaComponent implements OnInit {
       this.privada = false;
       this.publica = true;
       document.getElementById('contrasenia')!.style.visibility="hidden";
-
     }
+    
   }
 
 
