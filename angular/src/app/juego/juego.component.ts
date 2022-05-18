@@ -357,8 +357,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   case 5: { // IDAccionAtaque
                       console.log("Mostrando dados");
                       this.mostrarAlertaDados(obj);
-                      console.log("Tratar accion atacar");
-                      this.tratarAccionAtacar(obj);
                       break;
                   }
                   case 6: { // IDAccionOcupar
@@ -765,11 +763,24 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     // Atacante
     console.log("Numero de dados es igual a " + obj.DadosAtacante.length);
     for (var i = 0; i < obj.DadosAtacante.length; i++) {
-      this.obtenerDados(i, obj)
+      this.obtenerDadosAtacante(i, obj)
     }
+    console.log("Numero de dados del defensor es igual a " + obj.DadosDefensor.length);
+    for (var i = 0; i < obj.DadosDefensor.length; i++) {
+      this.obtenerDadosDefensor(i, obj)
+    }
+    window.setTimeout(() =>{
+      document.getElementById("dadoUno")!.style.visibility="hidden";
+      document.getElementById("dadoDos")!.style.visibility="hidden";
+      document.getElementById("dadoTres")!.style.visibility="hidden";
+      document.getElementById("dadoUnoD")!.style.visibility="hidden";
+      document.getElementById("dadoDosD")!.style.visibility="hidden";
+      console.log("Tratar accion atacar");
+      this.tratarAccionAtacar(obj);
+    }, 5000);
   }
 
-  obtenerDados(i : number, obj : any) {
+  obtenerDadosAtacante(i : number, obj : any) {
     this.http.get(LlamadasAPI.URLApi+'/api/obtenerDados/' + obj.JugadorAtacante + '/' + obj.DadosAtacante[i], {observe:'body', responseType:'blob', withCredentials: true})
       .subscribe({
         next : (response) => {
@@ -793,6 +804,30 @@ export class JuegoComponent implements OnInit, AfterViewInit {
               document.getElementById("dadoTres")!.style.visibility="visible";
               console.log("Mostrando tercer dado: ", url);
               var imagen = document.getElementById("dadoTres")! as HTMLImageElement;
+              imagen.src = url;
+            }
+          }
+      });
+  }
+
+  obtenerDadosDefensor(i : number, obj : any) {
+    this.http.get(LlamadasAPI.URLApi+'/api/obtenerDados/' + obj.JugadorDefensor + '/' + obj.DadosDefensor[i], {observe:'body', responseType:'blob', withCredentials: true})
+      .subscribe({
+        next : (response) => {
+            // mostrar los resultados de cada dado
+            var url = URL.createObjectURL(response);
+
+            if(i == 0) {
+              document.getElementById("dadoUnoD")!.style.visibility="visible";
+              console.log("Mostrando primer dado del defensor: ", url);
+              var imagen = document.getElementById("dadoUnoD")! as HTMLImageElement;
+              imagen.src = url;
+            }
+            if(i == 1) {
+              document.getElementById("dadoDosD")!.style.visibility="visible";
+              console.log("Mostrando segundo dado del defensor: ", url);
+              //this.dadoDos = url;
+              var imagen = document.getElementById("dadoDosD")! as HTMLImageElement;
               imagen.src = url;
             }
           }

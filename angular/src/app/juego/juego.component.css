@@ -239,12 +239,17 @@ transform: rotate(-225deg);
 .imagenDado {
   width: 75px;
   height: 75px;
-  border-radius: 100%;
-  float:left;
+  float:center;
   margin: auto;
   position: relative;
+  background-color:hsl(0, 0%, 0%, 0);
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+  pointer-events: none;
+}
 
-  border-style: solid;
-  border-width: 3px 3px 3px 3px;
-  border-color: #7f0033;
+.Resultado {
+  font-size: 2vw;
+  text-decoration: none;
+  background-color:hsl(0, 0%, 0%, 0);
 }
