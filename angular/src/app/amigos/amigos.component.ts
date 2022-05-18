@@ -39,7 +39,7 @@ export class AmigosComponent implements OnInit {
   }
 
   listarAmigos() {
-    this.http.get(`http://localhost:8090/api/listarAmigos`, {observe:'body', responseType:'text', withCredentials: true})
+    this.http.get(LlamadasAPI.URLApi+'/api/listarAmigos', {observe:'body', responseType:'text', withCredentials: true})
     .subscribe({
     next : (response) => {
       this.amigos = JSON.parse(response);

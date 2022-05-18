@@ -397,7 +397,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                 }
               }
             })
-    }, 5000);
+    }, 500);
   }
 
   mostrarFase() {
@@ -910,7 +910,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             var tropasTerritorio1 = this.obtenerTropasRegion(this.territorios.indexOf(this.territorio1))
 
             // Una vez hecho, se llama por callback a la selección de tropas
-            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", tropasTerritorio1, "fortificar");
+            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", String(Number.parseInt(tropasTerritorio1)-1), "fortificar");
           }
         }
       },
@@ -967,13 +967,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     var nombreTerritorioOrigen : string = this.territorios[Number.parseInt(this.territorioOrigen)]
 
-    this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas de ocupación desde "+nombreTerritorioOrigen, "1", String(tropasOrigen), "ocupar");
+    this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas de ocupación desde "+nombreTerritorioOrigen, "1", String(tropasOrigen-1), "ocupar");
   }
 
   reiniciarOcupar() {
     console.log("reiniciando ocupar por fallo...")
     if (this.objetoOcuparGuardado == null) { // Ha habido un fallo tras resumir
-      this.reiniciarOcuparResumen(Number.parseInt(this.tropasOrigenFalloOcuparResumir))
+      this.reiniciarOcuparResumen(Number.parseInt(this.tropasOrigenFalloOcuparResumir)-1)
     } else {
       this.tratarOcupar(this.objetoOcuparGuardado)
     }
@@ -1185,6 +1185,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   terminarAutomataJuego() {
     clearInterval(this.intervarloConsultaTerritorio)
+    clearInterval(this.intervaloConsultaEstado)
   }
 
 
