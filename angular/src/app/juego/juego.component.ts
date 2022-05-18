@@ -1099,7 +1099,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   tratarAccionJugadorExpulsado(obj : any) {
     this.mostrarAlertaDerrotaAjena("Jugador eliminado",
-      "El jugador " + obj.JugadorEliminado + " ha sido desconectado de la partida por inactividad." +
+      "El jugador " + obj.JugadorEliminado + " ha sido desconectado de la partida por rendirse o por inactividad." +
       "Sus territorios pueden ser conquistados sin restricciones.");
 
     // Busca la caja de jugador, y sobreescribe su color por uno gris
