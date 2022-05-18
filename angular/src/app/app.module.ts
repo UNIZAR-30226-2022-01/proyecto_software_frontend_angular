@@ -40,7 +40,7 @@ const appRoutes: Routes = [
   {path: 'registroUsuario', component: RegistroComponent},
   {path: 'inicioSesion', component: InicioSesionComponent},
   {path: 'tienda', component: TiendaComponent},
-  {path: '', component: TopBarComponent},
+  {path: 'top-bar', component: TopBarComponent},
   {path: 'configuracionPartida', component: ConfigPartidaComponent},
   {path: 'buscarPartida', component: BuscarPartidaComponent},
   {path: 'perfil/:nombre', component: PerfilComponent},

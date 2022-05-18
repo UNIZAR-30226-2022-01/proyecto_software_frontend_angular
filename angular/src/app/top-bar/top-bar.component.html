@@ -1,10 +1,10 @@
 
 
 <div class="navbar navbar-dark bg-dark" style="justify-content: right;">
-  <a class="navbar-brand ps-3" style="position: fixed; left: 1%;" >World domination</a>
+  <a class="navbar-brand ps-3" style="position: fixed; left: 1%;" [routerLink]="['/']" >World domination</a>
 
     <li class="nav-item ">
-      <a class="nav-link" style="left: 0; color: #6c757d;"> 100
+      <a class="nav-link" style="left: 0; color: #6c757d;"> {{puntos}}
         <img style="  filter: invert(100%)" src="https://img.icons8.com/ios-glyphs/30/000000/average-2.png"/>
           
       </a>
@@ -20,7 +20,7 @@
         <a class="nav-link " style> 
           <img style="cursor: pointer;filter:invert(100%)" src="https://img.icons8.com/material-rounded/30/000000/conference-call.png"/>
     
-            <span class="badge badge-danger badge-counter">3+</span>
+            <span class="badge badge-danger badge-counter">{{amigos}}</span>
         </a>
       </li>
     
@@ -30,9 +30,9 @@
       <a class="nav-link dropdown-toggle" style="color:#6c757d" id="navbarDropdown" (click)="mostrar()" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{nombre_usuario}}</a>
   
       <ul class="dropdown-menu dropdown-menu-end " aria-labelledby="navbarDropdown" id="menu" data-bs-popper="none">
-        <li><a class="dropdown-item" href="#!">Perfil</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/miPerfil']">Perfil</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#!">Log out</a></li>
+        <li><a class="dropdown-item" (click)="cerrarSesion()">Log out</a></li>
       </ul>
   
     </li>
