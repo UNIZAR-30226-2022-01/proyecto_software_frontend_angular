@@ -124,33 +124,51 @@ export class TiendaComponent implements OnInit {
   }
 
   // Una vez cargados los datos en la template de HTML, introduce las imagenes
-  cargarImagenes() {
-      for (let i = 0; i < this.dados.length; i++) {
-        console.log("Obteniendo dado",this.dados[i])
-        this.llamadasAPI.obtenerImagenItem(this, String(this.dados[i].id))
+  async cargarImagenes() {
+    for (let i = 0; i < this.dados.length; i++) {
+      console.log("Obteniendo imagen de dado", this.dados[i])
+      var observableConsulta = this.http.get(LlamadasAPI.URLApi + '/api/obtenerImagenItem/' + String(this.dados[i].id), {
+        observe: 'body',
+        responseType: 'blob',
+        withCredentials: true
+      })
 
-        // Indicar que está comprado con una alerta y en el botón
-        if (this.dados[i].comprado) {
-          console.log("Dado comprado!")
-          document.getElementById("botonEquiparDado"+i)!.className = "btn btn-success"
-          document.getElementById("botonEquiparDado"+i)!.innerHTML = "Comprado"
-          document.getElementById("botonEquiparDado"+i)!.setAttribute('disabled',"");
-        }
+      var blob = await lastValueFrom(observableConsulta);
+
+      this.introducirImagen(blob, String(this.dados[i].id))
+
+
+      // Indicar que está comprado con una alerta y en el botón
+      if (this.dados[i].comprado) {
+        console.log("Dado comprado!")
+        document.getElementById("botonEquiparDado" + i)!.className = "btn btn-success"
+        document.getElementById("botonEquiparDado" + i)!.innerHTML = "Comprado"
+        document.getElementById("botonEquiparDado" + i)!.setAttribute('disabled', "");
       }
+    }
 
-      for (let i = 0; i < this.avatares.length; i++) {
-        console.log("Obteniendo avatar",this.avatares[i])
-        this.llamadasAPI.obtenerImagenItem(this, String(this.avatares[i].id))
+    for (let i = 0; i < this.avatares.length; i++) {
+      console.log("Obteniendo imagen de avatar", this.avatares[i])
 
-        if (this.avatares[i].comprado) {
-          console.log("Avatar comprado!")
-          document.getElementById("botonEquiparAvatar"+i)!.className = "btn btn-success"
-          document.getElementById("botonEquiparAvatar"+i)!.innerHTML = "Comprado"
-          document.getElementById("botonEquiparAvatar"+i)!.setAttribute('disabled',"");
-        }
+      var observableConsulta = this.http.get(LlamadasAPI.URLApi + '/api/obtenerImagenItem/' + String(this.avatares[i].id), {
+        observe: 'body',
+        responseType: 'blob',
+        withCredentials: true
+      })
+
+      var blob = await lastValueFrom(observableConsulta);
+
+      this.introducirImagen(blob, String(this.avatares[i].id))
+
+      if (this.avatares[i].comprado) {
+        console.log("Avatar comprado!")
+        document.getElementById("botonEquiparAvatar" + i)!.className = "btn btn-success"
+        document.getElementById("botonEquiparAvatar" + i)!.innerHTML = "Comprado"
+        document.getElementById("botonEquiparAvatar" + i)!.setAttribute('disabled', "");
       }
+    }
 
-      this.mostrarDados()
+    this.mostrarDados()
   }
 
   // Cambia la vista de ítems a los dados
