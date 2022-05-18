@@ -139,12 +139,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   nDadosAtaque : number = 0;
   nTropasOcupar : number = 0;
   turno : string = "-------";
-  dadoUno: string = "";
-  dadoDos: string = "";
-  dadoTres: string = "";
-  hayUno: boolean = false;
-  hayDos: boolean = false;
-  hayTres: boolean = false;
 
   resultadoAlerta : Promise<SweetAlertResult> | undefined ;
 
@@ -439,16 +433,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       }
       case 1: {
         console.log("ID Fase 1 Antes: " + id)
-        document.getElementById("rReforzar")!.style.background="black";
+        document.getElementById("rReforzar")!.style.background="#373737";
         console.log("ID Fase 1 Despues: " + id)
         break;
       }
       case 2: {
-        document.getElementById("rAtacar")!.style.background="black";
+        document.getElementById("rAtacar")!.style.background="#373737";
         break;
       }
       case 3: {
-        document.getElementById("rFortificar")!.style.background="black";
+        document.getElementById("rFortificar")!.style.background="#373737";
         break;
       }
     }
@@ -768,13 +762,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   // Funciones de tratamiento del juego
 
   mostrarAlertaDados(obj : any) {
-    this.dadoUno = "";
-    this.dadoDos = "";
-    this.dadoTres = "";
-    this.hayUno = false;
-    this.hayDos = false;
-    this.hayTres = false;
-
     // Atacante
     console.log("Numero de dados es igual a " + obj.DadosAtacante.length);
     for (var i = 0; i < obj.DadosAtacante.length; i++) {
@@ -790,27 +777,21 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             var url = URL.createObjectURL(response);
 
             if(i == 0) {
+              document.getElementById("dadoUno")!.style.visibility="visible";
               console.log("Mostrando primer dado: ", url);
-              this.hayUno = true;
-              //this.dadoUno = url;
-
               var imagen = document.getElementById("dadoUno")! as HTMLImageElement;
               imagen.src = url;
             }
             if(i == 1) {
+              document.getElementById("dadoDos")!.style.visibility="visible";
               console.log("Mostrando segundo dado: ", url);
-              this.hayUno = true;
-              this.hayDos = true;
               //this.dadoDos = url;
               var imagen = document.getElementById("dadoDos")! as HTMLImageElement;
               imagen.src = url;
             }
             if(i == 2) {
+              document.getElementById("dadoTres")!.style.visibility="visible";
               console.log("Mostrando tercer dado: ", url);
-              this.hayUno = true;
-              this.hayDos = true;
-              this.hayTres = true;
-              //this.dadoTres = url;
               var imagen = document.getElementById("dadoTres")! as HTMLImageElement;
               imagen.src = url;
             }

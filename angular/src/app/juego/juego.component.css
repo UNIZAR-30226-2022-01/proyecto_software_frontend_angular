@@ -100,7 +100,7 @@ html, body{
   clear:right;
   border: 1px solid #fafafa;
   box-shadow:  rgba(0, 0, 0, 0.25) 0px 5px 10px;
-  background: #b5bbbd;
+  background: #CCF4FF;
 }
 
 .rectangulito {
@@ -117,7 +117,7 @@ html, body{
   background-color: hsl(0, 0%, 0%, 0);
   transform: translate(3.7vw, 1vh);
   color: #373737;
-  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .fase{
@@ -126,6 +126,7 @@ html, body{
   transform: translate(5vw, 3.9vh);
   color: #373737;
   font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .round {
