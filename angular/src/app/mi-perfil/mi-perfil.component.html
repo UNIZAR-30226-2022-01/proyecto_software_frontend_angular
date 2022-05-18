@@ -1,1 +1,17 @@
-<p>mi-perfil works!</p>
+<top-bar></top-bar>
+<down-bar></down-bar>
+
+<div style="text-align: center;">
+    <br><br><br>
+    <h1> <img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
+        {{nombre}}
+       <a  [routerLink]="['/configuaracionPerfil']"><img src="https://img.icons8.com/material-sharp/48/000000/settings.png" /></a>   
+    </h1>
+    <br><br><br>
+       <h3>Biografía</h3>
+    <p>{{descripcion}}</p>
+    <br>
+    <h3>Email: {{email}}</h3>
+    <h3>Partidas ganadas: {{partidas_ganadas}}</h3>
+    <h3>Partidas totales: {{partidas_totales}}</h3>
+</div>
