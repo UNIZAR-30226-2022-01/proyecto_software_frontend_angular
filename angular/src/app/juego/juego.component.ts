@@ -370,6 +370,15 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   }
                   case 8: { // IDAccionObtenerCarta
                       this.logica.obtenerCarta(obj)
+
+                      if (obj.Jugador == this.logica.yo) {
+                        this.mostrarAlerta("Robo de carta",
+                          "Has obtenido una nueva carta")
+                      } else {
+                        this.mostrarAlerta("Robo de carta",
+                          "El jugador "+obj.Jugador+" ha robado una carta")
+                      }
+
                       this.aumentarCartasCajaJugadores(obj.Jugador, 1)
                       break;
                   }
