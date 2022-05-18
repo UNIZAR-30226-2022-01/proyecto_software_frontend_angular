@@ -120,6 +120,14 @@ html, body{
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+.turnoT{
+  background-color: hsl(0, 0%, 0%, 0);
+  font-weight: bold;
+  text-decoration:none;
+  color: #373737;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 .fase{
   position: absolute;
   background-color: hsl(0, 0%, 0%, 0);
