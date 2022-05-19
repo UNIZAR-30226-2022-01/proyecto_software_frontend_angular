@@ -7,7 +7,7 @@ import {lastValueFrom} from "rxjs";
 
 export class LlamadasAPI {
 
-  //public static URLApi: string = "https://api.pruebecita.tk";
+  //public static URLApi: string = "https://api.unizzardentertainment.tk";
   public static URLApi: string = "http://localhost:8090";
 
   constructor(private http : HttpClient){}
