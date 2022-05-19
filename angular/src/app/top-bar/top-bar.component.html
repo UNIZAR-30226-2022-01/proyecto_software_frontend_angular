@@ -1,31 +1,30 @@
 
 
-<div class="navbar navbar-dark bg-dark" style="justify-content: right;">
+<div class="navbar navbar-dark bg-dark" style="justify-content: right; height: 6vh">
   <a class="navbar-brand ps-3" style="position: fixed; left: 1%;" [routerLink]="['/identificacion']" >World domination</a>
 
     <li class="nav-item ">
-      <a class="nav-link" style="left: 0; color: #6c757d;"> {{puntos}}
-        <img style="  filter: invert(100%)" src="assets/puntos.png"/>
-          
+      <a class="nav-link" style="left: 0; color: #6c757d; transform: translateY(-2.5vh)"> {{puntos}}
+        <img style="filter: invert(100%);" src="assets/puntos.png" />
       </a>
     </li>
       <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link " style="left: 0;" [routerLink]="['/notificaciones']"> 
-          <img style="cursor: pointer;filter: invert(100%)" src="assets/notificaciones.png"/>
+          <img style="cursor: pointer;filter: invert(100%); transform: translateY(-2.5vh)" src="assets/notificaciones.png"/>
             <!-- Counter - Alerts -->
-            <span class="badge badge-danger badge-counter">{{notificaciones}}</span>
+            <span class="badge badge-danger badge-counter; "style="transform: translate(-0.2vw, -3.5vh)">{{notificaciones}}</span>
         </a>
       </li>
       <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link" [routerLink]="['/amigos']"> 
-          <img style="cursor: pointer;filter:invert(100%)" src="assets/amigos.png"/>
+          <img style="cursor: pointer;filter:invert(100%); transform: translateY(-2.5vh)" src="assets/amigos.png"/>
     
-            <span class="badge badge-danger badge-counter">{{amigos}}</span>
+            <span class="badge badge-danger badge-counter" style="transform: translateY(-2.5vh)">{{amigos}}</span>
         </a>
       </li>
     
      
-    <li class="nav-item dropdown"> 
+    <li class="nav-item dropdown" style="transform: translateY(-2.5vh)"> 
       
       <a class="nav-link dropdown-toggle" style="color:#6c757d" id="navbarDropdown" (click)="mostrar()" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{nombre_usuario}}</a>
   

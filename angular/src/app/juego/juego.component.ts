@@ -786,16 +786,28 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             // mostrar los resultados de cada dado
             var url = URL.createObjectURL(response);
 
-            if(i == 0) {
+            if(i == 0 && obj.DadosAtacante.length == 1) {
+              document.getElementById("dadoDos")!.style.visibility="visible";
+              console.log("Mostrando primer dado: ", url);
+              var imagen = document.getElementById("dadoDos")! as HTMLImageElement;
+              imagen.src = url;
+            }
+            else if (i == 0 && (obj.DadosAtacante.length == 2 || obj.DadosAtacante.length == 3)) {
               document.getElementById("dadoUno")!.style.visibility="visible";
               console.log("Mostrando primer dado: ", url);
               var imagen = document.getElementById("dadoUno")! as HTMLImageElement;
               imagen.src = url;
             }
-            if(i == 1) {
-              document.getElementById("dadoDos")!.style.visibility="visible";
+            if(i == 1 && obj.DadosAtacante.length == 2) {
+              document.getElementById("dadoTres")!.style.visibility="visible";
               console.log("Mostrando segundo dado: ", url);
               //this.dadoDos = url;
+              var imagen = document.getElementById("dadoTres")! as HTMLImageElement;
+              imagen.src = url;
+            }
+            else if (i == 1 && obj.DadosAtacante.length == 3) {
+              document.getElementById("dadoDos")!.style.visibility="visible";
+              console.log("Mostrando primer dado: ", url);
               var imagen = document.getElementById("dadoDos")! as HTMLImageElement;
               imagen.src = url;
             }
