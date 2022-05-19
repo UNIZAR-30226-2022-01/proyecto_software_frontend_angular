@@ -79,31 +79,29 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   constructor(private http: HttpClient, private router:Router){}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // Fuerza el background-color en el body en el constructor, Angular no lo aplica si no.
     document.body.style.backgroundColor = "#20BCE7";
 
     var volviendo = localStorage.getItem("volviendo")
 
-    console.log("volviendo es", volviendo)
-
     if (volviendo == null) {
-      this.logica = new LogicaJuego(this.http, true);
+      console.log("Iniciando sin resumen...", volviendo)
+      this.logica = new LogicaJuego(this.http);
+      await this.logica.obtenerJugadoresPartida()
 
       // Como la petición inicial de jugadores es asíncrona, se espera unos segundos a rellenar las cajas de jugadores
-      setTimeout(() =>{
-        this.rellenarCajasJugadores()
-      }, 2000);
+      console.log("rellenando cajas...")
+      this.rellenarCajasJugadores()
 
       // Del mismo modo, se espera para los avatares
-      setTimeout(() =>{
-        this.obtenerAvataresJugadores()
-      }, 3000);
+      console.log("rellenando avatares...")
+      this.obtenerAvataresJugadores()
 
     } else {
       localStorage.removeItem("volviendo")
-      console.log("Se ha vuelto, resumiendo partida...")
-      this.logica = new LogicaJuego(this.http, false);
+      console.log("Iniciando con resumen..")
+      this.logica = new LogicaJuego(this.http);
       this.resumirPartida()
     }
 
@@ -128,7 +126,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   jugador = Array<string>();
   intervalos = Array<any>();
   todoOk:boolean = false;
-  //primeraVez = 42;
 
   intervarloConsultaTerritorio : any;
   territorio1 : string = "";
@@ -140,17 +137,18 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   nTropasOcupar : number = 0;
   turno : string = "-------";
 
-  resultadoAlerta : Promise<SweetAlertResult> | undefined ;
-
   tropasAMover : number = 0;
 
-  jugadorChat : string = "";
-  mensajeChat : string ="";
   objetoOcuparGuardado : any;
   tropasOrigenFalloOcuparResumir : string = "";
 
   llamadasAPI : LlamadasAPI = new LlamadasAPI(this.http);
+
+  primerRefuerzo : boolean = true;
+
   resumirPartida()  {
+    this.primerRefuerzo = false;
+
     this.http.get(LlamadasAPI.URLApi+'/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
@@ -266,17 +264,18 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   ejecutarAutomata() {
+    console.log("Iniciando autómata")
     this.intervaloConsultaEstado = setInterval(() => {
       this.http.get(LlamadasAPI.URLApi+'/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
           .subscribe(
-            data => {
+            async data => {
               //clearInterval(this.intervaloConsultaEstado) // Para debugging
-              //console.log(this.jsonData);
+              console.log("json en obtenerEstado:", this.jsonData);
               this.jsonData = JSON.parse(data);
-              for(var i = 0; i < this.jsonData.length; i++) {
+              for (var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
-                console.log(obj.IDAccion)
-                switch(obj.IDAccion) {
+                console.log("IDaccion:", obj.IDAccion)
+                switch (obj.IDAccion) {
                   case 0: { // IDAccionRecibirRegion
                     this.logica.recibirRegion(obj, document);
                     this.index.push(obj.Region);
@@ -285,7 +284,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     // Actualiza las tropas
                     this.logica.mapaJugadores.get(obj.Jugador)!.tropas = obj.TropasRestantes
 
-                    if (this.obtenerTropasCajaJugadores(obj.Jugador) == 0 ) {
+                    if (this.obtenerTropasCajaJugadores(obj.Jugador) == 0) {
                       this.sobreescribirTropasCajaJugadores(obj.Jugador, obj.TropasRestantes)
                     }
 
@@ -293,17 +292,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
                     // Muestra cada 200ms un cambio de territorio
                     this.tiempo = this.tiempo + 200;
-                    if (this.vez < 42){
+                    if (this.vez < 42) {
                       this.vez = this.vez + 1;
-                      this.intervalos.push(setTimeout(() =>
-                      {
+                      this.intervalos.push(setTimeout(() => {
                         var velemento = this.index.pop()!
                         var jugador = this.jugador.pop()!
-                        document.getElementById(this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
-                        document.getElementById("c"+this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
-                        document.getElementById("t"+this.territorios[velemento])!.innerHTML="1"
-                      },this.tiempo));
-                    }else{
+                        document.getElementById(this.territorios[velemento])!.style.fill = this.logica.colorJugador.get(jugador);
+                        document.getElementById("c" + this.territorios[velemento])!.style.fill = this.logica.colorJugador.get(jugador);
+                        document.getElementById("t" + this.territorios[velemento])!.innerHTML = "1"
+                      }, this.tiempo));
+                    } else {
                       clearInterval(this.intervalos.pop()!)
                     }
                     break;
@@ -326,7 +324,15 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       Swal.close()
                     }
 
-                    if (this.logica.fase == 0 && obj.Jugador == this.logica.yo) { // Refuerzo
+                    // Duerme en el primer refuerzo de la fase inicial, para esperar a que se rellene el mapa
+                    if (this.logica.fase == 0 && this.primerRefuerzo) {
+                      console.log("Primer refuerzo en fase inicial, durmiendo...")
+                      await new Promise(r => setTimeout(r, 200 * 42));
+                      console.log("Fin de dormir en primer refuerzo en fase inicial")
+                      this.primerRefuerzo = false
+                    }
+
+                    if (this.logica.fase == 0 && obj.Jugador == this.logica.yo) { // Refuerzo en fase inicial
                       // Rellenar primer indicador de fase
                       this.rellenarFase(1);
                       this.tratarFaseReforzar()
@@ -362,48 +368,48 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 5: { // IDAccionAtaque
-                      console.log("Mostrando dados");
-                      this.mostrarAlertaDados(obj);
-                      break;
+                    console.log("Mostrando dados");
+                    this.mostrarAlertaDados(obj);
+                    break;
                   }
                   case 6: { // IDAccionOcupar
                     this.tratarAccionOcupar(obj);
-                      break;
+                    break;
                   }
                   case 7: { // IDAccionFortificar
-                      this.tratarAccionFortificar(obj)
+                    this.tratarAccionFortificar(obj)
 
-                      break;
+                    break;
                   }
                   case 8: { // IDAccionObtenerCarta
-                      this.logica.obtenerCarta(obj)
+                    this.logica.obtenerCarta(obj)
 
-                      if (obj.Jugador == this.logica.yo) {
-                        this.mostrarAlerta("Robo de carta",
-                          "Has obtenido una nueva carta")
-                      } else {
-                        this.mostrarAlerta("Robo de carta",
-                          "El jugador "+obj.Jugador+" ha robado una carta")
-                      }
+                    if (obj.Jugador == this.logica.yo) {
+                      this.mostrarAlerta("Robo de carta",
+                        "Has obtenido una nueva carta")
+                    } else {
+                      this.mostrarAlerta("Robo de carta",
+                        "El jugador " + obj.Jugador + " ha robado una carta")
+                    }
 
-                      this.aumentarCartasCajaJugadores(obj.Jugador, 1)
-                      break;
+                    this.aumentarCartasCajaJugadores(obj.Jugador, 1)
+                    break;
                   }
                   case 9: { // IDAccionJugadorEliminado
-                      this.logica.jugadorEliminado(obj)
-                      this.tratarAccionJugadorEliminado(obj)
+                    this.logica.jugadorEliminado(obj)
+                    this.tratarAccionJugadorEliminado(obj)
 
-                      break;
+                    break;
                   }
                   case 10: { // IDAccionJugadorExpulsado
-                      this.logica.jugadorExpulsado(obj)
-                      // Sabemos que no podemos ser nosotros, ya que estaríamos desvinculados de la partida
-                      this.tratarAccionJugadorExpulsado(obj)
-                      break;
+                    this.logica.jugadorExpulsado(obj)
+                    // Sabemos que no podemos ser nosotros, ya que estaríamos desvinculados de la partida
+                    this.tratarAccionJugadorExpulsado(obj)
+                    break;
                   }
                   case 11: { // IDAccionPartidaFinalizada
-                      this.tratarAccionPartidaFinalizada(obj)
-                      break;
+                    this.tratarAccionPartidaFinalizada(obj)
+                    break;
                   }
 
                   case 12: { // IDAccionMensaje
