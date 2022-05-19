@@ -147,6 +147,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   primerRefuerzo : boolean = true;
 
   resumirPartida()  {
+    this.primerRefuerzo = false;
+
     this.http.get(LlamadasAPI.URLApi+'/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
