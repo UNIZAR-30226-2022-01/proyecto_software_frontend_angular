@@ -79,31 +79,29 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   constructor(private http: HttpClient, private router:Router){}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // Fuerza el background-color en el body en el constructor, Angular no lo aplica si no.
     document.body.style.backgroundColor = "#20BCE7";
 
     var volviendo = localStorage.getItem("volviendo")
 
-    console.log("volviendo es", volviendo)
-
     if (volviendo == null) {
-      this.logica = new LogicaJuego(this.http, true);
+      console.log("Iniciando sin resumen...", volviendo)
+      this.logica = new LogicaJuego(this.http);
+      await this.logica.obtenerJugadoresPartida()
 
       // Como la petición inicial de jugadores es asíncrona, se espera unos segundos a rellenar las cajas de jugadores
-      setTimeout(() =>{
-        this.rellenarCajasJugadores()
-      }, 2000);
+      console.log("rellenando cajas...")
+      this.rellenarCajasJugadores()
 
       // Del mismo modo, se espera para los avatares
-      setTimeout(() =>{
-        this.obtenerAvataresJugadores()
-      }, 3000);
+      console.log("rellenando avatares...")
+      this.obtenerAvataresJugadores()
 
     } else {
       localStorage.removeItem("volviendo")
-      console.log("Se ha vuelto, resumiendo partida...")
-      this.logica = new LogicaJuego(this.http, false);
+      console.log("Iniciando con resumen..")
+      this.logica = new LogicaJuego(this.http);
       this.resumirPartida()
     }
 
@@ -128,7 +126,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   jugador = Array<string>();
   intervalos = Array<any>();
   todoOk:boolean = false;
-  //primeraVez = 42;
 
   intervarloConsultaTerritorio : any;
   territorio1 : string = "";
@@ -140,12 +137,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   nTropasOcupar : number = 0;
   turno : string = "-------";
 
-  resultadoAlerta : Promise<SweetAlertResult> | undefined ;
-
   tropasAMover : number = 0;
 
-  jugadorChat : string = "";
-  mensajeChat : string ="";
   objetoOcuparGuardado : any;
   tropasOrigenFalloOcuparResumir : string = "";
 
@@ -266,16 +259,17 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   ejecutarAutomata() {
+    console.log("Iniciando autómata")
     this.intervaloConsultaEstado = setInterval(() => {
       this.http.get(LlamadasAPI.URLApi+'/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
           .subscribe(
             data => {
               //clearInterval(this.intervaloConsultaEstado) // Para debugging
-              //console.log(this.jsonData);
+              console.log("json en obtenerEstado:", this.jsonData);
               this.jsonData = JSON.parse(data);
               for(var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
-                console.log(obj.IDAccion)
+                console.log("IDaccion:", obj.IDAccion)
                 switch(obj.IDAccion) {
                   case 0: { // IDAccionRecibirRegion
                     this.logica.recibirRegion(obj, document);
@@ -303,7 +297,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                         document.getElementById("c"+this.territorios[velemento])!.style.fill=this.logica.colorJugador.get(jugador);
                         document.getElementById("t"+this.territorios[velemento])!.innerHTML="1"
                       },this.tiempo));
-                    }else{
+                    }else {
                       clearInterval(this.intervalos.pop()!)
                     }
                     break;
