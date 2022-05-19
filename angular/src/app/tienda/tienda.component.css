@@ -23,6 +23,7 @@
   flex-shrink: 1;
   flex-basis: auto;
   align-self: auto;
+  width: 13rem;
 }
 
 .flex-itemsBotonera {
@@ -44,12 +45,14 @@
 }
 
 .contenedor-bottom {
-  position: absolute;
-  top: 20%;
+  width: 40%;
+  height: 50%;
+  /*border: 0.1em solid rgb(54, 51, 51);*/
+  position: fixed;
   left: 50%;
-  right: 50%;
-  height: 125vh;
-  transform: translate(50%, 0%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: auto;
 }
 
 .contenedor-superior {
