@@ -2,13 +2,15 @@
 <top-bar></top-bar>
 <down-bar></down-bar>
 
-<br>
-<!--<h1 style="text-align: center;">Buscar Partida</h1>-->
+<div style="text-align: center;">
+  <br><br>
+  <h1>Buscar partida</h1>
+  <br>
+</div>
 
-<div class="bP card">
-  <h1 style="margin-top: 1.5rem;text-align: center;">Buscar Partida</h1>
+<div class="bP card" style="background-color:transparent; border:transparent;">
   <ng-container *ngFor="let p of jsonArray">
-    <div class="partida card" style="background-color:rgb(250, 250, 250);">
+    <div class="partida card" style="background-color:rgb(250, 250, 250);margin-bottom: 15px;">
       <div class="tipoPartida">
         <a *ngIf="p.EsPublica" class="txtTP">Partida Publica</a>
         <a *ngIf="!p.EsPublica" class="txtTP">Partida Privada</a>

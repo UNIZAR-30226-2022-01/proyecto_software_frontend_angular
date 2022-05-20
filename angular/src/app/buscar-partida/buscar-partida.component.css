@@ -1,11 +1,10 @@
 .bP{
   width: 41.8vw;
   height: 80vh;
-  border:1.5px solid rgb(54, 51, 51);
   position: fixed;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -35%);
   overflow-y: auto;
 }
 
