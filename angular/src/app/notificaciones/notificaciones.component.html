@@ -6,32 +6,41 @@
   <h1>Notificaciones</h1>
   <br>
   <div style="overflow: auto !important;max-height: 39.5em;">
-    <ng-container *ngFor="let n of notificaciones; let i = index" class="overflow-auto">
+    <div *ngIf="notificaciones">
+      <ng-container *ngFor="let n of notificaciones; let i = index" class="overflow-auto">
 
-      <div  class="card shadow h-100" style="border-left: .25rem solid #4e73df;width:60rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 1rem; padding-bottom: 1rem;" *ngIf="n.IDNotificacion == 0" > <!-- NotificacionAmistad -->
-        <div id="texto{{i}}" class="d-inline-block textoNotificacion"> ¡{{n.Jugador}} te ha enviado una solicitud de amistad! </div>
-        <a id="botonAceptar{{i}}" class="btn btn-outline-success mt-auto" style="margin-right: 30px; margin-top: 10px;" (click)="aceptarAmistad(n.Jugador, i)"> Aceptar </a>
-        <a id="botonRechazar{{i}}" class="btn btn-outline-danger mt-auto" style="margin-right: 30px; margin-top: 10px;" (click)="rechazarAmistad(n.Jugador, i)"> Rechazar </a>
-      </div>
-  
-      <div id="{{i}}" class="card shadow h-100" style="border-left: .25rem solid #36b9cc;width:60rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 1rem; padding-bottom: 1rem;" *ngIf="n.IDNotificacion == 1" > <!-- NotificacionTurno -->
-        <div class="d-inline-block textoNotificacion"> ¡La partida en la que estás participando está esperando a que realices tu jugada! </div>
-        <a class="btn btn-outline-dark mt-auto" style="margin-right: 30px; margin-top: 10px;" routerLink="/juego"> Ir a la partida</a>
-      </div>
-  
-      <div id="{{i}}" class="card h-100" style="border-left: .25rem solid #1cc88a;width:60rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 1rem; padding-bottom: 1rem;" *ngIf="n.IDNotificacion == 2" > <!-- NotificacionPuntosObtenidos -->
-        <div *ngIf="n.PartidaGanada" class="d-inline-block textoNotificacion"> ¡Enhorabuena! Has recibido {{n.Puntos}} puntos por ganar.</div>
-        <div *ngIf="!n.PartidaGanada" class="d-inline-block textoNotificacion"> ¡La siguiente vez será! Has recibido {{n.Puntos}} puntos por participar.</div>
-  
-        <a class="btn btn-outline-dark mt-auto" style="margin-right: 30px; margin-top: 10px;" routerLink="/tienda">Ir a la tienda</a> 
-      </div>
-  
-      <div id="{{i}}" class="card shadow h-100" style="border-left: .25rem solid #f6c23e !important;width:60rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 1.5rem; padding-bottom: 1.5rem;" *ngIf="n.IDNotificacion == 3" > <!-- NewNotificacionExpulsion -->
-         <div class="textoNotificacion"> ¡Has sido expulsado de la partida por inactividad! Por favor, evite abandonar la partida la próxima vez. </div>
-      </div>
-  
-      <br>
-    </ng-container>
+        <div  class="card shadow h-100" style="border-left: .25rem solid #4e73df;width:60rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 1rem; padding-bottom: 1rem;" *ngIf="n.IDNotificacion == 0" > <!-- NotificacionAmistad -->
+          <div id="texto{{i}}" class="d-inline-block textoNotificacion"> ¡{{n.Jugador}} te ha enviado una solicitud de amistad! </div>
+          <a id="botonAceptar{{i}}" class="btn btn-outline-success mt-auto" style="margin-right: 30px; margin-top: 10px;" (click)="aceptarAmistad(n.Jugador, i)"> Aceptar </a>
+          <a id="botonRechazar{{i}}" class="btn btn-outline-danger mt-auto" style="margin-right: 30px; margin-top: 10px;" (click)="rechazarAmistad(n.Jugador, i)"> Rechazar </a>
+        </div>
+    
+        <div id="{{i}}" class="card shadow h-100" style="border-left: .25rem solid #36b9cc;width:60rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 1rem; padding-bottom: 1rem;" *ngIf="n.IDNotificacion == 1" > <!-- NotificacionTurno -->
+          <div class="d-inline-block textoNotificacion"> ¡La partida en la que estás participando está esperando a que realices tu jugada! </div>
+          <a class="btn btn-outline-dark mt-auto" style="margin-right: 30px; margin-top: 10px;" routerLink="/juego"> Ir a la partida</a>
+        </div>
+    
+        <div id="{{i}}" class="card h-100" style="border-left: .25rem solid #1cc88a;width:60rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 1rem; padding-bottom: 1rem;" *ngIf="n.IDNotificacion == 2" > <!-- NotificacionPuntosObtenidos -->
+          <div *ngIf="n.PartidaGanada" class="d-inline-block textoNotificacion"> ¡Enhorabuena! Has recibido {{n.Puntos}} puntos por ganar.</div>
+          <div *ngIf="!n.PartidaGanada" class="d-inline-block textoNotificacion"> ¡La siguiente vez será! Has recibido {{n.Puntos}} puntos por participar.</div>
+    
+          <a class="btn btn-outline-dark mt-auto" style="margin-right: 30px; margin-top: 10px;" routerLink="/tienda">Ir a la tienda</a> 
+        </div>
+    
+        <div id="{{i}}" class="card shadow h-100" style="border-left: .25rem solid #f6c23e !important;width:60rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 1.5rem; padding-bottom: 1.5rem;" *ngIf="n.IDNotificacion == 3" > <!-- NewNotificacionExpulsion -->
+           <div class="textoNotificacion"> ¡Has sido expulsado de la partida por inactividad! Por favor, evite abandonar la partida la próxima vez. </div>
+        </div>
+    
+        <br>
+      </ng-container>
+    </div>
+    <div *ngIf="!notificaciones">
+        <h5>No tienes notificaciones todavía...</h5>
+        <img class="imagen" src="assets/robot.png"/> 
+        <h5>¡Únete a una partida para continuar disfrutando de </h5>
+        <h5>la experiencia del juego!</h5>
+        <a class="btn btn-dark mt-auto" style="margin-top:15px" routerLink="/buscarPartida">Buscar partida</a> 
+    </div>
   </div>
 </div>
 

@@ -1,26 +1,35 @@
+<top-bar></top-bar>
+<down-bar></down-bar>
+
 <div style="text-align: center;">
-    <h1>PERFIL</h1>
-    <form [formGroup]="profileForm">
-        <label> Nombre de usuario: </label> <br>
-        <input id="nombreUsuario" type="text" formControlName="nombreUsuario">
+  <br><br>
+  <h1>Configuración de perfil</h1>
+  <br>
+    <div class="card shadow h-100" style="width:50rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 3rem; padding-bottom: 3rem; padding-left: 3rem;padding-right: 3rem;" > <!-- NotificacionAmistad -->
+        
+      <form [formGroup]="profileForm">
+        <div class="form-group row" style="margin-bottom: 15px;text-align: left;">
+          <label for="email" class="col-sm-2 col-form-label fw-bolder" style="font-size: 1.25rem;margin-bottom: 10px;width: 30%;">Correo electrónico:</label>
+            <div class="col-sm-10" style="width: 70%;">
+              <input type="text" class="form-control" id="email" name="email" formControlName="email" value={{email}}>
+            </div>
+        </div>
+          
+        <div class="form-group row" style="margin-bottom: 15px;text-align: left;">
+            <label for="descripcion" class="col-sm-2 col-form-label fw-bolder" style="font-size: 1.25rem;margin-bottom: 10px;width: 30%;">Biografía:</label>
+              <div class="col-sm-10" style="width: 70%;">
+                <input type="text" class="form-control" id="descripcion" name="descripcion" formControlName="descripcion" value={{descripcion}}>
+              </div>
+          </div>  
+          
+      </form>
 
-        <br><br>
-        <label> Descripción: </label> <br>
-        <input id="descripcion" type="text" formControlName="descripcion">
+      <p style="font-size: small; "><a [routerLink]="['/cambioContrasegna']" style="text-decoration: none;">¿Quieres cambiar tu contraseña?</a></p>
 
-        <br><br>
-        <label> Correo electrónico: </label> <br>
-        <input id="correo" type="text" formControlName="correo">
-
-        <br><br>
-        <label> Contraseña: </label> <br>
-        <input id="password" type="password" ormControlName="password">
-    </form>
-
-    <br><br>
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-        <button type="submit"> Actualizar</button>
-    </form>  
+      <form [formGroup]="profileForm" (click)="onSubmit()">
+          <button [disabled]="!(profileForm.get('descripcion')!.value || profileForm.get('email')!.value)" class="btn btn-outline-primary" type="submit"> Actualizar</button>
+      </form>  
+    </div>
 </div>
     
     

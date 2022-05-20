@@ -34,6 +34,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { SolicitarTokenComponent } from './solicitar-token/solicitar-token.component';
 import { CartasComponent } from './cartas/cartas.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CambioContrasegnaComponent } from './cambio-contrasegna/cambio-contrasegna.component';
 
 const appRoutes: Routes = [
   {path: '', component: InicioComponent},
@@ -52,13 +53,14 @@ const appRoutes: Routes = [
   {path: 'amigos', component: AmigosComponent},
   {path: 'identificacion', component: IdentificacionComponent},
   {path: 'lobby', component: LobbyComponent},
-  {path: 'configuracionPerfil', component: ConfigPerfilComponent},
+  {path: 'configuracionPerfil', component: ConfigPerfilComponent},//configuracionPerfil
   {path: 'miPerfil', component: MiPerfilComponent},
   {path: 'mapaInfo', component: MapaInfoComponent},
   {path: 'juego', component: JuegoComponent},
   {path: 'resetPassword', component: ResetPasswordComponent},
   {path: 'solicitarToken', component: SolicitarTokenComponent},
-  {path: 'cartas', component: CartasComponent}
+  {path: 'cartas', component: CartasComponent},
+  {path: 'cambioContrasegna', component: CambioContrasegnaComponent}
 ]
 
 
@@ -90,7 +92,8 @@ const appRoutes: Routes = [
     JuegoComponent,
     ResetPasswordComponent,
     SolicitarTokenComponent,
-    CartasComponent
+    CartasComponent,
+    CambioContrasegnaComponent
   ],
   imports: [
     BrowserModule,

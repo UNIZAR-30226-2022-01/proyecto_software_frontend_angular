@@ -18,6 +18,7 @@ export class NotificacionesComponent implements OnInit {
   ngOnInit(): void {
     document.body.style.background = "#f8f9fc";
     this.llamadasAPI.obtenerNotificaciones(this)
+    console.log(this.notificaciones)
   }
 
   rechazarAmistad(jugador : string, id : number) {

@@ -41,7 +41,6 @@ export class InicioSesionComponent  {
   }*/
 
   onSubmit() {
-    console.log(this.profileForm.value);
 
     var formData: any = new FormData();
     formData.append('nombre', this.profileForm.get('nombre')!.value);
