@@ -7,7 +7,7 @@ import {lastValueFrom} from "rxjs";
 
 export class LlamadasAPI {
 
-  //public static URLApi: string = "https://api.pruebecita.tk";
+  //public static URLApi: string = "https://api.unizzardentertainment.tk";
   public static URLApi: string = "http://localhost:8090";
 
   constructor(private http : HttpClient){}
@@ -86,25 +86,28 @@ export class LlamadasAPI {
   }
 
   // Obtiene los jugadores de la partida y llama por callback a logica para almacenarlos
-  obtenerJugadoresPartida(logica : LogicaJuego) {
-    this.http.get(LlamadasAPI.URLApi+'/api/obtenerJugadoresPartida', {observe:'body', responseType:'text', withCredentials: true})
-      .subscribe(
-        data => {
-          var jsonData = JSON.parse(data);
+  async obtenerJugadoresPartida(logica: LogicaJuego) {
+    var observableConsulta = this.http.get(LlamadasAPI.URLApi + '/api/obtenerJugadoresPartida', {
+      observe: 'body',
+      responseType: 'json',
+      withCredentials: true
+    })
 
-          for(var i = 0; i < jsonData.length; i++) {
-            var estado : Estado = {
-              tropas: 0,
-              territorios: [],
-              numCartas: 0,
-              eliminado: false,
-              expulsado: false,
-            }
+    var jsonData : any = await lastValueFrom(observableConsulta);
 
-            logica.mapaJugadores.set(jsonData[i], estado);
-            logica.colorJugador.set(jsonData[i], logica.colores[i]);
-          }
-        })
+    for (var i = 0; i < jsonData.length; i++) {
+      console.log("obtenido jugador ", i)
+      var estado: Estado = {
+        tropas: 0,
+        territorios: [],
+        numCartas: 0,
+        eliminado: false,
+        expulsado: false,
+      }
+
+      logica.mapaJugadores.set(jsonData[i], estado);
+      logica.colorJugador.set(jsonData[i], logica.colores[i]);
+    }
   }
 
   reforzarTerritorio(juego : JuegoComponent){
@@ -210,16 +213,17 @@ export class LlamadasAPI {
       });
   }
 
-  obtenerAvatar(llamador : any, usuario : string) : any {
-    this.http.get(LlamadasAPI.URLApi+'/api/obtenerFotoPerfil/'+usuario, {observe:'body', responseType:'blob', withCredentials: true})
-      .subscribe({
-        next :(response) => {
-          llamador.introducirAvatar(response, usuario)
-        },
-        error: (error) => {
-          console.log("Error:", error)
-        }
-      });
+  async obtenerAvatar(llamador: any, usuario: string) {
+    var observableConsulta = this.http.get(LlamadasAPI.URLApi + '/api/obtenerFotoPerfil/' + usuario, {
+      observe: 'body',
+      responseType: 'blob',
+      withCredentials: true
+    })
+
+    var blob = await lastValueFrom(observableConsulta);
+
+
+    llamador.introducirAvatar(blob, usuario)
   }
 
   obtenerDados(llamador : any, usuario : string) : any {

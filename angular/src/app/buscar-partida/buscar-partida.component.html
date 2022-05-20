@@ -5,9 +5,10 @@
 <br>
 <!--<h1 style="text-align: center;">Buscar Partida</h1>-->
 
-<div class="bP">
+<div class="bP card">
+  <h1 style="margin-top: 1.5rem;text-align: center;">Buscar Partida</h1>
   <ng-container *ngFor="let p of jsonArray">
-    <div class="partida">
+    <div class="partida card" style="background-color:rgb(250, 250, 250);">
       <div class="tipoPartida">
         <a *ngIf="p.EsPublica" class="txtTP">Partida Publica</a>
         <a *ngIf="!p.EsPublica" class="txtTP">Partida Privada</a>
