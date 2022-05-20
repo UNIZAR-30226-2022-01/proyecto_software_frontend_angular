@@ -1,26 +1,24 @@
 <top-bar></top-bar>
 <down-bar></down-bar>
 
-<div class="contenedorPrincipal" style="text-align: center;">
-    <br><br>
-    <h1><img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
+<div class="card" style="width: 34rem; height: 36rem; padding:2rem;padding-left: 4rem;padding-right: 4rem; justify-content: center;margin-right: auto;margin-left: auto;margin-top:5%;margin-bottom: auto;">
+    <h1 style="transform: translate(3.5vw, -8vh); font-weight: bold;"><img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
         {{nombre}}
     </h1>
-    <br><br><br>
-       <h3>Biografía</h3>
-    <p *ngIf="descripcion != null">{{descripcion}}</p>
-    <p *ngIf="descripcion == null">El usuario no tiene ninguna descripcion.</p>
-    <br>
-    <h3>Puntos: {{puntos}}</h3>
-    <h3>Partidas ganadas: {{partidas_ganadas}}</h3>
-    <h3>Partidas totales: {{partidas_totales}}</h3>
+    <p style="transform: translateY(-8vh)" *ngIf="descripcion != null">{{descripcion}}</p>
+    <p style="transform: translateY(-8vh)" *ngIf="descripcion == null">El usuario no tiene ninguna descripcion.</p>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><h3 style="font-weight: 250">Puntos: {{puntos}}</h3></li>
+        <li class="list-group-item"><h3 style="font-weight: 250">Partidas ganadas: {{partidas_ganadas}}</h3></li>
+        <li class="list-group-item"><h3 style="font-weight: 250">Partidas totales: {{partidas_totales}}</h3></li>
+      </ul>
     <div *ngIf="esAmigo; then thenBlock; else elseBlock"></div>
     <ng-template #thenBlock>
-        Sois amigos
-        <button (click)="eliminarAmigo(nombre)">Eliminar amigo</button>
+        <a style="transform: translate(7.5vw, 5.5vh); font-weight: bold">Sois amigos</a>
+        <button class="boton btn btn-outline-primary" type="submit" style="width: 7vw; transform: translate(6.5vw, 7vh)" (click)="eliminarAmigo(nombre)">Eliminar amigo</button>
     </ng-template>
     <ng-template #elseBlock>
-        <button (click)="enviarSolicitudAmistad(nombre)">Añadir amigo</button>
+        <button class="boton btn btn-outline-primary" type="submit" style="width: 7vw; transform: translate(6.5vw, 5vh)" (click)="enviarSolicitudAmistad(nombre)">Añadir amigo</button>
     </ng-template>
 
 

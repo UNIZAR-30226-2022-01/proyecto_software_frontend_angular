@@ -1,17 +1,19 @@
 <top-bar></top-bar>
 <down-bar></down-bar>
 
-<div style="text-align: center;">
-    <br><br><br>
-    <h1> <img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
+<div class="card" style="width: 34rem; height: 36rem; padding:2rem;padding-left: 4rem;padding-right: 4rem; justify-content: center;margin-right: auto;margin-left: auto;margin-top:5%;margin-bottom: auto;">
+    <h1 style="transform: translate(3.5vw, -8vh); font-weight: bold;"> <img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
         {{nombre}}
-       <a  [routerLink]="['/configuaracionPerfil']"><img src="https://img.icons8.com/material-sharp/48/000000/settings.png" /></a>   
-    </h1>
-    <br><br><br>
-       <h3>Biografía</h3>
-    <p>{{descripcion}}</p>
-    <br>
-    <h3>Email: {{email}}</h3>
-    <h3>Partidas ganadas: {{partidas_ganadas}}</h3>
-    <h3>Partidas totales: {{partidas_totales}}</h3>
+    </h1 >
+    <p style="transform: translateY(-8vh)">{{descripcion}}</p>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><h3 style="font-weight: 250">Email: {{email}}</h3></li>
+        <li class="list-group-item"><h3 style="font-weight: 250">Partidas ganadas: {{partidas_ganadas}}</h3></li>
+        <li class="list-group-item"><h3 style="font-weight: 250">Partidas totales: {{partidas_totales}}</h3></li>
+      </ul>
+      <br>
+    <button class="boton btn btn-outline-primary" type="submit" style="width: 7vw; transform: translate(6.5vw, 5vh)" [routerLink]="['/configuaracionPerfil']">Actualizar</button>
+    
+    
+    
 </div>
