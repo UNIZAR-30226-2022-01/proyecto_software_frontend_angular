@@ -6,7 +6,7 @@
     <h2>¡Domina y defiende todos los territorios del mapa!</h2>
     <div class="contenedorJugadoresEspera">
         <div *ngFor="let jugador of nombresJugadores; index as i;">
-         <div class="participante" id = {{i}}>
+         <div class="participante color{{i}}" id = {{i}}>
             <div class ="datosParticipante"> 
                 {{jugador}}
             </div>

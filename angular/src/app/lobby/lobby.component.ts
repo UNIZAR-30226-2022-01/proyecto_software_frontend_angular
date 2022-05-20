@@ -29,7 +29,13 @@ export class LobbyComponent implements OnInit {
   intervaloMio:any;
   enCurso:any;
 
-  colores = ['red', 'purple','green', 'blue', 'orange']
+  colores = ["#f94144", // Rojo
+    "#f9c74f",            // Amarillo
+    "#90be6d",            // Verde
+    "#0a9396",            // Azul
+    "#6a4c93",            // Morado
+    "#f9844a",           // Naranja
+    ]
   fnCall() {
 
     this.intervaloMio = setInterval(() => {
@@ -39,16 +45,12 @@ export class LobbyComponent implements OnInit {
               console.log(data)
               this.cosaJSON = JSON.parse(data.toString());
 
-
-
               console.log(this.cosaJSON)
 
               this.maxJugadores = this.cosaJSON.MaxJugadores,
               this.nombresJugadores = this.cosaJSON.NombresJugadores,
               this.jugadores = this.cosaJSON.Jugadores;
               this.enCurso = this.cosaJSON.EnCurso;
-
-
 
               if (this.enCurso) { //iniciarPartida
                 clearInterval(this.intervaloMio)

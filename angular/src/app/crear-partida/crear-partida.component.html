@@ -26,14 +26,17 @@
             <label class="form-check-label " for="privada">Partida privada</label>
           </div>
 
-          <div id="contrasenia" style="visibility: hidden;">
-              <form [formGroup]="profileForm" >
-                  <label class="col-form-label" for="password" class="fw-bolder" style="font-size: 1.25rem;margin-bottom: 10px;">Contraseña</label>
-                  <input type="text" id="password" name="password" formControlName="password" class="form-control" width="10px">      
-              </form> 
-          </div>
-      
-      
+          <form [formGroup]="profileForm" >
+            <div class="form-group row" id="contrasenia" style="visibility: hidden;">
+              
+              <label for="password" class="col-sm-2 col-form-label fw-bolder" style="font-size: 1.25rem;margin-bottom: 5px;width: 35%;">Contraseña:</label>
+              <div class="col-sm-10" style="width: 65%;">
+                <input type="text" class="form-control" id="password" name="password" formControlName="password">
+              </div>
+            
+          </div> 
+        </form>
+
       <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" style="text-align: center;margin-top: 15px;">
           <button class="btn btn-outline-primary" type="submit" [disabled]="(!esPublica&&!esPrivada)||(esPrivada&&password.errors?.['required'])||(maxJugadores.errors?.['required'])">Crear partida</button>
       </form>

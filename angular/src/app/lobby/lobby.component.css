@@ -12,8 +12,8 @@
 } 
 
 .jugadorEspera {
-  background: #909090;
-  border-style: dashed solid;
+  background: #b7b9cc;
+  border-style: dashed ;
   /* stroke-dasharray: 5,5; */
 }
 .participante:hover {
@@ -23,7 +23,6 @@
 }
 
 .datosParticipante {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   color:#fafafa;
   font-size: 20px;
   font-weight: 550;
@@ -54,10 +53,9 @@
 .botonAtrasEspera {
     border: 1.5px solid white; 
     border-radius: 10px;
-    background-color: rgb(110, 110, 110);
+    background-color: #858796;
     width: 20%;
     height: 50%;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     color:#fafafa;
     font-size: 20px;
     font-weight: 550;
@@ -69,6 +67,32 @@
     margin: auto;
   }
   
+  .color0{
+    background: #f94144;
+  }
+
+  .color1{
+    background: #f9c74f;
+  }
+
+  .color2{
+    background: #90be6d;
+  }
+
+  .color3{
+    background: #0a9396;
+  }
+
+  .color4{
+    background: #6a4c93;
+  }
+
+  .color5{
+    background: #f9844a;
+  }
+
+  
+
   .botonAtras:hover {
     opacity: 0.6;
     transform: scale(1.05);

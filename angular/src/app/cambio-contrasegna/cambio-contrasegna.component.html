@@ -1,0 +1,65 @@
+<top-bar></top-bar>
+<down-bar></down-bar>
+
+<div style="text-align: center;">
+  <br><br>
+  <h1>Cambio de contraseña</h1>
+  <br>
+    <div class="card shadow h-100" style="width:50rem;margin-right: auto; margin-left: auto; display: inline-block; margin-bottom: 25px;padding-top: 3rem; padding-bottom: 3rem; padding-left: 3rem;padding-right: 3rem;" > <!-- NotificacionAmistad -->
+        
+      <form [formGroup]="profileForm">
+          <div class="form-group row" style="text-align: left;margin-top: 5px">
+              <label for="passwordAntigua" class="col-sm-2 col-form-label fw-bolder" style="font-size: 1.25rem;margin-bottom: 5px;width: 45%;">Contraseña actual:</label>
+              <div class="col-sm-10" style="width: 55%;">
+                <input type="password" class="form-control" id="passwordAntigua" name="passwordAntigua" formControlName="passwordAntigua">
+              </div>
+          </div>  
+          <div *ngIf="passwordAntigua.invalid && (passwordAntigua.dirty || passwordAntigua.touched)"
+              style="color:red;">
+
+                <div *ngIf="passwordAntigua.errors?.['required']">
+                La contraseña es un campo es obligatorio.
+                </div>
+            </div>
+            <div *ngIf="!(passwordAntigua.invalid && (passwordAntigua.dirty || passwordAntigua.touched))"> <br> </div>
+
+
+          <div class="form-group row" style="text-align: left;margin-top: 5px">
+            <label for="passwordNueva" class="col-sm-2 col-form-label fw-bolder" style="font-size: 1.25rem;margin-bottom: 5px;width: 45%;">Contraseña nueva:</label>
+              <div class="col-sm-10" style="width: 55%;">
+                <input type="password" class="form-control" id="passwordNueva" name="passwordNueva" formControlName="passwordNueva" >
+              </div>
+          </div>  
+
+            <div *ngIf="passwordNueva.invalid && (passwordNueva.dirty || passwordNueva.touched)"
+              style="color:red;">
+
+                <div *ngIf="passwordNueva.errors?.['required']">La contraseña nueva es un campo es obligatorio.</div>
+                <div *ngIf="passwordNueva.errors?.['minlength']&&!passwordNueva.errors?.['required']">La contraseña debe tener mínimo 8 caracteres.</div>
+
+            </div>
+            <div *ngIf="!(passwordNueva.invalid && (passwordNueva.dirty || passwordNueva.touched))"> <br> </div>
+
+
+          <div class="form-group row" style="text-align: left;margin-top: 5px">
+              <label for="passwordNueva2" class="col-sm-2 col-form-label fw-bolder" style="font-size: 1.25rem;margin-bottom: 5px;width: 45%;">Confirmar contraseña nueva:</label>
+              <div class="col-sm-10" style="width: 55%;">
+                <input type="password" class="form-control" id="passwordNueva2" name="passwordNueva2" formControlName="passwordNueva2">
+              </div>
+          </div>  
+
+          <div *ngIf="profileForm.value.passwordNueva!=profileForm.value.passwordNueva2" style="color:red;">
+            Las contraseñas tienen que coincidir.
+          </div>
+          <div *ngIf="profileForm.value.passwordNueva==profileForm.value.passwordNueva2"> <br> </div>
+  
+      </form>
+
+      <br>
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" >
+        <button class="btn btn-outline-primary" type="submit"  [disabled]="!profileForm.valid || ((profileForm.valid && profileForm.value.passwordNueva!=profileForm.value.passwordNueva2))">Cambiar contraseña</button>
+    </form>
+    </div>
+</div>
+    
+    

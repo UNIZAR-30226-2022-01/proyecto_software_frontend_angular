@@ -17,21 +17,21 @@ export class CrearPartidaComponent implements OnInit {
 
   ngOnInit() {
     document.body.style.background = "#f8f9fc";
-    //this.nombre_usuario = localStorage.getItem('nombre_usuario'),
-    //this.cookie = localStorage.getItem('cookie')
   }
+
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {}
+
 
   profileForm = this.fb.group({
     maxJugadores: new FormControl('',[
       Validators.required,]),
-    password: new FormControl('',[
-      Validators.required,]),
+      password: new FormControl('',[
+        Validators.required,
+      ]),
   });
 
   privada: boolean = false;
   publica: boolean = false;
-
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {}
 
   actualizar(nombre:string){
     console.log(this.privada,this.publica);
@@ -49,7 +49,7 @@ export class CrearPartidaComponent implements OnInit {
 
 
   onSubmit() {
-
+  console.log(this.profileForm.value)
   var formData: any = new FormData();
   formData.append('maxJugadores', this.profileForm.get('maxJugadores')!.value);
   formData.append('password', this.profileForm.get('password')!.value);

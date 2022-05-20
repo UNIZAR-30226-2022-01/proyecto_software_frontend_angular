@@ -1,7 +1,4 @@
 h2{
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 30px;
-  font-weight: 550;
   padding: 20px;
 }
 .participante {
@@ -13,7 +10,7 @@ h2{
     border-radius: 15px;
     border: 1px solid #fafafa;
     box-shadow:  rgba(0, 0, 0, 0.2) 0px 5px 10px;
-    background: #909090;
+    background: #b7b9cc;
     font-size: 50px;   
     transition: width 0.5s, height 0.5s, transform 0.5s;
     z-index: -1;
@@ -58,12 +55,11 @@ h2{
   }
 
   .yo{
-    background: #90ee90;
+    background: #99d98c;
   }
   
   .datosJugador {
-    
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+
     color:#fafafa;
     font-size: 21px;
     font-weight: 550;

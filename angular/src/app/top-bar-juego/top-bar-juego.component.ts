@@ -35,7 +35,7 @@ export class TopBarJuegoComponent implements OnInit {
                                             timerProgressBar: true,
                                           });
 
-                                  this.router.navigate(['/'])
+                                  this.router.navigate(['/identificacion'])
                                 },
             error: (error) => {Swal.fire({
                                         title: 'Se ha producido un error al abandonar la partida',
