@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'inicio',
   templateUrl: './inicio.component.html',
@@ -9,8 +8,9 @@ export class InicioComponent implements OnInit {
 
   constructor() { }
 
+  videoID = "../../assets/videoInicio2.mp4" 
+
   ngOnInit(): void {
-    document.body.style.background = "#f8f9fc";
   }
 
 }

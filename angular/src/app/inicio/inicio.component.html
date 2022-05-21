@@ -1,10 +1,27 @@
+<div class="cen">
 
-<div style="text-align: center;">
-    <br><br><br>
-    <h1>World domination</h1>
-    <button class="btn btn-outline-primary" type="submit" [routerLink]="['/inicioSesion']">Iniciar Sesión</button>
-    <br><br>
-    <button class="btn btn-outline-primary" type="submit" [routerLink]="['/registroUsuario']">Registrar Usuario</button>
-    <br><br>
+    <div class="containerVideoInicio">
+        <video autoPlay muted loop>
+            <source src="../../assets/videoInicio2.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+      
+    <div class="txt">
+      <div class="contenedorTituloInicio">
+        <h1 class="textoTituloInicio">World Domination</h1>
+      </div>
+
+      <div class="contenedorBotonInicio">
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary btn-lg textoBotonInicio" type="submit" [routerLink]="['/inicioSesion']">Iniciar sesión</button>
+        </div>
+      </div> <br/>
+
+      <div class="contenedorBotonInicio">
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary btn-lg textoBotonInicio" type="submit" [routerLink]="['/registroUsuario']">Crear cuenta</button>
+        </div>
+      </div>
+    </div>
 </div>
-
