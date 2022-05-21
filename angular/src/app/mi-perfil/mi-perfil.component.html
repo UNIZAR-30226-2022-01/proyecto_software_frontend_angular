@@ -2,18 +2,24 @@
 <down-bar></down-bar>
 
 <div class="card" style="width: 34rem; height: 36rem; padding:2rem;padding-left: 4rem;padding-right: 4rem; justify-content: center;margin-right: auto;margin-left: auto;margin-top:5%;margin-bottom: auto;">
-    <h1 style="transform: translate(3.5vw, -8vh); font-weight: bold;"> <img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
-        {{nombre}}
-    </h1 >
-    <p style="transform: translateY(-8vh)">{{descripcion}}</p>
+    <div class="text-center">
+      <img id="avatar" class="card-img-top avatar" src="" alt="Avatar">
+    </div>
+    <h5 class="card-title text-center">{{nombre}}</h5>
+    <p class="card-text text-center" *ngIf="descripcion.length != 0">{{descripcion}}</p>
+    <p class="card-text text-center" *ngIf="descripcion.length === 0">No tienes ninguna descripción.</p>
+
+
     <ul class="list-group list-group-flush">
-        <li class="list-group-item"><h3 style="font-weight: 250">Email: {{email}}</h3></li>
-        <li class="list-group-item"><h3 style="font-weight: 250">Partidas ganadas: {{partidas_ganadas}}</h3></li>
-        <li class="list-group-item"><h3 style="font-weight: 250">Partidas totales: {{partidas_totales}}</h3></li>
-      </ul>
+        <li class="list-group-item"><b>Email:</b> {{email}}</li>
+        <li class="list-group-item"><b>Partidas ganadas:</b> {{partidas_ganadas}}</li>
+        <li class="list-group-item"><b>Partidas totales:</b> {{partidas_totales}}</li>
+        <li class="list-group-item"><b>Puntos:</b> {{puntos}}</li>
+    </ul>
+
+    <div class="col text-center">
       <br>
-    <button class="boton btn btn-outline-primary" type="submit" style="width: 7vw; transform: translate(6.5vw, 5vh)" [routerLink]="['/configuracionPerfil']">Actualizar</button>
-
-
-
+      <br>
+      <button class="boton btn btn-outline-primary" type="submit" [routerLink]="['/configuracionPerfil']">Actualizar</button>
+    </div>
 </div>

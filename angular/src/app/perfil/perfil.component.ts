@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import {LlamadasAPI} from "../llamadas-api";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'perfil',
@@ -17,25 +18,55 @@ export class PerfilComponent implements OnInit {
   partidas_ganadas:any;
   partidas_totales:any;
   esAmigo:any;
+  solicitudRecibida:boolean | undefined;
+  solicitudPendiente: boolean | undefined;
+  mostrarBotonAnyadirAmigo: boolean | undefined;
+  somosNosotros : boolean | undefined;
 
-  constructor(private http: HttpClient, private router:Router){
+  constructor(private http: HttpClient, private router:Router){}
 
+  getNombre_Usuario(nombre:string) {
+    nombre = nombre.split('=')[1];
+    nombre = nombre.split('|')[0];
+    return nombre;
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     document.body.style.background = "#f8f9fc";
     this.nombre = localStorage.getItem('nombre')
 
-    this.http.get<Perfil>(LlamadasAPI.URLApi+'/api/obtenerPerfil/' + this.nombre, {observe:'body',withCredentials: true})
-        .subscribe(
-          data => {console.log(data);
-            //this.nombre = data.NombreUsuario,
-            this.descripcion = data.Biografia,
-            this.partidas_ganadas = data.PartidasGanadas,
-            this.partidas_totales = data.PartidasTotales,
-            this.puntos = data.Puntos;
-            this.esAmigo = data.EsAmigo;
+    this.http.get<Perfil>(LlamadasAPI.URLApi + '/api/obtenerPerfil/' + this.nombre, {
+      observe: 'body',
+      withCredentials: true
+    })
+      .subscribe(
+        data => {
+          console.log(data);
+          //this.nombre = data.NombreUsuario,
+          this.descripcion = data.Biografia
+          this.partidas_ganadas = data.PartidasGanadas
+          this.partidas_totales = data.PartidasTotales
+          this.puntos = data.Puntos
+          this.esAmigo = data.EsAmigo
+          this.solicitudRecibida = data.SolicitudRecibida
+          this.solicitudPendiente = data.SolicitudPendiente
+
+          this.somosNosotros = !(this.getNombre_Usuario(document.cookie) != this.nombre);
+
+          this.mostrarBotonAnyadirAmigo = !(this.solicitudRecibida || this.solicitudPendiente) && !this.somosNosotros
         })
+
+    // Obtener avatar
+    var observableConsulta = this.http.get(LlamadasAPI.URLApi + '/api/obtenerFotoPerfil/' + this.nombre, {
+      observe: 'body',
+      responseType: 'blob',
+      withCredentials: true
+    })
+
+    var blob = await lastValueFrom(observableConsulta);
+    const img = URL.createObjectURL(blob);
+    var imagen = document.getElementById("avatar")! as HTMLImageElement;
+    imagen.src = img;
   }
 
   enviarSolicitudAmistad(nombre : string) {
@@ -84,4 +115,6 @@ export interface Perfil {
   PartidasTotales: any;
   Puntos:any;
   EsAmigo:any;
+  SolicitudRecibida:any;
+  SolicitudPendiente:any;
 }

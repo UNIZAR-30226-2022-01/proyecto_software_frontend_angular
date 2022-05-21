@@ -1,3 +1,10 @@
 boton:hover {
     cursor: pointer;
 }
+
+.avatar {
+  width: 50%;
+  height: auto;
+  border-radius: 100%;
+  border: 0.2em solid black;
+}

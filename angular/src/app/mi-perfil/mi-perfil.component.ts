@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {LlamadasAPI} from "../llamadas-api";
+import {lastValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-mi-perfil',
@@ -14,6 +15,7 @@ export class MiPerfilComponent implements OnInit {
     descripcion:any;
     partidas_ganadas:any;
     partidas_totales:any;
+    puntos:any;
     constructor(private http: HttpClient, private router:Router){}
 
     getNombre_Usuario(nombre:string) {
@@ -23,19 +25,38 @@ export class MiPerfilComponent implements OnInit {
     }
 
     amigos:any;
-    ngOnInit(): void {
+    async ngOnInit() {
       document.body.style.background = "#f8f9fc";
-      this.nombre = this.getNombre_Usuario(document.cookie),
-      this.http.get<Perfil>(LlamadasAPI.URLApi+'/api/obtenerPerfil/'+this.nombre, {observe:'body',withCredentials: true})
-          .subscribe(
-            data => {console.log(data);
-              //this.nombre = data.NombreUsuario,
-              //this.descripcion = data.Biografia,
-              this.partidas_ganadas = data.PartidasGanadas,
-              this.partidas_totales = data.PartidasTotales,
-              this.email = data.Email;
+
+      // Obtener datos del perfil
+      this.nombre = this.getNombre_Usuario(document.cookie)
+
+      this.http.get<Perfil>(LlamadasAPI.URLApi + '/api/obtenerPerfil/' + this.nombre, {
+        observe: 'body',
+        withCredentials: true
+      })
+        .subscribe(
+          data => {
+            console.log(data);
+            //this.nombre = data.NombreUsuario,
+            this.descripcion = data.Biografia
+            this.partidas_ganadas = data.PartidasGanadas
+            this.partidas_totales = data.PartidasTotales
+            this.email = data.Email
+            this.puntos = data.Puntos
           })
-      this.descripcion='Apasionado de los juegos de mesa. En mis tiempos libres soy ingeniero'
+
+      // Obtener avatar
+      var observableConsulta = this.http.get(LlamadasAPI.URLApi + '/api/obtenerFotoPerfil/' + this.nombre, {
+        observe: 'body',
+        responseType: 'blob',
+        withCredentials: true
+      })
+
+      var blob = await lastValueFrom(observableConsulta);
+      const img = URL.createObjectURL(blob);
+      var imagen = document.getElementById("avatar")! as HTMLImageElement;
+      imagen.src = img;
     }
 
     listaAmigos(){
@@ -54,5 +75,5 @@ export class MiPerfilComponent implements OnInit {
     Biografia: any;
     PartidasGanadas: any;
     PartidasTotales: any;
-
+    Puntos : any;
   }

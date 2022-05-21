@@ -2,26 +2,38 @@
 <down-bar></down-bar>
 
 <div class="card" style="width: 34rem; height: 36rem; padding:2rem;padding-left: 4rem;padding-right: 4rem; justify-content: center;margin-right: auto;margin-left: auto;margin-top:5%;margin-bottom: auto;">
-    <h1 style="transform: translate(3.5vw, -8vh); font-weight: bold;"><img src="https://img.icons8.com/small/64/000000/user-male-circle.png"/>
-        {{nombre}}
-    </h1>
-    <p style="transform: translateY(-8vh)" *ngIf="descripcion != null">{{descripcion}}</p>
-    <p style="transform: translateY(-8vh)" *ngIf="descripcion == null">El usuario no tiene ninguna descripcion.</p>
+    <div class="text-center">
+        <img id="avatar" class="card-img-top avatar" src="" alt="Avatar">
+    </div>
+    <h5 class="card-title text-center">{{nombre}}</h5>
+    <p class="card-text text-center" *ngIf="descripcion.length != 0">{{descripcion}}</p>
+    <p class="card-text text-center" *ngIf="descripcion.length === 0">El usuario no tiene ninguna descripción.</p>
+
     <ul class="list-group list-group-flush">
-        <li class="list-group-item"><h3 style="font-weight: 250">Puntos: {{puntos}}</h3></li>
-        <li class="list-group-item"><h3 style="font-weight: 250">Partidas ganadas: {{partidas_ganadas}}</h3></li>
-        <li class="list-group-item"><h3 style="font-weight: 250">Partidas totales: {{partidas_totales}}</h3></li>
-      </ul>
+        <li class="list-group-item"><b>Partidas ganadas:</b> {{partidas_ganadas}}</li>
+        <li class="list-group-item"><b>Partidas totales:</b> {{partidas_totales}}</li>
+        <li class="list-group-item"><b>Puntos:</b> {{puntos}}</li>
+    </ul>
+
     <div *ngIf="esAmigo; then thenBlock; else elseBlock"></div>
+
     <ng-template #thenBlock>
-        <a style="transform: translate(7.5vw, 5.5vh); font-weight: bold">Sois amigos</a>
-        <button class="boton btn btn-outline-primary" type="submit" style="width: 7vw; transform: translate(6.5vw, 7vh)" (click)="eliminarAmigo(nombre)">Eliminar amigo</button>
+        <div class="col text-center">
+          <br>
+          <p class="card-text">Sois amigos</p>
+          <button class="boton btn btn-outline-primary" type="submit" (click)="eliminarAmigo(nombre)">Eliminar amigo</button>
+        </div>
     </ng-template>
+
     <ng-template #elseBlock>
-        <button class="boton btn btn-outline-primary" type="submit" style="width: 7vw; transform: translate(6.5vw, 5vh)" (click)="enviarSolicitudAmistad(nombre)">Añadir amigo</button>
+        <div class="col text-center">
+          <br>
+          <p class="card-text" *ngIf="solicitudRecibida === true">Tienes una solicitud de amistad pendiente de {{nombre}}.</p>
+          <p class="card-text" *ngIf="solicitudPendiente === true">{{nombre}} tiene una solicitud de amistad pendiente tuya.</p>
+          <p class="card-text" *ngIf="mostrarBotonAnyadirAmigo === true">No sois amigos</p>
+          <p class="card-text" *ngIf="somosNosotros">Eres tú</p>
+          <button class="boton btn btn-outline-primary" type="submit" (click)="enviarSolicitudAmistad(nombre)" *ngIf="mostrarBotonAnyadirAmigo === true">Añadir amigo</button>
+          <button class="boton btn btn-outline-primary" type="submit" [routerLink]="['/notificaciones']" *ngIf="solicitudRecibida === true">Ir a las notificaciones</button>
+        </div>
     </ng-template>
-
-
-
-
 </div>
