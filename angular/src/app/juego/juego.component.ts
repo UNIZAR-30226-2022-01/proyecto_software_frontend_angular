@@ -874,16 +874,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", tropasRecibidas.toString());
         }
 
-        // Prevención de condiciones de carrera
-        if (this.logica.fase != 1) {
-          console.log("Detectado bucle de consulta en reforzar fuera de fase, terminando...")
-          clearInterval(this.intervarloConsultaTerritorio)
-          if (this.logica.jugadorTurno == this.logica.yo) {
-            console.log("Detectado bucle de consulta en reforzar fuera de fase, pasando a atacar...")
-            this.tratarFaseAtacar()
-          }
-        }
-
         console.log("Fin de intervalo de tratarFaseReforzar en fase", this.logica.fase)
       },
       50);
@@ -929,16 +919,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
             // Una vez hecho, se llama por callback a la selección de tropas
             this.mostrarAlertaRangoAsincrona("Selecciona el número de dados", "1", "3", "atacar");
-          }
-        }
-
-        // Prevención de condiciones de carrera
-        if (this.logica.fase != 2) {
-          console.log("Detectado bucle de consulta en atacar fuera de fase, terminando...")
-          clearInterval(this.intervarloConsultaTerritorio)
-          if (this.logica.jugadorTurno == this.logica.yo) {
-            console.log("Detectado bucle de consulta en atacar fuera de fase, pasando a fortificar...")
-            this.tratarFaseFortificar()
           }
         }
         console.log("Fin de intervalo de tratarFaseAtacar en fase", this.logica.fase)
@@ -999,12 +979,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
               // Una vez hecho, se llama por callback a la selección de tropas
               this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", String(Number.parseInt(tropasTerritorio1)-1), "fortificar");
             }
-          }
-
-          // Prevención de condiciones de carrera
-          if (this.logica.fase != 3) {
-            console.log("Detectado bucle de consulta en fortificar fuera de fase, terminando...")
-            clearInterval(this.intervarloConsultaTerritorio)
           }
         }
         console.log("Fin de intervalo de tratarFaseFortificar en fase", this.logica.fase)
