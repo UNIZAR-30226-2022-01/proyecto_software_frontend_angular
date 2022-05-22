@@ -695,10 +695,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     };
     return Swal.fire({
       title: tituloAlerta,
-      //icon: 'question',
       input: 'range',
       inputAttributes: atributos,
-      //inputLabel: textoSelector,
+      allowOutsideClick: false,
       inputValue: min,
     }).then((result) => {
       if (fase == "fortificar") {
@@ -726,10 +725,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     };
     return Swal.fire({
       title: tituloAlerta,
-      //icon: 'question',
       input: 'range',
       inputAttributes: atributos,
-      //inputLabel: textoSelector,
+      allowOutsideClick: false,
       inputValue: min,
     }).then((result) => {
         this.tropasAMover = result.value;
@@ -923,8 +921,23 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
             var tropasTerritorio1 = this.obtenerTropasRegion(this.territorios.indexOf(this.territorio1))
 
-            // Una vez hecho, se llama por callback a la selección de tropas
-            this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", String(Number.parseInt(tropasTerritorio1)-1), "fortificar");
+
+
+            if (Number.parseInt(tropasTerritorio1)-1 <= 0) {
+              Swal.fire({
+                title: 'No puedes fortificar desde un territorio con 1 tropa',
+                //text: error.error,
+                icon: 'error',
+                timer: 2000,
+                willClose: () => {
+                  this.tratarFaseFortificar()
+                  return
+                }
+              })
+            } else {
+              // Una vez hecho, se llama por callback a la selección de tropas
+              this.mostrarAlertaRangoAsincrona("Selecciona el número de tropas", "1", String(Number.parseInt(tropasTerritorio1)-1), "fortificar");
+            }
           }
         }
         console.log("Fin de intervalo de tratarFaseFortificar")
