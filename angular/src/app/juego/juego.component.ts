@@ -146,6 +146,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   primerRefuerzo : boolean = true;
 
+  faseActual : string = "";
+
   resumirPartida()  {
     this.primerRefuerzo = false;
 
@@ -229,17 +231,27 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             console.log("Resumir: turno de " + this.logica.jugadorTurno)
             console.log("Resumir: fase " + this.logica.fase)
             // Si era nuestro turno, hay que pasar a ejecutar la fase
-            if (this.logica.jugadorTurno == this.logica.yo) {
-              if (this.logica.fase == 0) { // Inicio
-                this.rellenarFase(1);
-                console.log("Tratando fase de inicio desde resumen")
+            if (this.logica.fase == 0) { // Inicio
+              this.rellenarFase(1);
+              console.log("Tratando fase de inicio desde resumen")
+              this.faseActual = "REFUERZO INICIAL"
+
+              if (this.logica.jugadorTurno == this.logica.yo) {
                 this.tratarFaseReforzar()
-              } else if (this.logica.fase == 1) { // Refuerzo
-                console.log("Tratando fase de refuerzo desde resumen")
-                this.rellenarFase(1);
+              }
+            } else if (this.logica.fase == 1) { // Refuerzo
+              console.log("Tratando fase de refuerzo desde resumen")
+              this.rellenarFase(1);
+              this.faseActual = "REFUERZO"
+
+              if (this.logica.jugadorTurno == this.logica.yo) {
                 this.tratarFaseReforzar()
-              } else if (this.logica.fase == 2) { // Ataque
-                this.rellenarFase(2);
+              }
+            } else if (this.logica.fase == 2) { // Ataque
+              this.rellenarFase(2);
+              this.faseActual = "ATAQUE"
+
+              if (this.logica.jugadorTurno == this.logica.yo) {
                 console.log("Tratando fase de ataque desde resumen")
                 if (territoriosPorOcupar) {
                   console.log("Hay territorios por ocupar")
@@ -251,15 +263,21 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                 } else {
                   this.tratarFaseAtacar()
                 }
+              }
+            } else if (this.logica.fase == 3) { // Fortificar
+              this.rellenarFase(3);
+              this.faseActual = "FORTIFICAR"
 
-              } else if (this.logica.fase == 3) { // Fortificar
-                this.rellenarFase(3);
-                console.log("Tratando fase de fortificar desde resumen")
+              console.log("Tratando fase de fortificar desde resumen")
+              if (this.logica.jugadorTurno == this.logica.yo) {
                 this.tratarFaseFortificar()
               }
             }
+
           } else { // Sabemos que hemos perdido si hemos vuelto, y ya estaba terminada
-            this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
+            if (this.logica.jugadorTurno == this.logica.yo) {
+              this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
+            }
           }
       }
     });
@@ -322,11 +340,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
                     // Fuerza incondicionalmente cualquier alerta activa y el intervalo de consulta de territorio,
                     // para evitar condiciones de carrera entre una fase y otra
-                    if (obj.Jugador == this.logica.yo) {
-                      clearInterval(this.intervarloConsultaTerritorio)
-                      this.delay(50) // Hace una espera del mismo tiempo que tarda un intervalo de consulta de territorios
-                      Swal.close()
-                    }
+                    clearInterval(this.intervarloConsultaTerritorio)
+                    this.delay(50) // Hace una espera del mismo tiempo que tarda un intervalo de consulta de territorios
+                    Swal.close()
 
                     // Duerme en el primer refuerzo de la fase inicial, para esperar a que se rellene el mapa
                     if (this.logica.fase == 0 && this.primerRefuerzo) {
@@ -336,22 +352,38 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       this.primerRefuerzo = false
                     }
 
-                    if (this.logica.fase == 0 && obj.Jugador == this.logica.yo) { // Refuerzo en fase inicial
+                    if (this.logica.fase == 0) { // Refuerzo en fase inicial
                       // Rellenar primer indicador de fase
                       this.rellenarFase(1);
-                      this.tratarFaseReforzar()
-                    } else if (this.logica.fase == 1 && obj.Jugador == this.logica.yo) { // Refuerzo
+                      this.faseActual = "REFUERZO INICIAL"
+
+                      if (obj.Jugador == this.logica.yo) {
+                        this.tratarFaseReforzar()
+                      }
+                    } else if (this.logica.fase == 1) { // Refuerzo
                       // Rellenar primer indicador de fase
                       this.rellenarFase(1);
-                      this.tratarFaseReforzar()
-                    } else if (this.logica.fase == 2 && obj.Jugador == this.logica.yo) { // Ataque
+                      this.faseActual = "REFUERZO"
+
+                      if (obj.Jugador == this.logica.yo) {
+                        this.tratarFaseReforzar()
+                      }
+                    } else if (this.logica.fase == 2) { // Ataque
                       // Rellenar segundo indicador de fase
                       this.rellenarFase(2);
-                      this.tratarFaseAtacar()
-                    } else if (this.logica.fase == 3 && obj.Jugador == this.logica.yo) { // Fortificar
+                      this.faseActual = "ATAQUE"
+
+                      if (obj.Jugador == this.logica.yo) {
+                        this.tratarFaseAtacar()
+                      }
+                    } else if (this.logica.fase == 3) { // Fortificar
                       // Rellenar tercer indicador de fase
                       this.rellenarFase(3);
-                      this.tratarFaseFortificar()
+                      this.faseActual = "FORTIFICAR"
+
+                      if (obj.Jugador == this.logica.yo) {
+                        this.tratarFaseFortificar()
+                      }
                     }
 
                     break;
@@ -427,6 +459,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   mostrarFase() {
+    console.log("Mostrando fase...")
     switch(this.logica.fase) {
       case 0: {
         return "REFUERZO INICIAL";
@@ -438,7 +471,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         return "ATAQUE";
       }
       case 3: {
-        return "FORTIFICACION";
+        return "FORTIFICACIÓN";
       }
       default: {
         return "-------";
@@ -897,7 +930,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     this.mostrarAlertaPermanente("Selecciona el territorio origen", "")
     this.mapa.permitirSeleccionTerritorios();
-    clearInterval(this.intervarloConsultaTerritorio) // Limpia el intervalo de la fase de ataque, si existe
+
     this.intervarloConsultaTerritorio = setInterval(() =>
       {
         if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
@@ -1103,6 +1136,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     this.mostrarAlertaPermanente("Selecciona el territorio a reforzar", "")
     this.mapa.permitirSeleccionTerritorios();
+
     this.intervarloConsultaTerritorio = setInterval(() =>
       {
         if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
@@ -1213,6 +1247,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   // Funciones de terminación
 
   terminarAutomataJuego() {
+    console.log("Terminando autómata del juego...")
     clearInterval(this.intervarloConsultaTerritorio)
     clearInterval(this.intervaloConsultaEstado)
   }
