@@ -64,12 +64,17 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   setMapa() {this.info = 0; this.resumirPartida();}
-  setMapaInfo() {this.info = 1;}
+  setMapaInfo() {
+    console.log("Terminando autómata al cambiar a vista de información...")
+    this.terminarAutomataJuego()
+    this.info = 1;
+  }
 
   irCartas(){
     if (this.logica.fase == 1 && this.logica.jugadorTurno  == this.logica.yo) {
       this.router.navigate(['/cartas'])
-      Swal.close()
+      console.log("Terminando autómata al cambiar a vista de cartas...")
+      this.terminarAutomataJuego()
     }
   }
 
@@ -82,6 +87,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   @HostListener('unloaded')
   ngOnDestroy() {
     console.log('Componente de juego destruído');
+    this.terminarAutomataJuego()
   }
 
 
@@ -351,7 +357,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     // para evitar condiciones de carrera entre una fase y otra
                     console.log("Limpiando intervalo y alertas de la anterior fase...")
                     clearInterval(this.intervarloConsultaTerritorio)
-                    this.delay(10) // Hace una espera del doble de tiempo que tarda un intervalo de consulta de territorios
+                    await this.delay(100) // Hace una espera del doble de tiempo que tarda un intervalo de consulta de territorios
                     Swal.close()
 
                     // Duerme en el primer refuerzo de la fase inicial, para esperar a que se rellene el mapa
@@ -1303,6 +1309,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     console.log("Terminando autómata del juego...")
     clearInterval(this.intervarloConsultaTerritorio)
     clearInterval(this.intervaloConsultaEstado)
+    Swal.close()
   }
 
 
