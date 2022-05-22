@@ -149,6 +149,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   resumirPartida()  {
     this.primerRefuerzo = false;
 
+    console.log("Terminando autómata anterior...")
+    this.terminarAutomataJuego()
+
+    console.log("Resumiendo la partida...")
     this.http.get(LlamadasAPI.URLApi+'/api/resumirPartida', {observe:'body', responseType:'text', withCredentials: true})
       .subscribe({
         next :(response) => {
