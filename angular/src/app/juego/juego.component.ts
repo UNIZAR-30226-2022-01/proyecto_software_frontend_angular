@@ -75,20 +75,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-
+  // Variables auxiliares del juego
   jsonData: any;
   intervaloConsultaEstado:any;
   i:any;
   logica:any;
-
   tiempo = 0;
   vez = 0;
   index = Array<number>();
   jugador = Array<string>();
   intervalos = Array<any>();
-  todoOk:boolean = false;
-
   intervarloConsultaTerritorio : any;
   territorio1 : string = "";
   territorio2 : string = "";
@@ -97,6 +93,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   nTropasOrigen : number = 0;
   nDadosAtaque : number = 0;
   nTropasOcupar : number = 0;
+  cartaRobada : boolean = false;
   turno : string = "-------";
 
   tropasAMover : number = 0;
@@ -386,13 +383,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                   case 8: { // IDAccionObtenerCarta
                     this.logica.obtenerCarta(obj)
 
-                    if (obj.Jugador == this.logica.yo) {
-                      this.mostrarAlerta("Robo de carta",
-                        "Has obtenido una nueva carta")
-                    } else {
-                      this.mostrarAlerta("Robo de carta",
-                        "El jugador " + obj.Jugador + " ha robado una carta")
-                    }
+                    this.cartaRobada = true
 
                     this.aumentarCartasCajaJugadores(obj.Jugador, 1)
                     break;
@@ -848,7 +839,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     console.log("mapa en tratarFaseReforzar: "+this.logica.mapaJugadores)
     var tropasRecibidas : number = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
 
-    console.log('tropas:', tropasRecibidas, "todoOk:", this.todoOk)
+    console.log('tropas:', tropasRecibidas)
 
     if (tropasRecibidas == 0) return
     console.log("Estamos en fase de refuerzo!", tropasRecibidas)
@@ -1123,10 +1114,12 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     var numTerritorios = obj.RazonNumeroTerritorios
     var numContinentes = obj.RazonContinentesOcupados
 
-    var mensaje = (numContinentes>0)? "y " + numContinentes + " continentes " : "";
+    var mensajeExtraContinentes = (numContinentes>0)? " y " + numContinentes + " continentes" : "";
+    var mensajeExtraCartas = (this.cartaRobada)? ". Ha robado una carta por conquistar un territorio en su turno." : ".";
+    this.cartaRobada = false
     if (this.logica.fase != 0) {
         this.mostrarAlertaRefuerzo("Inicio de turno de "+obj.Jugador,
-        "El jugador "+obj.Jugador+" ha recibido " + tropasObtenidas + " tropas por ocupar " + numTerritorios + " territorios " + mensaje, obj)
+        "El jugador "+obj.Jugador+" ha recibido " + tropasObtenidas + " tropas por ocupar " + numTerritorios + " territorios" + mensajeExtraContinentes + mensajeExtraCartas, obj)
     }
 
   }
