@@ -39,49 +39,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   isShow = false;
   source = "assets/bar-chart.png";
 
-  toggleDisplay() { this.isShow = !this.isShow;}
-
-  changeImage() {
-    if (!this.isShow) {this.source = "assets/bar-chart.png";}
-    else {this.source = "assets/cross.png";}
-  }
-
-  cambiarFase() {
-    this.rellenarFase(0);
-    console.log("Cambiando de fase");
-      this.http.post(LlamadasAPI.URLApi+'/api/pasarDeFase', null, { observe:'response', responseType:'text', withCredentials: true})
-      .subscribe({
-        next :(response) => {
-          console.log("Exito en el cambio de fase");
-        },
-        error: (error) => {Swal.fire({
-          title: 'Se ha producido un error al cambiar de fase',
-          text: error.error,
-          icon: 'error',
-          timer: 2000,
-        })}
-      });
-  }
-
-  setMapa() {this.info = 0; this.resumirPartida();}
-  setMapaInfo() {
-    console.log("Terminando autómata al cambiar a vista de información...")
-    this.terminarAutomataJuego()
-    this.info = 1;
-  }
-
-  irCartas(){
-    if (this.logica.fase == 1 && this.logica.jugadorTurno  == this.logica.yo) {
-      this.router.navigate(['/cartas'])
-      console.log("Terminando autómata al cambiar a vista de cartas...")
-      this.terminarAutomataJuego()
-    }
-  }
-
-  delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
-  }
-
   constructor(private http: HttpClient, private router:Router){}
 
   @HostListener('unloaded')
@@ -118,12 +75,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Solicita los avatares de los jugadores presentes, que se rellenarán mediante callback
-  obtenerAvataresJugadores() {
-    this.logica.mapaJugadores.forEach((estado: any, key: string) => {
-      this.llamadasAPI.obtenerAvatar(this, key)
-    })
-  }
+
 
   jsonData: any;
   intervaloConsultaEstado:any;
@@ -156,7 +108,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   primerRefuerzo : boolean = true;
 
-  faseActual : string = "";
+  faseActual : string = ""; // Texto de la caja de fases
 
   resumirPartida()  {
     this.primerRefuerzo = false;
@@ -301,12 +253,10 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
   ejecutarAutomata() {
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAA Iniciando autómata")
     this.intervaloConsultaEstado = setInterval(() => {
       this.http.get(LlamadasAPI.URLApi+'/api/obtenerEstadoPartida', {observe:'body', responseType:'text', withCredentials: true})
           .subscribe(
             async data => {
-              //clearInterval(this.intervaloConsultaEstado) // Para debugging
               console.log("json en obtenerEstado:", this.jsonData);
               this.jsonData = JSON.parse(data);
               for (var i = 0; i < this.jsonData.length; i++) {
@@ -592,7 +542,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     document.getElementById("tropasJugador"+i)!.innerHTML = String(tropas+aumento)
   }
 
-
   aumentarTerritoriosCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
 
@@ -600,7 +549,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     document.getElementById("territoriosJugador"+i)!.innerHTML = String(territorios+aumento)
   }
-
 
   aumentarCartasCajaJugadores(jugador : string, aumento : number) {
     var i = this.obtenerIndiceCajaJugadores(jugador);
@@ -611,7 +559,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     document.getElementById("cartasJugador"+i)!.innerHTML = String(cartas+aumento)
   }
-
 
   // Obtiene el índice de caja dado un jugador. El jugador debe existir.
   obtenerIndiceCajaJugadores(jugador : string) {
@@ -644,7 +591,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
-
   mostrarAlertaRefuerzo(tituloAlerta: string, textoAlerta: string, obj : any) {
     var timerInterval : any
     Swal.fire({
@@ -663,7 +609,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       if (obj.Jugador == this.logica.yo) this.tratarFaseReforzar();
   });
   }
-
 
   mostrarAlertaAtaque(tituloAlerta: string, textoAlerta: string) {
     var timerInterval : any
@@ -700,7 +645,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
-
   mostrarAlertaDerrotaAjena(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
@@ -718,7 +662,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     })
   }
 
-
   mostrarAlertaPermanente(tituloAlerta: string, textoAlerta: string) {
     Swal.fire({
       title: tituloAlerta,
@@ -729,7 +672,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       showConfirmButton: false,
     })
   }
-
 
   cerrarAlertaPermanente() {
     Swal.close()
@@ -785,7 +727,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   mostrarAlertaChat() {
     var atributos : Record<string, any> = {
       autocapitalize: 'off',
@@ -806,8 +747,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       }
     })
   }
-
-  // Funciones de tratamiento del juego
 
   mostrarAlertaDados(obj : any) {
     // Atacante
@@ -897,6 +836,60 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   }
 
 
+  // Funciones de tratamiento del juego
+
+  tratarFaseReforzar() {
+    // Fuerza incondicionalmente cualquier alerta activa y el intervalo de consulta de territorio,
+    // para evitar condiciones de carrera entre una fase y otra
+    clearInterval(this.intervarloConsultaTerritorio)
+    this.delay(50) // Hace una espera del mismo tiempo que tarda un intervalo de consulta de territorios
+    Swal.close()
+
+    console.log("mapa en tratarFaseReforzar: "+this.logica.mapaJugadores)
+    var tropasRecibidas : number = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
+
+    console.log('tropas:', tropasRecibidas, "todoOk:", this.todoOk)
+
+    if (tropasRecibidas == 0) return
+    console.log("Estamos en fase de refuerzo!", tropasRecibidas)
+    this.territorio1 = "";
+    this.tropasAMover = 0;
+
+    this.mostrarAlertaPermanente("Selecciona el territorio a reforzar", "")
+    this.mapa.permitirSeleccionTerritorios();
+
+    this.intervarloConsultaTerritorio = setInterval(() =>
+      {
+        if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
+
+          // Asignar el territorio seleccionado
+          this.territorio1 = this.mapa.territorioSeleccionado;
+          this.mapa.territorioSeleccionado = "";
+          // Cierra el popup de seleccionar el primer territorio y crea otro para el segundo
+          this.cerrarAlertaPermanente()
+
+          clearInterval(this.intervarloConsultaTerritorio)
+          this.mapa.limitarSeleccionTerritorios();
+
+          // Una vez hecho, se llama por callback a la selección de tropas
+          this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", tropasRecibidas.toString());
+        }
+
+        // Prevención de condiciones de carrera
+        if (this.logica.fase != 1) {
+          console.log("Detectado bucle de consulta en reforzar fuera de fase, terminando...")
+          clearInterval(this.intervarloConsultaTerritorio)
+          if (this.logica.jugadorTurno == this.logica.yo) {
+            console.log("Detectado bucle de consulta en reforzar fuera de fase, pasando a atacar...")
+            this.tratarFaseAtacar()
+          }
+        }
+
+        console.log("Fin de intervalo de tratarFaseReforzar en fase", this.logica.fase)
+      },
+      50);
+  }
+
   tratarFaseAtacar() {
     // Fuerza incondicionalmente cualquier alerta activa y el intervalo de consulta de territorio,
     // para evitar condiciones de carrera entre una fase y otra
@@ -940,6 +933,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           }
         }
 
+        // Prevención de condiciones de carrera
         if (this.logica.fase != 2) {
           console.log("Detectado bucle de consulta en atacar fuera de fase, terminando...")
           clearInterval(this.intervarloConsultaTerritorio)
@@ -952,7 +946,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       },
       50);
   }
-
 
   tratarFaseFortificar() {
     // Fuerza incondicionalmente cualquier alerta activa y el intervalo de consulta de territorio,
@@ -992,8 +985,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
             var tropasTerritorio1 = this.obtenerTropasRegion(this.territorios.indexOf(this.territorio1))
 
-
-
             if (Number.parseInt(tropasTerritorio1)-1 <= 0) {
               Swal.fire({
                 title: 'No puedes fortificar desde un territorio con 1 tropa',
@@ -1011,6 +1002,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             }
           }
 
+          // Prevención de condiciones de carrera
           if (this.logica.fase != 3) {
             console.log("Detectado bucle de consulta en fortificar fuera de fase, terminando...")
             clearInterval(this.intervarloConsultaTerritorio)
@@ -1020,7 +1012,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
       },
       50);
   }
-
 
   tratarAccionAtacar(obj : any) {
     var tropasAntesDestino = this.obtenerTropasRegion(obj.Destino);
@@ -1055,7 +1046,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   }
 
-
   tratarOcupar(obj : any) {
     this.objetoOcuparGuardado = obj // Guarda el objeto JSON usado para ocupar, en caso de fallo
 
@@ -1084,7 +1074,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   }
 
-
   tratarAccionOcupar(obj : any) {
     var idTerritorioOrigen = obj.Origen;
     var idTerritorioDestino = obj.Destino;
@@ -1104,7 +1093,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                 + obj.JugadorOcupado);
   }
 
-
   tratarAccionFortificar(obj : any) {
     var tropasAntes = this.obtenerTropasRegion(obj.Destino)
     console.log("antes:", tropasAntes)
@@ -1120,7 +1108,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.mostrarAlerta("Fortificación",
       "El jugador "+obj.Jugador+" ha fortificado " + nombreTerritorio2 + " con " + tropasFortificacion + " tropas desde " + nombreTerritorio1)
   }
-
 
   tratarInicioTurno(obj:any){
     console.log("Inicio de turno de "+obj.Jugador)
@@ -1144,7 +1131,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   }
 
-
   tratarAccionJugadorEliminado(obj : any) {
     if (obj.JugadorEliminado == this.logica.yo) { // Somos el jugador eliminado
       // Oscurece la pantalla, indica que se ha sido derrotado, y permite únicamente volver al menú principal
@@ -1165,58 +1151,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     }*/
   }
 
-
-  tratarFaseReforzar() {
-    // Fuerza incondicionalmente cualquier alerta activa y el intervalo de consulta de territorio,
-    // para evitar condiciones de carrera entre una fase y otra
-    clearInterval(this.intervarloConsultaTerritorio)
-    this.delay(50) // Hace una espera del mismo tiempo que tarda un intervalo de consulta de territorios
-    Swal.close()
-
-    console.log("mapa en tratarFaseReforzar: "+this.logica.mapaJugadores)
-    var tropasRecibidas : number = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
-
-    console.log('tropas:', tropasRecibidas, "todoOk:", this.todoOk)
-
-    if (tropasRecibidas == 0) return
-    console.log("Estamos en fase de refuerzo!", tropasRecibidas)
-    this.territorio1 = "";
-    this.tropasAMover = 0;
-
-    this.mostrarAlertaPermanente("Selecciona el territorio a reforzar", "")
-    this.mapa.permitirSeleccionTerritorios();
-
-    this.intervarloConsultaTerritorio = setInterval(() =>
-      {
-        if (this.mapa.territorioSeleccionado != "") { // Ha cambiado
-
-          // Asignar el territorio seleccionado
-          this.territorio1 = this.mapa.territorioSeleccionado;
-          this.mapa.territorioSeleccionado = "";
-          // Cierra el popup de seleccionar el primer territorio y crea otro para el segundo
-          this.cerrarAlertaPermanente()
-
-          clearInterval(this.intervarloConsultaTerritorio)
-          this.mapa.limitarSeleccionTerritorios();
-
-          // Una vez hecho, se llama por callback a la selección de tropas
-          this.mostrarAlertaRangoRefuerzo("Selecciona el número de tropas", "1", tropasRecibidas.toString());
-        }
-
-        if (this.logica.fase != 1) {
-          console.log("Detectado bucle de consulta en reforzar fuera de fase, terminando...")
-          clearInterval(this.intervarloConsultaTerritorio)
-          if (this.logica.jugadorTurno == this.logica.yo) {
-            console.log("Detectado bucle de consulta en reforzar fuera de fase, pasando a atacar...")
-            this.tratarFaseAtacar()
-          }
-        }
-
-        console.log("Fin de intervalo de tratarFaseReforzar en fase", this.logica.fase)
-      },
-      50);
-  }
-
   refuerzoConExito() {
     console.log("mapa en refuerzoConExito: "+this.logica.mapaJugadores)
 
@@ -1229,16 +1163,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.mostrarAlertaDerrotaAjena("Jugador eliminado",
       "El jugador " + obj.JugadorEliminado + " ha sido desconectado de la partida por rendirse o por inactividad." +
       "Sus territorios pueden ser conquistados sin restricciones.");
-
-    // Busca la caja de jugador, y sobreescribe su color por uno gris
-    /*for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
-      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == obj.JugadorEliminado) {
-        document.getElementById("jugador" + (i+1))!.style.backgroundColor = "#808080"
-        return
-      }
-    }*/
   }
-
 
   tratarAccionReforzar(obj : any) {
     var jugador = obj.Jugador;
@@ -1248,7 +1173,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.aumentarTropasRegion(territorio, tropasRefuerzo)
     this.mostrarAlerta("Refuerzo", jugador + " ha reforzado " + this.territorios[territorio] + " con " + tropasRefuerzo + " tropas de refuerzo")
   }
-
 
   tratarAccionCambioCartas(obj : any) {
     if (obj.Jugador === this.logica.yo) {
@@ -1267,7 +1191,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     this.aumentarCartasCajaJugadores(this.logica.jugadorTurno, -3)
 
   }
-
 
   tratarAccionPartidaFinalizada(obj : any) {
     if (obj.JugadorGanador === this.logica.yo) {
@@ -1297,7 +1220,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   tratarAccionMensaje(obj : any) {
     document.getElementById("cajaChat")!.innerHTML = obj.JugadorEmisor + ": "+obj.Mensaje
   }
@@ -1315,6 +1237,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   // Funciones de carga de assets
 
+  // Solicita los avatares de los jugadores presentes, que se rellenarán mediante callback
+  obtenerAvataresJugadores() {
+    this.logica.mapaJugadores.forEach((estado: any, key: string) => {
+      this.llamadasAPI.obtenerAvatar(this, key)
+    })
+  }
+
   // Carga de un avatar
   introducirAvatar(blob : any, jugador : string) {
     const img = URL.createObjectURL(blob);
@@ -1327,6 +1256,54 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         return
       }
     }
+  }
+
+  // Funciones de cambio de botones inferiores
+
+  toggleDisplay() { this.isShow = !this.isShow;}
+
+  changeImage() {
+    if (!this.isShow) {this.source = "assets/bar-chart.png";}
+    else {this.source = "assets/cross.png";}
+  }
+
+  cambiarFase() {
+    this.rellenarFase(0);
+    console.log("Cambiando de fase");
+    this.http.post(LlamadasAPI.URLApi+'/api/pasarDeFase', null, { observe:'response', responseType:'text', withCredentials: true})
+      .subscribe({
+        next :(response) => {
+          console.log("Exito en el cambio de fase");
+        },
+        error: (error) => {Swal.fire({
+          title: 'Se ha producido un error al cambiar de fase',
+          text: error.error,
+          icon: 'error',
+          timer: 2000,
+        })}
+      });
+  }
+
+  setMapa() {this.info = 0; this.resumirPartida();}
+
+  setMapaInfo() {
+    console.log("Terminando autómata al cambiar a vista de información...")
+    this.terminarAutomataJuego()
+    this.info = 1;
+  }
+
+  irCartas(){
+    if (this.logica.fase == 1 && this.logica.jugadorTurno  == this.logica.yo) {
+      this.router.navigate(['/cartas'])
+      console.log("Terminando autómata al cambiar a vista de cartas...")
+      this.terminarAutomataJuego()
+    }
+  }
+
+  // Función de Sleep
+
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
   // Funciones para herencia de mapa<->juego
