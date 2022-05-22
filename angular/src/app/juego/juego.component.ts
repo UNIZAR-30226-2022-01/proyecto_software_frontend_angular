@@ -480,6 +480,14 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     document.getElementById("t"+this.territorios[id])!.innerHTML = String(tropas);
   }
 
+  truncarNombreJugador(nombre : string) : string {
+    if (nombre.length > 13) {
+      nombre = nombre.substring(0, 13)
+      nombre = nombre.concat("...")
+    }
+
+    return nombre
+  }
 
   // Inicializa las cajas de jugadores
   rellenarCajasJugadores() {
@@ -490,7 +498,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     console.log("Ocultando jugador", this.logica.mapaJugadores.size)
 
     this.logica.mapaJugadores.forEach((estado: Estado, jugador: string) => {
-      document.getElementById("nombreJugador"+contador)!.innerHTML = String(jugador)
+      document.getElementById("nombreJugador"+contador)!.innerHTML = this.truncarNombreJugador(String(jugador))
 
       var tropasActuales : number = 0
       estado.territorios.forEach((territorio : number) => {
@@ -555,7 +563,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   obtenerIndiceCajaJugadores(jugador : string) {
     // Busca al jugador en las cajas, ya que pueden estar desordenadas
     for (var i = 1; i <= 6; i++) {
-      if (document.getElementById("nombreJugador"+i)!.innerHTML == jugador) {
+      if (document.getElementById("nombreJugador"+i)!.innerHTML == this.truncarNombreJugador(jugador)) {
         return i
       }
     }
@@ -1134,14 +1142,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     } else {
       this.mostrarAlertaDerrotaAjena("Jugador eliminado", "El jugador " + obj.JugadorEliminador + " ha eliminado a " + obj.JugadorEliminado + ".")
     }
-
-    // Busca la caja de jugador, y sobreescribe su color por uno gris
-    /*for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
-      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == obj.JugadorEliminado) {
-        document.getElementById("jugador" + (i+1))!.style.backgroundColor = "#808080"
-        return
-      }
-    }*/
   }
 
   refuerzoConExito() {
@@ -1243,10 +1243,14 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
     // Busca la caja de jugador, y escribe la URL de la imagen parseada
     for (var i = 0; i < this.logica.mapaJugadores.size; i++) {
-      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == jugador) {
+      console.log("mirando si ", document.getElementById("nombreJugador" + (i+1))!.innerHTML, "coincide con", jugador, "truncado a", this.truncarNombreJugador(jugador))
+      if (document.getElementById("nombreJugador" + (i+1))!.innerHTML == this.truncarNombreJugador(jugador)) {
+        console.log("coincide :)")
         var imagen = document.getElementById("avatarJugador" + (i+1))! as HTMLImageElement;
-        imagen.src = img;
-        return
+        if (imagen.src == "") { // Si no, coincide con el nombre de otro usuario, y ya se ha introducido su imagen
+          imagen.src = img;
+          return
+        }
       }
     }
   }
