@@ -94,7 +94,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
   nDadosAtaque : number = 0;
   nTropasOcupar : number = 0;
   cartaRobada : boolean = false;
-  turno : string = "-------";
 
   tropasAMover : number = 0;
 
@@ -298,7 +297,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     console.log("jugador:", obj.Jugador)
                     console.log("yo:", this.logica.yo)
 
-                    this.turno = obj.Jugador;
+                    this.logica.jugadorTurno = obj.Jugador;
 
                     // Fuerza incondicionalmente cualquier alerta activa y el intervalo de consulta de territorio,
                     // para evitar condiciones de carrera entre una fase y otra
@@ -919,6 +918,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
             // Una vez hecho, se llama por callback a la selección de tropas
             this.mostrarAlertaRangoAsincrona("Selecciona el número de dados", "1", "3", "atacar");
+          }
+        }
+
+        // Prevención de condiciones de carrera (Se pulsa el botón de fase inmediatamente después de entrar a Ataque)
+        if (this.logica.fase != 2) {
+          console.log("Detectado bucle de consulta en atacar fuera de fase, terminando...")
+          clearInterval(this.intervarloConsultaTerritorio)
+          if (this.logica.jugadorTurno == this.logica.yo) {
+            console.log("Detectado bucle de consulta en atacar fuera de fase, pasando a fortificar...")
+            this.tratarFaseFortificar()
           }
         }
         console.log("Fin de intervalo de tratarFaseAtacar en fase", this.logica.fase)
