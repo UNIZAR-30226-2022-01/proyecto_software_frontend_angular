@@ -45,8 +45,8 @@
 }
 
 .contenedor-bottom {
-  width: 40%;
-  height: 50%;
+  width: 50%;
+  height: 60%;
   /*border: 0.1em solid rgb(54, 51, 51);*/
   position: fixed;
   left: 50%;
