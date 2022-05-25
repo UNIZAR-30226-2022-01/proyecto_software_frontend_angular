@@ -1168,7 +1168,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
 
   }
 
-  tratarAccionPartidaFinalizada(obj : any) {
+  async tratarAccionPartidaFinalizada(obj: any) {
+    console.log("Recibida partida finalizada")
+    // Termina todo el autómata por completo
+    this.terminarAutomataJuego()
+    // Espera a que se cierren alertas permanentes pendientes en la siguiente iteración pendiente de los intervalos de consulta
+    await this.delay(6000)
+    this.terminarAutomataJuego()
     if (obj.JugadorGanador === this.logica.yo) {
       Swal.fire({
         title: "Fin de la partida",
@@ -1177,7 +1183,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         confirmButtonText: 'OK',
         confirmButtonColor: '#3085d6',
         willClose: () => {
-          this.terminarAutomataJuego()
+
           this.router.navigate(['/identificacion'])
         }
       })
@@ -1189,7 +1195,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         confirmButtonText: 'OK',
         confirmButtonColor: '#3085d6',
         willClose: () => {
-          this.terminarAutomataJuego()
           this.router.navigate(['/identificacion'])
         }
       })
