@@ -400,6 +400,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 11: { // IDAccionPartidaFinalizada
+                    this.logica.fase = -1
                     this.tratarAccionPartidaFinalizada(obj)
                     break;
                   }
@@ -411,7 +412,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                 }
               }
             })
-    }, 500);
+    }, 750);
   }
 
   mostrarFase() {
@@ -921,8 +922,13 @@ export class JuegoComponent implements OnInit, AfterViewInit {
           }
         }
 
+        // Ha acabado la partida y estamos en ataque, se termina
+        if (this.logica.fase == -1) {
+          console.log("Terminando fase de ataque por fin de partida...")
+          clearInterval(this.intervarloConsultaTerritorio)
+        }
         // Prevención de condiciones de carrera (Se pulsa el botón de fase inmediatamente después de entrar a Ataque)
-        if (this.logica.fase != 2) {
+        else if (this.logica.fase != 2) {
           console.log("Detectado bucle de consulta en atacar fuera de fase, terminando...")
           clearInterval(this.intervarloConsultaTerritorio)
           if (this.logica.jugadorTurno == this.logica.yo) {
