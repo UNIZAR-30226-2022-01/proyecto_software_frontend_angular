@@ -123,6 +123,8 @@ export class JuegoComponent implements OnInit, AfterViewInit {
         next :(response) => {
           var jsonData = JSON.parse(response);
 
+          console.log("resumen:",jsonData)
+
           if (!jsonData.Terminada) {
             // Recuperar el estado de cada jugador
             for (let i = 0; i < jsonData.Jugadores.length; i++) {
@@ -238,8 +240,9 @@ export class JuegoComponent implements OnInit, AfterViewInit {
             }
 
           } else { // Sabemos que hemos perdido si hemos vuelto, y ya estaba terminada
-            if (this.logica.jugadorTurno == this.logica.yo) {
-              this.mostrarAlertaDerrotaPropia("¡Has sido derrotado!", "Presione el botón para volver al menú")
+            if (jsonData.TurnoJugador == this.logica.yo) {
+              console.log("La partida estaba terminada!")
+              this.mostrarAlertaDerrotaPropia("¡La partida ya ha terminado!", "Presione el botón para volver al menú")
             }
           }
 
