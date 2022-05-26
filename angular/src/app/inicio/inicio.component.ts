@@ -8,7 +8,7 @@ export class InicioComponent implements OnInit {
 
   constructor() { }
 
-  videoID = "../../assets/videoInicio2.mp4" 
+  videoID = "../../assets/videoInicio.mp4"
 
   ngOnInit(): void {
   }

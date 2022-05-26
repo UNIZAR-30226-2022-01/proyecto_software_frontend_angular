@@ -12,7 +12,18 @@
   top: 0px;
   z-index: -1000;
   overflow:hidden;
-  }
+}
+
+.containerVideoInicio video {
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .textoTituloInicio {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -40,7 +51,7 @@
     position:absolute;
     right: 0;
     bottom: 0;
-    min-width: 100%; 
+    min-width: 100%;
     min-height: 100%;
   }
 
