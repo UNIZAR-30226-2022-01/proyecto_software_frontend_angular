@@ -258,6 +258,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
               for (var i = 0; i < this.jsonData.length; i++) {
                 var obj = this.jsonData[i];
                 console.log("IDaccion:", obj.IDAccion)
+
                 switch (obj.IDAccion) {
                   case 0: { // IDAccionRecibirRegion
                     this.logica.recibirRegion(obj, document);
@@ -320,6 +321,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       this.faseActual = "REFUERZO INICIAL"
 
                       if (obj.Jugador == this.logica.yo) {
+                        await this.delay(500) // Espera a tratar la acción de inicio de turno y obtener las tropas
                         this.tratarFaseReforzar()
                       }
                     } else if (this.logica.fase == 1) { // Refuerzo
@@ -328,6 +330,7 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                       this.faseActual = "REFUERZO"
 
                       if (obj.Jugador == this.logica.yo) {
+                        await this.delay(500) // Espera a tratar la acción de inicio de turno y obtener las tropas
                         this.tratarFaseReforzar()
                       }
                     } else if (this.logica.fase == 2) { // Ataque
@@ -351,9 +354,16 @@ export class JuegoComponent implements OnInit, AfterViewInit {
                     break;
                   }
                   case 2: { // IDAccionInicioTurno
+                    //var tropasAntes = this.logica.mapaJugadores.get(this.logica.yo)!.tropas
                     this.logica.jugadorTurno = obj.Jugador
                     this.logica.inicioTurno(obj);
                     this.tratarInicioTurno(obj);
+                    /*
+                    if (obj.Jugador == this.logica.yo && tropasAntes == 0) { // Primer refuerzo tras inicio de partida
+                      this.logica.mapaJugadores.get(this.logica.yo)!.tropas = obj.TropasObtenidas
+                      this.tratarFaseReforzar()
+                    }
+                    */
                     break;
                   }
                   case 3: { // IDAccionCambioCartas
@@ -1101,11 +1111,6 @@ export class JuegoComponent implements OnInit, AfterViewInit {
     console.log("Inicio de turno de "+obj.Jugador)
 
     var tropasObtenidas = obj.TropasObtenidas;
-    if (this.logica.fase != 0) {
-      this.logica.mapaJugadores.get(obj.Jugador)!.tropas = tropasObtenidas;
-    } else {
-      console.log("inicio turno en fase inicial, no se modifican las tropas")
-    }
 
     this.aumentarTropasCajaJugadores(obj.Jugador, tropasObtenidas)
     var numTerritorios = obj.RazonNumeroTerritorios

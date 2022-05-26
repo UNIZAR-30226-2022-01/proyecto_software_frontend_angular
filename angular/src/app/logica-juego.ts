@@ -62,10 +62,13 @@ export class LogicaJuego {
 
     inicioTurno(json: any) {
       var jugador = json.Jugador;
+      console.log("Tropas antes de inicio de turno:", this.mapaJugadores.get(jugador)!.tropas)
       var tropasObtenidas = json.TropasObtenidas;
       var estadoJugador = this.mapaJugadores.get(jugador)!
       estadoJugador.tropas += tropasObtenidas; // Aumentamos el número de tropas
+
       this.mapaJugadores.set(jugador, estadoJugador);
+      console.log("Tropas tras inicio de turno:", this.mapaJugadores.get(jugador)!.tropas)
     }
 
     cambioCartas(json: any) {
